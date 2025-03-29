@@ -16,11 +16,10 @@ import SwiftUI
 @MainActor
 struct ObjectTrackingRealityView: View {
     
-    @StateObject var speechRecognizer = SpeechRecognizer()
-    
     var appState: AppState
     var root = Entity()
     
+    @State private var recognizedText: String = ""
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
 
     var body: some View {
@@ -32,43 +31,45 @@ struct ObjectTrackingRealityView: View {
                 guard let objectTracking else {
                     return
                 }
-                
+                //wird nicht aufgerufen
                 for await anchorUpdate in objectTracking.anchorUpdates {
                     let anchor = anchorUpdate.anchor
                     let id = anchor.id
                     
-                    switch anchorUpdate.event {
-                    case .added:
-                        let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
-                        let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
+                    print("anchor.referenceObject.name: \(anchor.referenceObject.name) recognizedText: \(recognizedText)")
                         
-                        //add audio to object entity
-                        let resource: AudioFileResource = try .load(named: "spatial-sound.wav", in: .main)
-                        let controller = visualization.entity.prepareAudio(resource)
+                    if(anchor.referenceObject.name == recognizedText){
                         
                         
-                        speechRecognizer.onResult = { recognizedText in
-                            print("Erkannt: \(recognizedText)")
-                            print("visualization.entity: \(visualization.entity)")
-                        }
-                        
-                        speechRecognizer.startRecognition()
-                        
-                        //controller.play()
-                        
-                        self.objectVisualizations[id] = visualization
-                        root.addChild(visualization.entity)
-                    case .updated:
-                        self.objectVisualizations[id]?.update(with: anchor)
-                    case .removed:
-                        self.objectVisualizations[id]?.entity.removeFromParent()
-                        self.objectVisualizations.removeValue(forKey: id)
-
+                        switch anchorUpdate.event {
+                        case .added:
+                            let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
+                            
+                            let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
+                            
+                            
+                            
+                            //add audio to object entity
+                            let resource: AudioFileResource = try .load(named: "spatial-sound.wav", in: .main)
+                            let controller = visualization.entity.prepareAudio(resource)
+                            
+                            controller.play()
+                            
+                            self.objectVisualizations[id] = visualization
+                            root.addChild(visualization.entity)
+                        case .updated:
+                            self.objectVisualizations[id]?.update(with: anchor)
+                        case .removed:
+                            self.objectVisualizations[id]?.entity.removeFromParent()
+                            self.objectVisualizations.removeValue(forKey: id)
+                            
+                        }}
                     }
+                   
                 }
                 
             }
-        }
+        
         .onAppear() {
             appState.isImmersiveSpaceOpened = true
         }
@@ -78,6 +79,8 @@ struct ObjectTrackingRealityView: View {
             }
             objectVisualizations.removeAll()
             appState.didLeaveImmersiveSpace()
+        }.onChange(of: recognizedText) {
+            print("recognizedText hat sich geändert: \(recognizedText)")
         }
     }
 }

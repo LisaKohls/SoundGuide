@@ -33,8 +33,12 @@ class ObjectAnchorVisualization {
         // create an anchor 3d text with reference object name
         let font = MeshResource.Font(name: "Helvetica", size: CGFloat(textBaseHeight))!
         let mesh = MeshResource.generateText(anchor.referenceObject.name.replacingOccurrences(of: "_", with: " "), extrusionDepth: textBaseHeight * 0.05, font: font)
+        
+        print("object text: \(anchor.referenceObject.name)")
+        
         let material = UnlitMaterial(color: .white)
         let text = ModelEntity(mesh: mesh, materials: [material])
+        print("material text: \(text)")
         text.transform.translation.x = anchor.boundingBox.center.x - mesh.bounds.max.x / 2
         text.transform.translation.y = anchor.boundingBox.extent.y
         

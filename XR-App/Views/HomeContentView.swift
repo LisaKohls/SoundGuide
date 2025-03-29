@@ -15,36 +15,52 @@ struct HomeContentView: View {
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     
+    @State private var recognizedText: String = ""
+    @State private var showSpeechRecognizer = false
+    
     var body: some View {
         Group {
             Text("visionOS Object Tracking")
                 .font(.system(size: 15, weight:. bold))
-                .padding(.horizontal, 30)
+                .padding(30)
         }
         VStack {
             if appState.canEnterImmersiveSpace {
                 VStack {
                     if !appState.isImmersiveSpaceOpened {
-                        Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
-                            Task {
-                                switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
-                                case .opened:
-                                    break
-                                case .error:
-                                    print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
-                                case .userCancelled:
-                                    print("The user declined opening immersive space \(immersiveSpaceIdentifier)")
-                                @unknown default:
-                                    break
+                        
+                        Button("Name the object you are looking for"){
+                            showSpeechRecognizer = true
+                        }.padding(10)
+                        
+                        if !recognizedText.isEmpty {
+                            Text("Recognized Object: \(recognizedText)")
+                                .font(.headline)
+                                .padding()
+                            
+                            
+                            Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
+                                Task {
+                                    switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
+                                    case .opened:
+                                        break
+                                    case .error:
+                                        print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
+                                    case .userCancelled:
+                                        print("The user declined opening immersive space \(immersiveSpaceIdentifier)")
+                                    @unknown default:
+                                        break
+                                    }
                                 }
                             }
-                        }
-                        .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
+                            .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
+                       }
                     } else {
                         Button("Stop Tracking") {
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
+                                recognizedText = ""
                             }
                         }
                         
@@ -63,6 +79,8 @@ struct HomeContentView: View {
                     .foregroundStyle(.secondary)
                     .font(.footnote)
                     .padding(.horizontal)
+                }.sheet(isPresented: $showSpeechRecognizer) {
+                    SpeechRecognizerView(recognizedText: $recognizedText)
                 }
             }
         }
