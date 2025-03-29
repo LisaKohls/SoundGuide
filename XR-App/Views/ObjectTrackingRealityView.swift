@@ -15,6 +15,9 @@ import SwiftUI
 
 @MainActor
 struct ObjectTrackingRealityView: View {
+    
+    @StateObject var speechRecognizer = SpeechRecognizer()
+    
     var appState: AppState
     var root = Entity()
     
@@ -42,7 +45,16 @@ struct ObjectTrackingRealityView: View {
                         //add audio to object entity
                         let resource: AudioFileResource = try .load(named: "spatial-sound.wav", in: .main)
                         let controller = visualization.entity.prepareAudio(resource)
-                        controller.play()
+                        
+                        
+                        speechRecognizer.onResult = { recognizedText in
+                            print("Erkannt: \(recognizedText)")
+                            print("visualization.entity: \(visualization.entity)")
+                        }
+                        
+                        speechRecognizer.startRecognition()
+                        
+                        //controller.play()
                         
                         self.objectVisualizations[id] = visualization
                         root.addChild(visualization.entity)
