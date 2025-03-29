@@ -19,6 +19,7 @@ struct ObjectTrackingRealityView: View {
     var root = Entity()
     
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
+    @State private var toneGenerators: [UUID: AudioToneGenerator] = [:]
 
     var body: some View {
         RealityView { content in
@@ -46,11 +47,23 @@ struct ObjectTrackingRealityView: View {
                         
                         self.objectVisualizations[id] = visualization
                         root.addChild(visualization.entity)
+                        
+                        let generator = AudioToneGenerator(frequency: 440)
+                        generator.play()
+                        toneGenerators[id] = generator
                     case .updated:
                         self.objectVisualizations[id]?.update(with: anchor)
+                        
+                        if let generator = toneGenerators[id] {
+                            let y = anchor.originFromAnchorTransform.columns.3.y
+                            generator.updatePitch(forY: y)
+                        }
+
                     case .removed:
                         self.objectVisualizations[id]?.entity.removeFromParent()
                         self.objectVisualizations.removeValue(forKey: id)
+                        toneGenerators[id]?.stop()
+                        toneGenerators.removeValue(forKey: id)
 
                     }
                 }
