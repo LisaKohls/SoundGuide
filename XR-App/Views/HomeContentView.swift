@@ -15,31 +15,31 @@ struct HomeContentView: View {
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     
-    //@State private var recognizedText: String = ""
-    @State private var showSpeechRecognizer = false
+    @State private var showSpeechRecognizer = true
     
     var body: some View {
         Group {
-            Text("visionOS Object Tracking")
-                .font(.system(size: 15, weight:. bold))
+            Text("Welcome to SoundGuide")
+                .font(.system(size: 25, weight:. bold))
                 .padding(30)
         }
         VStack {
             if appState.canEnterImmersiveSpace {
                 VStack {
                     if !appState.isImmersiveSpaceOpened {
-                        
-                        Button("Name the object you are looking for"){
-                            showSpeechRecognizer = true
-                        }.padding(10)
-                        
-                        if !appState.recognizedText.isEmpty {
-                            Text("Recognized Object: \(appState.recognizedText)")
+                     
+                            
+                            if !showSpeechRecognizer {
+                            Text("Gesuchtes Objekt: \(appState.recognizedText)")
                                 .font(.headline)
                                 .padding()
                             
+                            Button("Erneute Eingabe") {
+                                appState.recognizedText = ""
+                                showSpeechRecognizer = true
+                            }.padding()
                             
-                            Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
+                            Button("Starte das Tracking mit \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Objekt(en)") {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                     case .opened:
@@ -54,13 +54,16 @@ struct HomeContentView: View {
                                 }
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
-                       }
+                            } else {
+                                SpeechRecognizerView(recognizedText: $appState.recognizedText, showSpeechRecognizer: $showSpeechRecognizer)
+                            }
                     } else {
                         Button("Stop Tracking") {
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
                                 appState.recognizedText = ""
+                                showSpeechRecognizer = true
                             }
                         }
                         
@@ -73,14 +76,14 @@ struct HomeContentView: View {
                     }
                     
                     Text(appState.isImmersiveSpaceOpened ?
-                         "This leaves the immersive space." :
-                         "This enters an immersive space, hiding all other apps."
-                    )
+                         "This leaves the immersive space." : "" )
+                    
+                    Text(!appState.recognizedText.isEmpty ? "This enters an immersive space, hiding all other apps.": "This allows you to open the speech recognizer")
+                    
                     .foregroundStyle(.secondary)
                     .font(.footnote)
                     .padding(.horizontal)
-                }.sheet(isPresented: $showSpeechRecognizer) {
-                    SpeechRecognizerView(recognizedText: $appState.recognizedText)
+                    //.frame(minWidth: 400, minHeight: 300)
                 }
             }
         }

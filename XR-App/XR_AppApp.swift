@@ -21,7 +21,6 @@ struct XR_AppApp: App {
                       }
                   }
           }
-          .defaultSize(CGSize(width: 250, height: 150))
           
           ImmersiveSpace(id: "ObjectTracking") {
               ObjectTrackingRealityView(appState: appState)

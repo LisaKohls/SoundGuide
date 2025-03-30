@@ -11,6 +11,7 @@ import Speech
 struct SpeechRecognizerView: View {
     
     @Binding var recognizedText: String
+    @Binding var showSpeechRecognizer: Bool
     @Environment(\.dismiss) var dismiss
     
     @State private var isListening = false
@@ -18,6 +19,7 @@ struct SpeechRecognizerView: View {
     
     var body: some View {
            VStack {
+               
                Text("Say the name of the object")
                    .font(.title3)
 
@@ -28,9 +30,10 @@ struct SpeechRecognizerView: View {
                    Button(action: {
                        if isListening {
                            speechRecognizer.stopRecognition()
+                           recognizedText = ""
                            isListening = false
                        } else {
-        
+                           speechRecognizer.startRecognition()
                            speechRecognizer.onResult = { textResult in
                                print("Erkannt: \(textResult)")
                                if !textResult.isEmpty {
@@ -40,19 +43,22 @@ struct SpeechRecognizerView: View {
                                //speechRecognizer.stopRecognition()
                            }
                            
-                           speechRecognizer.startRecognition()
                            isListening = true
                        }
                    }) {
-                       Text(isListening ? "Stop" : "Start Listening")
+                       Text(isListening ? "Eingabe löschen" : "Starten")
                            .clipShape(Capsule())
                    }
                    
-                   Button("Close") {
-                       dismiss()
+                   if isListening && !recognizedText.isEmpty {
+                       Button("Submit") {
+                          showSpeechRecognizer = false
+                          //speechRecognizer.stopRecognition()
+                          dismiss()
+                      }.background(Color.gray.opacity(0.2))
+                       .clipShape(Capsule())
                    }
-                   .background(Color.gray.opacity(0.2))
-                   .clipShape(Capsule())
+                   
                }
            }
            .onDisappear {
