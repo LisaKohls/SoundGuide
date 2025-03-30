@@ -17,16 +17,6 @@ class SpeechRecognizer: ObservableObject {
     
     var onResult: ((String) -> Void)?
     
-    func configureAudioSession() {
-        do {
-            let session = AVAudioSession.sharedInstance()
-            try session.setCategory(.record, mode: .measurement, options: .duckOthers)
-            try session.setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            print("⚠️ Fehler beim Konfigurieren der AudioSession: \(error)")
-        }
-    }
-    
     func startRecognition() {
         SFSpeechRecognizer.requestAuthorization { status in
             print("try starting recognition")
@@ -49,8 +39,11 @@ class SpeechRecognizer: ObservableObject {
                         let spokenText = result.bestTranscription.formattedString.lowercased()
                         self.onResult?(spokenText)
                     }
+                    
                 }
+               
             }
+            self.audioEngine.stop()
         }
     }
     
@@ -59,5 +52,7 @@ class SpeechRecognizer: ObservableObject {
         request?.endAudio()
         recognitionTask?.cancel()
     }
+  
+    
 }
 

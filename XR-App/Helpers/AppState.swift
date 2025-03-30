@@ -16,6 +16,8 @@ import RealityFoundation
 @MainActor
 @Observable
 class AppState {
+    var recognizedText: String = ""
+    
     var isImmersiveSpaceOpened = false
     
     let referenceObjectLoader = ReferenceObjectLoader()

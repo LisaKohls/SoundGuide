@@ -16,10 +16,9 @@ import SwiftUI
 @MainActor
 struct ObjectTrackingRealityView: View {
     
-    var appState: AppState
+    @Bindable var appState: AppState
     var root = Entity()
-    
-    @State private var recognizedText: String = ""
+
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
 
     var body: some View {
@@ -31,23 +30,18 @@ struct ObjectTrackingRealityView: View {
                 guard let objectTracking else {
                     return
                 }
-                //wird nicht aufgerufen
+                
                 for await anchorUpdate in objectTracking.anchorUpdates {
                     let anchor = anchorUpdate.anchor
                     let id = anchor.id
-                    
-                    print("anchor.referenceObject.name: \(anchor.referenceObject.name) recognizedText: \(recognizedText)")
-                        
-                    if(anchor.referenceObject.name == recognizedText){
-                        
+              
+                    if(anchor.referenceObject.name.lowercased() == appState.recognizedText){
                         
                         switch anchorUpdate.event {
                         case .added:
                             let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
                             
                             let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
-                            
-                            
                             
                             //add audio to object entity
                             let resource: AudioFileResource = try .load(named: "spatial-sound.wav", in: .main)
@@ -79,8 +73,6 @@ struct ObjectTrackingRealityView: View {
             }
             objectVisualizations.removeAll()
             appState.didLeaveImmersiveSpace()
-        }.onChange(of: recognizedText) {
-            print("recognizedText hat sich geändert: \(recognizedText)")
         }
     }
 }

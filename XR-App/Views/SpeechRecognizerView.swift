@@ -21,7 +21,7 @@ struct SpeechRecognizerView: View {
                Text("Say the name of the object")
                    .font(.title3)
 
-               Text(recognizedText.isEmpty ? "Listening..." : recognizedText)
+               Text(recognizedText.isEmpty && isListening ? "Listening..." : recognizedText)
                    .font(.headline)
                
                HStack {
@@ -30,11 +30,14 @@ struct SpeechRecognizerView: View {
                            speechRecognizer.stopRecognition()
                            isListening = false
                        } else {
-                           speechRecognizer.configureAudioSession()
-                           
+        
                            speechRecognizer.onResult = { textResult in
                                print("Erkannt: \(textResult)")
-                               recognizedText = textResult
+                               if !textResult.isEmpty {
+                                   recognizedText = textResult
+                               }
+                              
+                               //speechRecognizer.stopRecognition()
                            }
                            
                            speechRecognizer.startRecognition()

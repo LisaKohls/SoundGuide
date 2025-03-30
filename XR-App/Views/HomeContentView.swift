@@ -15,7 +15,7 @@ struct HomeContentView: View {
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     
-    @State private var recognizedText: String = ""
+    //@State private var recognizedText: String = ""
     @State private var showSpeechRecognizer = false
     
     var body: some View {
@@ -33,8 +33,8 @@ struct HomeContentView: View {
                             showSpeechRecognizer = true
                         }.padding(10)
                         
-                        if !recognizedText.isEmpty {
-                            Text("Recognized Object: \(recognizedText)")
+                        if !appState.recognizedText.isEmpty {
+                            Text("Recognized Object: \(appState.recognizedText)")
                                 .font(.headline)
                                 .padding()
                             
@@ -60,7 +60,7 @@ struct HomeContentView: View {
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
-                                recognizedText = ""
+                                appState.recognizedText = ""
                             }
                         }
                         
@@ -80,7 +80,7 @@ struct HomeContentView: View {
                     .font(.footnote)
                     .padding(.horizontal)
                 }.sheet(isPresented: $showSpeechRecognizer) {
-                    SpeechRecognizerView(recognizedText: $recognizedText)
+                    SpeechRecognizerView(recognizedText: $appState.recognizedText)
                 }
             }
         }
