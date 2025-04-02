@@ -27,8 +27,6 @@ struct HomeContentView: View {
             if appState.canEnterImmersiveSpace {
                 VStack {
                     if !appState.isImmersiveSpaceOpened {
-                     
-                            
                             if !showSpeechRecognizer {
                             Text("Gesuchtes Objekt: \(appState.recognizedText)")
                                 .font(.headline)
@@ -77,8 +75,6 @@ struct HomeContentView: View {
                     
                     Text(appState.isImmersiveSpaceOpened ?
                          "This leaves the immersive space." : "" )
-                    
-                    Text(!appState.recognizedText.isEmpty ? "This enters an immersive space, hiding all other apps.": "This allows you to open the speech recognizer")
                     
                     .foregroundStyle(.secondary)
                     .font(.footnote)

@@ -34,23 +34,29 @@ class SpeechRecognizer: ObservableObject {
                 try? self.audioEngine.start()
                 
                 self.recognitionTask = self.recognizer?.recognitionTask(with: self.request!) { result, error in
+                    if let error = error {
+                           print("Fehler bei der Spracherkennung: \(error.localizedDescription)")
+                           //self.onResult?("Fehler: \(error.localizedDescription)")
+                           return
+                    }
+                    
                     if let result = result {
                         print("result in speechrecognizer: \(result.bestTranscription.formattedString)")
                         let spokenText = result.bestTranscription.formattedString.lowercased()
                         self.onResult?(spokenText)
                     }
-                    
                 }
-               
             }
-            self.audioEngine.stop()
         }
     }
     
     func stopRecognition() {
-        audioEngine.stop()
-        request?.endAudio()
-        recognitionTask?.cancel()
+       recognitionTask?.cancel()
+       recognitionTask = nil
+       request?.endAudio()
+       request = nil
+       audioEngine.stop()
+       audioEngine.inputNode.removeTap(onBus: 0)
     }
   
     

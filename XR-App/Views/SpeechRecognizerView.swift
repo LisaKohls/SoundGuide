@@ -18,9 +18,9 @@ struct SpeechRecognizerView: View {
     private let speechRecognizer = SpeechRecognizer()
     
     var body: some View {
-           VStack {
-               
-               Text("Say the name of the object")
+        VStack {
+            
+               Text("Beginne mit der Spracherkennung")
                    .font(.title3)
 
                Text(recognizedText.isEmpty && isListening ? "Listening..." : recognizedText)
@@ -39,10 +39,7 @@ struct SpeechRecognizerView: View {
                                if !textResult.isEmpty {
                                    recognizedText = textResult
                                }
-                              
-                               //speechRecognizer.stopRecognition()
                            }
-                           
                            isListening = true
                        }
                    }) {
