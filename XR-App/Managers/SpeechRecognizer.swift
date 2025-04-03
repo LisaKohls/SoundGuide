@@ -2,7 +2,7 @@
 //  SpeechRecognizer.swift
 //  XR-App
 //
-//  Created by Lisa Salzer on 29.03.25.
+//  Created by Lisa Kohls on 29.03.25.
 //
 
 import Foundation

@@ -33,7 +33,6 @@ struct SpeechRecognizerView: View {
                            recognizedText = ""
                            isListening = false
                        } else {
-                           speechRecognizer.startRecognition()
                            speechRecognizer.onResult = { textResult in
                                print("Erkannt: \(textResult)")
                                if !textResult.isEmpty {
@@ -41,6 +40,8 @@ struct SpeechRecognizerView: View {
                                }
                            }
                            isListening = true
+                           
+                           speechRecognizer.startRecognition()
                        }
                    }) {
                        Text(isListening ? "Eingabe löschen" : "Starten")
@@ -50,7 +51,6 @@ struct SpeechRecognizerView: View {
                    if isListening && !recognizedText.isEmpty {
                        Button("Submit") {
                           showSpeechRecognizer = false
-                          //speechRecognizer.stopRecognition()
                           dismiss()
                       }.background(Color.gray.opacity(0.2))
                        .clipShape(Capsule())

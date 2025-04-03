@@ -16,7 +16,6 @@ import RealityFoundation
 @MainActor
 @Observable
 class AppState {
-    var recognizedText: String = ""
     
     var isImmersiveSpaceOpened = false
     
@@ -42,6 +41,8 @@ class AppState {
     var providersStoppedWithError = false
     
     var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
+    
+    var recognizedText: String = ""
     
     func startTracking() async -> ObjectTrackingProvider? {
         let referenceObjects = referenceObjectLoader.enabledReferenceObjects
