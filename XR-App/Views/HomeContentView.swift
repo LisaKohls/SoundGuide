@@ -33,7 +33,6 @@ struct HomeContentView: View {
                                 .padding()
                             
                             Button("Erneute Eingabe") {
-                                appState.recognizedText = ""
                                 showSpeechRecognizer = true
                             }.padding()
                             
@@ -53,7 +52,9 @@ struct HomeContentView: View {
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
                             } else {
-                                SpeechRecognizerView(recognizedText: $appState.recognizedText, showSpeechRecognizer: $showSpeechRecognizer)
+                                SpeechRecognizerView(showSpeechRecognizer: $showSpeechRecognizer){ newText in
+                                    appState.recognizedText = newText
+                                }
                             }
                     } else {
                         Button("Stop Tracking") {

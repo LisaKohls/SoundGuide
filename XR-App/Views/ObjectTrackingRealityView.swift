@@ -34,8 +34,14 @@ struct ObjectTrackingRealityView: View {
                 for await anchorUpdate in objectTracking.anchorUpdates {
                     let anchor = anchorUpdate.anchor
                     let id = anchor.id
-              
-                    if(anchor.referenceObject.name.lowercased() == appState.recognizedText){
+                    var detectedObject = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
+                    
+                    if detectedObject == "mug" {
+                        detectedObject = "tasse"
+                    }
+                    
+                    print("detectedObject: \(detectedObject)")
+                    if(detectedObject == appState.recognizedText){
                         
                         switch anchorUpdate.event {
                         case .added:

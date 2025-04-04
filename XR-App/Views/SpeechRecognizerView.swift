@@ -10,29 +10,38 @@ import Speech
 
 struct SpeechRecognizerView: View {
     
-    @Binding var recognizedText: String
+    @State private var recognizedText: String = ""
     @Binding var showSpeechRecognizer: Bool
     @Environment(\.dismiss) var dismiss
     
     @State private var isListening = false
     private let speechRecognizer = SpeechRecognizer()
+    @State private var startButton: Bool = true
+    var onResult: (String) -> Void
     
     var body: some View {
         VStack {
             
                Text("Beginne mit der Spracherkennung")
                    .font(.title3)
-
-               Text(recognizedText.isEmpty && isListening ? "Listening..." : recognizedText)
-                   .font(.headline)
+                   .padding()
+            
+                if !startButton {
+                    Text(recognizedText.isEmpty && isListening ? "Aufnahme läuft..." : recognizedText)
+                                       .font(.headline)
+                }
+               
                
                HStack {
                    Button(action: {
                        if isListening {
+                           isListening = false
                            speechRecognizer.stopRecognition()
                            recognizedText = ""
-                           isListening = false
+                           startButton = true
                        } else {
+                           recognizedText = ""
+                           startButton = false
                            speechRecognizer.onResult = { textResult in
                                print("Erkannt: \(textResult)")
                                if !textResult.isEmpty {
@@ -50,7 +59,9 @@ struct SpeechRecognizerView: View {
                    
                    if isListening && !recognizedText.isEmpty {
                        Button("Submit") {
+                          speechRecognizer.stopRecognition()
                           showSpeechRecognizer = false
+                          onResult(recognizedText)
                           dismiss()
                       }.background(Color.gray.opacity(0.2))
                        .clipShape(Capsule())
@@ -58,9 +69,10 @@ struct SpeechRecognizerView: View {
                    
                }
            }
-           .onDisappear {
-               speechRecognizer.stopRecognition()
-           }
+        .onDisappear {
+            speechRecognizer.stopRecognition()
+            isListening = false
+        }
            .padding()
        }
    }
