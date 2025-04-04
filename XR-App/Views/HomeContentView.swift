@@ -31,10 +31,13 @@ struct HomeContentView: View {
                             Text("Gesuchtes Objekt: \(appState.recognizedText)")
                                 .font(.headline)
                                 .padding()
+                                .accessibilityLabel("Gesuchtes Objekt ist \(appState.recognizedText)")
                             
                             Button("Erneute Eingabe") {
                                 showSpeechRecognizer = true
                             }.padding()
+                             .accessibilityLabel("Button Erneute Eingabe")
+                                
                             
                             Button("Starte das Tracking mit \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Objekt(en)") {
                                 Task {
@@ -51,20 +54,21 @@ struct HomeContentView: View {
                                 }
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
+                            .accessibilityLabel("Button starte das Tracking")
                             } else {
                                 SpeechRecognizerView(showSpeechRecognizer: $showSpeechRecognizer){ newText in
                                     appState.recognizedText = newText
                                 }
                             }
                     } else {
-                        Button("Stop Tracking") {
+                        Button("Stoppe Tracking") {
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
                                 appState.recognizedText = ""
                                 showSpeechRecognizer = true
                             }
-                        }
+                        }.accessibilityLabel("Button stoppe das Tracking")
                         
                         if !appState.objectTrackingStartedRunning {
                             HStack {
