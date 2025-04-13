@@ -40,7 +40,7 @@ struct HomeContentView: View {
                                     viewModel.speak(text: "Das gesuchtes Objekt ist \(appState.recognizedText)")
                                 }
                             
-                            Button("Erneute Eingabe") {
+                            Button("Button zur erneuten Eingabe") {
                                 showSpeechRecognizer = true
                             }.padding()
                                  .accessibilityLabel("Button zur erneuten Eingabe")

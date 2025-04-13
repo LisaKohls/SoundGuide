@@ -16,7 +16,6 @@ struct SpeechRecognizerView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var isListening = false
-    private let speechRecognizer = SpeechRecognizer()
     @State private var startButton: Bool = true
     @AccessibilityFocusState private var isFocused: Bool
     var onResult: (String) -> Void
@@ -48,13 +47,13 @@ struct SpeechRecognizerView: View {
                         Button(action: {
                             if isListening {
                                 isListening = false
-                                speechRecognizer.stopRecognition()
+                                viewModel.stopRecognition()
                                 recognizedText = ""
                                 startButton = true
                             } else {
                                 recognizedText = ""
                                 startButton = false
-                                speechRecognizer.onResult = { textResult in
+                                viewModel.onResult = { textResult in
                                     
                                     if !textResult.isEmpty && !textResult.contains("ein") && !textResult.contains("klicken") {
                                         recognizedText = textResult
@@ -63,7 +62,7 @@ struct SpeechRecognizerView: View {
                                 }
                                 isListening = true
                                 
-                                speechRecognizer.startRecognition()
+                                viewModel.startRecognition()
                             }
                         }) {
                             let btnText = isListening ? "Eingabe löschen Button" : "Start Button"
@@ -84,7 +83,7 @@ struct SpeechRecognizerView: View {
                         
                         if isListening && !recognizedText.isEmpty {
                             Button("Einreichen Button") {
-                                speechRecognizer.stopRecognition()
+                                viewModel.stopRecognition()
                                 showSpeechRecognizer = false
                                 onResult(recognizedText)
                                 dismiss()
@@ -99,7 +98,7 @@ struct SpeechRecognizerView: View {
                     }
                 }
                 .onDisappear {
-                    speechRecognizer.stopRecognition()
+                    viewModel.stopRecognition()
                     isListening = false
                 }
                 .padding()
