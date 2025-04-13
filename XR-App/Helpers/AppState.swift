@@ -12,57 +12,19 @@ The app's overall state.
 import ARKit
 import RealityKitContent;
 import RealityFoundation
-
 @MainActor
-@Observable
-class AppState {
+class AppState: ObservableObject {
     
-    var isImmersiveSpaceOpened = false
-    
+    @Published var isImmersiveSpaceOpened = false
+    @Published var recognizedText: String = ""
+    @Published var objectTrackingStartedRunning = false
+    @Published var providersStoppedWithError = false
+    @Published var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
+
     let referenceObjectLoader = ReferenceObjectLoader()
-
-    func didLeaveImmersiveSpace() {
-        // Stop the provider; the provider that just ran in the
-        // immersive space is now in a paused state and isn't needed
-        // anymore. When a person reenters the immersive space,
-        // run a new provider.
-        arkitSession.stop()
-        isImmersiveSpaceOpened = false
-    }
-
-    // MARK: - ARKit state
-
-    private var arkitSession = ARKitSession()
-    
     private var objectTracking: ObjectTrackingProvider? = nil
-    
-    var objectTrackingStartedRunning = false
-    
-    var providersStoppedWithError = false
-    
-    var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
-    
-    var recognizedText: String = ""
-    
-    func startTracking() async -> ObjectTrackingProvider? {
-        let referenceObjects = referenceObjectLoader.enabledReferenceObjects
-        
-        guard !referenceObjects.isEmpty else {
-            fatalError("No reference objects to start tracking")
-        }
-        
-        // Run a new provider every time when entering the immersive space.
-        let objectTracking = ObjectTrackingProvider(referenceObjects: referenceObjects)
-        do {
-            try await arkitSession.run([objectTracking])
-        } catch {
-            print("Error: \(error)" )
-            return nil
-        }
-        self.objectTracking = objectTracking
-        return objectTracking
-    }
-    
+    private var arkitSession = ARKitSession()
+
     var allRequiredAuthorizationsAreGranted: Bool {
         worldSensingAuthorizationStatus == .allowed
     }
@@ -75,14 +37,36 @@ class AppState {
         allRequiredAuthorizationsAreGranted && allRequiredProvidersAreSupported
     }
 
-    func requestWorldSensingAuthorization() async {
-        let authorizationResult = await arkitSession.requestAuthorization(for: [.worldSensing])
-        worldSensingAuthorizationStatus = authorizationResult[.worldSensing]!
+    func startTracking() async -> ObjectTrackingProvider? {
+        let referenceObjects = referenceObjectLoader.enabledReferenceObjects
+        guard !referenceObjects.isEmpty else {
+            fatalError("No reference objects to start tracking")
+        }
+
+        let objectTracking = ObjectTrackingProvider(referenceObjects: referenceObjects)
+        do {
+            try await arkitSession.run([objectTracking])
+        } catch {
+            print("Error: \(error)")
+            return nil
+        }
+        self.objectTracking = objectTracking
+        return objectTracking
     }
-    
+
+    func didLeaveImmersiveSpace() {
+        arkitSession.stop()
+        isImmersiveSpaceOpened = false
+    }
+
+    func requestWorldSensingAuthorization() async {
+        let result = await arkitSession.requestAuthorization(for: [.worldSensing])
+        worldSensingAuthorizationStatus = result[.worldSensing]!
+    }
+
     func queryWorldSensingAuthorization() async {
-        let authorizationResult = await arkitSession.queryAuthorization(for: [.worldSensing])
-        worldSensingAuthorizationStatus = authorizationResult[.worldSensing]!
+        let result = await arkitSession.queryAuthorization(for: [.worldSensing])
+        worldSensingAuthorizationStatus = result[.worldSensing]!
     }
 
     func monitorSessionEvents() async {
@@ -114,13 +98,17 @@ class AppState {
                     break
                 }
             case .authorizationChanged(let type, let status):
-                print("Authorization type \(type) changed to \(status)")
                 if type == .worldSensing {
                     worldSensingAuthorizationStatus = status
                 }
             default:
-                print("An unknown event occurred \(event)")
+                print("Unknown event: \(event)")
             }
         }
+    }
+
+    // Falls du die Session woanders brauchst:
+    var arSession: ARKitSession {
+        arkitSession
     }
 }
