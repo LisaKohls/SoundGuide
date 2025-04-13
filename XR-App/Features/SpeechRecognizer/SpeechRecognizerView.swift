@@ -9,6 +9,7 @@ import SwiftUI
 import Speech
 
 struct SpeechRecognizerView: View {
+    var viewModel: SpeechRecognizerViewModel 
     
     @State private var recognizedText: String = ""
     @Binding var showSpeechRecognizer: Bool
@@ -27,11 +28,19 @@ struct SpeechRecognizerView: View {
                 .font(.title3)
                 .padding()
                 .accessibilityLabel("Beginne mit der Spracherkennung")
+                .onAppear {
+                        viewModel.speak(text: "Beginne mit der Spracherkennung")
+                }
                     
                     if !startButton {
                         let startBtnText = recognizedText.isEmpty && isListening ? "Aufnahme läuft..." : recognizedText
                         Text(startBtnText)
                             .font(.headline)
+                            .onAppear {
+                                    viewModel.speak(text: startBtnText)
+                            }.onChange(of: startBtnText) {
+                                viewModel.speak(text: startBtnText)
+                            }
                     }
                     
                     
@@ -57,22 +66,34 @@ struct SpeechRecognizerView: View {
                                 speechRecognizer.startRecognition()
                             }
                         }) {
-                            let btnText = isListening ? "Eingabe löschen" : "Starten"
+                            let btnText = isListening ? "Eingabe löschen Button" : "Start Button"
                             Text(btnText)
                                 .clipShape(Capsule())
-                                .accessibilityLabel(isListening ? "Eingabe löschen" : "Starten")
+                                .accessibilityLabel(btnText)
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                        viewModel.speak(text: btnText)
+                                    }
+                                }.onChange(of: btnText){
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        viewModel.speak(text: btnText)
+                                    }
+                                }
                         }
                         
                         
                         if isListening && !recognizedText.isEmpty {
-                            Button("Einreichen") {
+                            Button("Einreichen Button") {
                                 speechRecognizer.stopRecognition()
                                 showSpeechRecognizer = false
                                 onResult(recognizedText)
                                 dismiss()
                             }.background(Color.gray.opacity(0.2))
                                 .clipShape(Capsule())
-                                .accessibilityLabel("Einreichen")
+                                .accessibilityLabel("Einreichen Button")
+                                .onAppear {
+                                     viewModel.speak(text: "Einreichen Button")
+                                }
                         }
                         
                     }

@@ -14,14 +14,18 @@ struct HomeContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
+    @StateObject var viewModel = SpeechRecognizerViewModel()
     
     @State private var showSpeechRecognizer = true
     
     var body: some View {
         Group {
-            Text("Welcome to SoundGuide")
+            Text("Willkommen zu SoundGuide")
                 .font(.system(size: 25, weight:. bold))
                 .padding(30)
+                .onAppear {
+                    viewModel.speak(text: "Willkommen zu SoundGuide") 
+                }
         }
         
         VStack {
@@ -32,13 +36,20 @@ struct HomeContentView: View {
                             Text("Gesuchtes Objekt: \(appState.recognizedText)")
                                 .font(.headline)
                                 .padding()
+                                .onAppear {
+                                    viewModel.speak(text: "Das gesuchtes Objekt ist \(appState.recognizedText)")
+                                }
                             
                             Button("Erneute Eingabe") {
                                 showSpeechRecognizer = true
                             }.padding()
-                                 .accessibilityLabel("Erneute Eingabe")
+                                 .accessibilityLabel("Button zur erneuten Eingabe")
+                                 .onAppear {
+                                     viewModel.speak(text: "Button zur erneuten Eingabe")
+                                 }
                                 
-                            Button("Starte Tracking") {
+                            let btnTitle = "Starte Tracking Button"
+                            Button(btnTitle) {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                     case .opened:
@@ -53,40 +64,54 @@ struct HomeContentView: View {
                                 }
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
-                            .accessibilityLabel("Starte Tracking")
+                            .accessibilityLabel(btnTitle)
+                            .onAppear {
+                                viewModel.speak(text: btnTitle)
+                            }
                             } else {
-                                SpeechRecognizerView(showSpeechRecognizer: $showSpeechRecognizer){ newText in
+                                SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
                                     appState.recognizedText = newText
                                 }
                             }
                     } else {
-                        Button("Stoppe Tracking") {
+                        
+                        let btnTitle = "Stoppe Tracking Button"
+                        Button(btnTitle) {
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
                                 appState.recognizedText = ""
                                 showSpeechRecognizer = true
                             }
-                        }.accessibilityLabel("Stoppe Tracking")
+                        }.accessibilityLabel(btnTitle)
+                            .onAppear {
+                                viewModel.speak(text: btnTitle)
+                            }
+                        
                           
                         
                         if !appState.objectTrackingStartedRunning {
                             HStack {
-                                ProgressView()
-                                Text("Bitte warten. Referenzobjekte werden geladen.")
-                                .accessibilityLabel("Bitte warten. Referenzobjekte werden geladen.")
+                                let text = "Objekte werden geladen."
+                                Text(text)
+                                .accessibilityLabel(text)
+                                .onAppear {
+                                    viewModel.speak(text: text)
+                                }
+                            }
+                        }else{
+                            let text = "Das Tracking ist gestartet, bewege den Kopf und bewege dich leicht um die Objekte zu finden."
+                            Text(text)
+                            .accessibilityLabel(text)
+                            .onAppear {
+                                viewModel.speak(text: text)
                             }
                         }
                     }
-                    
-                    Text(appState.isImmersiveSpaceOpened ?
-                         "Dies verlässt den erweiterten Raum." : "")
-                    
-                    .foregroundStyle(.secondary)
-                    .font(.footnote)
-                    .padding(.horizontal)
-                    //.frame(minWidth: 400, minHeight: 300)
                 }
+                .foregroundStyle(.secondary)
+                .font(.footnote)
+                .padding(.horizontal)
             }
         }
         .padding()
