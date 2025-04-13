@@ -23,6 +23,7 @@ struct HomeContentView: View {
                 .font(.system(size: 25, weight:. bold))
                 .padding(30)
         }
+        
         VStack {
             if appState.canEnterImmersiveSpace {
                 VStack {
@@ -31,15 +32,13 @@ struct HomeContentView: View {
                             Text("Gesuchtes Objekt: \(appState.recognizedText)")
                                 .font(.headline)
                                 .padding()
-                                .accessibilityLabel("Gesuchtes Objekt ist \(appState.recognizedText)")
                             
                             Button("Erneute Eingabe") {
                                 showSpeechRecognizer = true
                             }.padding()
-                             .accessibilityLabel("Button Erneute Eingabe")
+                                 .accessibilityLabel("Erneute Eingabe")
                                 
-                            
-                            Button("Starte das Tracking mit \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Objekt(en)") {
+                            Button("Starte Tracking") {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                     case .opened:
@@ -54,7 +53,7 @@ struct HomeContentView: View {
                                 }
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
-                            .accessibilityLabel("Button starte das Tracking")
+                            .accessibilityLabel("Starte Tracking")
                             } else {
                                 SpeechRecognizerView(showSpeechRecognizer: $showSpeechRecognizer){ newText in
                                     appState.recognizedText = newText
@@ -68,18 +67,20 @@ struct HomeContentView: View {
                                 appState.recognizedText = ""
                                 showSpeechRecognizer = true
                             }
-                        }.accessibilityLabel("Button stoppe das Tracking")
+                        }.accessibilityLabel("Stoppe Tracking")
+                          
                         
                         if !appState.objectTrackingStartedRunning {
                             HStack {
                                 ProgressView()
-                                Text("Please wait until all reference objects have been loaded")
+                                Text("Bitte warten. Referenzobjekte werden geladen.")
+                                .accessibilityLabel("Bitte warten. Referenzobjekte werden geladen.")
                             }
                         }
                     }
                     
                     Text(appState.isImmersiveSpaceOpened ?
-                         "This leaves the immersive space." : "" )
+                         "Dies verlässt den erweiterten Raum." : "")
                     
                     .foregroundStyle(.secondary)
                     .font(.footnote)
@@ -133,6 +134,7 @@ struct HomeContentView: View {
             // Settings app to the foreground and changes authorizations there.
             await appState.monitorSessionEvents()
         }
+        
     }
 }
 
