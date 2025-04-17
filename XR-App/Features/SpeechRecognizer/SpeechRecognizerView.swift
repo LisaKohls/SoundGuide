@@ -9,29 +9,34 @@ import SwiftUI
 import Speech
 
 struct SpeechRecognizerView: View {
-    var viewModel: SpeechRecognizerViewModel 
     
-    @State private var recognizedText: String = ""
+    var viewModel: SpeechRecognizerViewModel
+
     @Binding var showSpeechRecognizer: Bool
     @Binding var repeatSpeechRecognizer: Bool
     @Environment(\.dismiss) var dismiss
-    
+    @AccessibilityFocusState private var isFocused: Bool
+
+    @State private var recognizedText: String = ""
     @State private var isListening = false
     @State private var startButton: Bool = true
-    @AccessibilityFocusState private var isFocused: Bool
-    private let startRocordingBtn =  "Aufnahme beginnen"
+
+    private let startRocordingBtn = "Aufnahme beginnen"
+    private let beginRecordingHeading = "Beginne mit der Spracherkennung"
+    private let noRecordedObject = "Nenne jetzt das gesuchte Objekt..."
+
     var onResult: (String) -> Void
+
     
     var body: some View {
         VStack {
             
-            Text("Beginne mit der Spracherkennung")
-                .font(.title3)
+            Text(beginRecordingHeading)
+                .font(.title2)
                 .padding()
-                .accessibilityLabel("Beginne mit der Spracherkennung")
+                .accessibilityLabel(beginRecordingHeading)
                 .onAppear {
-                    print("repeatSpeechRecognizer: \(repeatSpeechRecognizer)")
-                        viewModel.speak(text: "Beginne mit der Spracherkennung")
+                        viewModel.speak(text: beginRecordingHeading)
                         if repeatSpeechRecognizer {
                             recognizedText = ""
                             startButton = false
@@ -48,7 +53,7 @@ struct SpeechRecognizerView: View {
                 }
                     
                 if !startButton {
-                        let recordedText = recognizedText.isEmpty && isListening ? "Nenne jetzt das gesuchte Objekt..." : recognizedText
+                        let recordedText = recognizedText.isEmpty && isListening ? noRecordedObject : recognizedText
                         Text(recordedText)
                             .font(.headline)
                             .onAppear {
@@ -84,8 +89,10 @@ struct SpeechRecognizerView: View {
                                     .clipShape(Capsule())
                                     .accessibilityLabel(startRocordingBtn)
                                     .onAppear {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
-                                            viewModel.speak(text: startRocordingBtn)
+                                        if !repeatSpeechRecognizer {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                                                viewModel.speak(text: startRocordingBtn)
+                                            }
                                         }
                                     }
                             }
@@ -95,6 +102,7 @@ struct SpeechRecognizerView: View {
                 .onDisappear {
                     viewModel.stopRecognition()
                     isListening = false
+                    repeatSpeechRecognizer = false
                 }
                 .padding()
         }

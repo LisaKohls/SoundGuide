@@ -99,6 +99,7 @@ struct HomeContentView: View {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
                                 appState.recognizedText = ""
+                                repeatSpeechRecognizer = false
                                 showSpeechRecognizer = true
                             }
                         }.accessibilityLabel(stopBtn)
