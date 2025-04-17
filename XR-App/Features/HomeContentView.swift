@@ -16,7 +16,16 @@ struct HomeContentView: View {
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @StateObject var viewModel = SpeechRecognizerViewModel()
     
-    @State private var showSpeechRecognizer = true
+    @State private var showSpeechRecognizer: Bool  = true
+    @State private var repeatSpeechRecognizer: Bool = false
+    
+    private let repeatBtn = "Erneut eingeben"
+    private let repeatContentBtn = "Inhalte erneut vorlesen"
+    private let startBtn = "Suche starten"
+    private let stopBtn = "Suche beenden"
+    private let text = "Das Tracking ist gestartet, bewege den Kopf und bewege dich leicht um die Objekte zu finden."
+    private let LoadObjectsText = "Objekte werden geladen."
+    private let welcomeText = "Willkommen zu SoundGuide. Das System ließt dir die möglichen Aktionen vor um das Object Tracking zu verwenden. Um einen Batten zu klicken, sage den Namen des vorgelesenen Batten und klicken dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken."
     
     var body: some View {
         Group {
@@ -24,7 +33,7 @@ struct HomeContentView: View {
                 .font(.system(size: 25, weight:. bold))
                 .padding(30)
                 .onAppear {
-                    viewModel.speak(text: "Willkommen zu SoundGuide") 
+                    //viewModel.speak(text: welcomeText)
                 }
         }
         
@@ -37,19 +46,28 @@ struct HomeContentView: View {
                                 .font(.headline)
                                 .padding()
                                 .onAppear {
-                                    viewModel.speak(text: "Das gesuchtes Objekt ist \(appState.recognizedText)")
-                                }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText)")
+                                    }
+                             }
                             
-                            Button("Button zur erneuten Eingabe") {
+                            Button(repeatBtn) {
                                 showSpeechRecognizer = true
+                                repeatSpeechRecognizer = true
                             }.padding()
-                                 .accessibilityLabel("Button zur erneuten Eingabe")
+                                 .accessibilityLabel(repeatBtn)
                                  .onAppear {
-                                     viewModel.speak(text: "Button zur erneuten Eingabe")
-                                 }
+                                     viewModel.speak(text: repeatBtn)
+                            }
+                            
+                            Button(repeatContentBtn) {
+                                viewModel.speak(text: "Gesuchtes Objekt: \(appState.recognizedText), \(repeatBtn), \(startBtn)")
+                            }.padding()
+                             .accessibilityLabel(repeatContentBtn)
+                               
                                 
-                            let btnTitle = "Starte Tracking Button"
-                            Button(btnTitle) {
+                            
+                            Button(startBtn) {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                     case .opened:
@@ -64,43 +82,46 @@ struct HomeContentView: View {
                                 }
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
-                            .accessibilityLabel(btnTitle)
+                            .accessibilityLabel(startBtn)
                             .onAppear {
-                                viewModel.speak(text: btnTitle)
+                                viewModel.speak(text: startBtn)
                             }
                             } else {
-                                SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
+                                SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer, repeatSpeechRecognizer: $repeatSpeechRecognizer){ newText in
                                     appState.recognizedText = newText
                                 }
                             }
                     } else {
                         
-                        let btnTitle = "Stoppe Tracking Button"
-                        Button(btnTitle) {
+                       
+                        Button(stopBtn) {
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
                                 appState.recognizedText = ""
                                 showSpeechRecognizer = true
                             }
-                        }.accessibilityLabel(btnTitle)
+                        }.accessibilityLabel(stopBtn)
                             .onAppear {
-                                viewModel.speak(text: btnTitle)
+                                viewModel.speak(text: stopBtn)
                             }
                         
-                          
+                        Button(repeatContentBtn) {
+                            viewModel.speak(text: stopBtn)
+                        }.padding()
+                         .accessibilityLabel(repeatContentBtn)
+                        
                         
                         if !appState.objectTrackingStartedRunning {
                             HStack {
-                                let text = "Objekte werden geladen."
-                                Text(text)
-                                .accessibilityLabel(text)
+                                Text(LoadObjectsText)
+                                .accessibilityLabel(LoadObjectsText)
                                 .onAppear {
-                                    viewModel.speak(text: text)
+                                    viewModel.speak(text: LoadObjectsText)
                                 }
                             }
                         }else{
-                            let text = "Das Tracking ist gestartet, bewege den Kopf und bewege dich leicht um die Objekte zu finden."
+                            
                             Text(text)
                             .accessibilityLabel(text)
                             .onAppear {
@@ -115,6 +136,9 @@ struct HomeContentView: View {
             }
         }
         .padding()
+        .onAppear(){
+            repeatSpeechRecognizer = false
+        }
         .onChange(of: scenePhase, initial: true) {
             print("Scene phase: \(scenePhase)")
             if scenePhase == .active {

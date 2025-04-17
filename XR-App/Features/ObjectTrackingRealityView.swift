@@ -36,9 +36,18 @@ struct ObjectTrackingRealityView: View {
                     let id = anchor.id
                     var detectedObject = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
                     
-                    if detectedObject == "mug" {
+                    switch detectedObject {
+                    case "mug":
                         detectedObject = "tasse"
+                    case "spices":
+                        detectedObject = "gewürz"
+                    case "bell peppers":
+                        detectedObject = "paprika"
+                    default:
+                    break;
                     }
+                    
+                
                     
                     print("detectedObject: \(detectedObject)")
                     if(detectedObject == appState.recognizedText){

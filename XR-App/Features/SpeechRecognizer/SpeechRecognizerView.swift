@@ -13,11 +13,13 @@ struct SpeechRecognizerView: View {
     
     @State private var recognizedText: String = ""
     @Binding var showSpeechRecognizer: Bool
+    @Binding var repeatSpeechRecognizer: Bool
     @Environment(\.dismiss) var dismiss
     
     @State private var isListening = false
     @State private var startButton: Bool = true
     @AccessibilityFocusState private var isFocused: Bool
+    private let startRocordingBtn =  "Aufnahme beginnen"
     var onResult: (String) -> Void
     
     var body: some View {
@@ -28,73 +30,66 @@ struct SpeechRecognizerView: View {
                 .padding()
                 .accessibilityLabel("Beginne mit der Spracherkennung")
                 .onAppear {
+                    print("repeatSpeechRecognizer: \(repeatSpeechRecognizer)")
                         viewModel.speak(text: "Beginne mit der Spracherkennung")
+                        if repeatSpeechRecognizer {
+                            recognizedText = ""
+                            startButton = false
+                            viewModel.onResult = { textResult in
+                                
+                                if !textResult.isEmpty && !textResult.contains("ein") && !textResult.contains("klicken") {
+                                    recognizedText = textResult
+                                    print("Erkannt recognized Text: \(recognizedText)")
+                                }
+                            }
+                            isListening = true
+                            viewModel.startRecognition()
+                    }
                 }
                     
-                    if !startButton {
-                        let startBtnText = recognizedText.isEmpty && isListening ? "Aufnahme läuft..." : recognizedText
-                        Text(startBtnText)
+                if !startButton {
+                        let recordedText = recognizedText.isEmpty && isListening ? "Nenne jetzt das gesuchte Objekt..." : recognizedText
+                        Text(recordedText)
                             .font(.headline)
                             .onAppear {
-                                    viewModel.speak(text: startBtnText)
-                            }.onChange(of: startBtnText) {
-                                viewModel.speak(text: startBtnText)
+                               viewModel.speak(text: recordedText)
+                            }.onChange(of: recordedText) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    showSpeechRecognizer = false
+                                    viewModel.stopRecognition()
+                                    onResult(recognizedText)
+                                    dismiss()
+                                }
                             }
                     }
                     
                     
                     HStack {
-                        Button(action: {
-                            if isListening {
-                                isListening = false
-                                viewModel.stopRecognition()
-                                recognizedText = ""
-                                startButton = true
-                            } else {
+                        if !isListening {
+                            Button(action: {
                                 recognizedText = ""
                                 startButton = false
                                 viewModel.onResult = { textResult in
-                                    
                                     if !textResult.isEmpty && !textResult.contains("ein") && !textResult.contains("klicken") {
                                         recognizedText = textResult
-                                        print("Erkannt recognized Text: \(recognizedText)")
+                                        print("Erkannter Text: \(recognizedText)")
                                     }
                                 }
                                 isListening = true
                                 
                                 viewModel.startRecognition()
                             }
-                        }) {
-                            let btnText = isListening ? "Eingabe löschen Button" : "Start Button"
-                            Text(btnText)
-                                .clipShape(Capsule())
-                                .accessibilityLabel(btnText)
-                                .onAppear {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                                        viewModel.speak(text: btnText)
+                            ) {
+                                Text(startRocordingBtn)
+                                    .clipShape(Capsule())
+                                    .accessibilityLabel(startRocordingBtn)
+                                    .onAppear {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                                            viewModel.speak(text: startRocordingBtn)
+                                        }
                                     }
-                                }.onChange(of: btnText){
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        viewModel.speak(text: btnText)
-                                    }
-                                }
+                            }
                         }
-                        
-                        
-                        if isListening && !recognizedText.isEmpty {
-                            Button("Einreichen Button") {
-                                viewModel.stopRecognition()
-                                showSpeechRecognizer = false
-                                onResult(recognizedText)
-                                dismiss()
-                            }.background(Color.gray.opacity(0.2))
-                                .clipShape(Capsule())
-                                .accessibilityLabel("Einreichen Button")
-                                .onAppear {
-                                     viewModel.speak(text: "Einreichen Button")
-                                }
-                        }
-                        
                     }
                 }
                 .onDisappear {
