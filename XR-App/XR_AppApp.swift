@@ -20,7 +20,7 @@ struct XR_AppApp: App {
                           await appState.referenceObjectLoader.loadBuiltInReferenceObjects()
                       }
                   }
-          }.defaultSize(CGSize(width: 550, height: 400))
+          }.defaultSize(CGSize(width: 600, height: 400))
           
           ImmersiveSpace(id: "ObjectTracking") {
               ObjectTrackingRealityView(appState: appState)

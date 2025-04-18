@@ -25,19 +25,16 @@ struct HomeContentView: View {
     private let stopBtn = "Suche beenden"
     private let text = "Das Tracking ist gestartet, bewege den Kopf und bewege dich leicht um die Objekte zu finden."
     private let LoadObjectsText = "Objekte werden geladen."
-    private let welcomeText = "Willkommen zu SoundGuide. Das System ließt dir die möglichen Aktionen vor um das Object Tracking zu verwenden.Um einen Batten zu klicken, sage den Namen des vorgelesenen Battens und klicken dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken. Folge anschließend der Richtung der Musik um das Objekt zu finden."
+    private let welcomeText = "Willkommen zu SoundGuide. Das System ließt dir die möglichen Aktionen vor um das Object Twracking zu verwenden.Um einen Batten zu klicken, sage den Namen des vorgelesenen Battens und klicken dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken. Folge anschließend der Richtung der Musik um das Objekt zu finden."
     
     var body: some View {
-        Group {
+        
+        VStack {
+            
             Text("Willkommen zu SoundGuide")
                 .font(.system(size: 25, weight:. bold))
                 .padding(30)
-                .onAppear {
-                    viewModel.speak(text: welcomeText)
-                }
-        }
-        
-        VStack {
+            
             if appState.canEnterImmersiveSpace {
                 VStack {
                     if !appState.isImmersiveSpaceOpened {
@@ -47,7 +44,7 @@ struct HomeContentView: View {
                                 .font(.headline)
                                 .padding()
                                 .onAppear {
-                                        viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText)")
+                                    viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText)")
                                 }
                             
                             HStack {
@@ -68,7 +65,7 @@ struct HomeContentView: View {
                                     .accessibilityLabel(repeatContentBtn)
                                     .accessibilityHidden(false)  
                                     .hidden()
-                                    
+                                
                                 
                                 Button(startBtn) {
                                     Task {
@@ -110,7 +107,9 @@ struct HomeContentView: View {
                             }
                         }.accessibilityLabel(stopBtn)
                             .onAppear {
-                                viewModel.speak(text: stopBtn)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    viewModel.speak(text: stopBtn)
+                                }
                             }
                         
                         Button(repeatContentBtn) {
@@ -131,7 +130,6 @@ struct HomeContentView: View {
                                     }
                             }
                         }else{
-                            
                             Text(text)
                                 .accessibilityLabel(text)
                                 .onAppear {
@@ -147,6 +145,11 @@ struct HomeContentView: View {
         }
         .padding()
         .onAppear(){
+            viewModel.preWarmSpeechEngine()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                viewModel.speak(text: welcomeText)
+            }
             repeatSpeechRecognizer = false
         }
         .onChange(of: scenePhase, initial: true) {
@@ -193,6 +196,8 @@ struct HomeContentView: View {
             // Settings app to the foreground and changes authorizations there.
             await appState.monitorSessionEvents()
         }
+        
+        
     }
 }
 

@@ -47,9 +47,9 @@ struct ObjectTrackingRealityView: View {
                     default:
                         break;
                     }
-         
+                    
                     print("detectedObject: \(detectedObject)")
-                    if(detectedObject == appState.recognizedText){
+                    if(detectedObject == "gewürz"){
                         
                         switch anchorUpdate.event {
                         case .added:

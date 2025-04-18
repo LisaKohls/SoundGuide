@@ -5,9 +5,9 @@
 //  Created by Lisa Kohls on 22.03.25.
 
 /*
-Abstract:
-The app's overall state.
-*/
+ Abstract:
+ The app's overall state.
+ */
 
 import ARKit
 import RealityKitContent;
@@ -20,7 +20,7 @@ class AppState {
     var isImmersiveSpaceOpened = false
     
     let referenceObjectLoader = ReferenceObjectLoader()
-
+    
     func didLeaveImmersiveSpace() {
         // Stop the provider; the provider that just ran in the
         // immersive space is now in a paused state and isn't needed
@@ -29,9 +29,9 @@ class AppState {
         arkitSession.stop()
         isImmersiveSpaceOpened = false
     }
-
+    
     // MARK: - ARKit state
-
+    
     private var arkitSession = ARKitSession()
     
     private var objectTracking: ObjectTrackingProvider? = nil
@@ -51,7 +51,6 @@ class AppState {
             fatalError("No reference objects to start tracking")
         }
         
-        // Run a new provider every time when entering the immersive space.
         let objectTracking = ObjectTrackingProvider(referenceObjects: referenceObjects)
         do {
             try await arkitSession.run([objectTracking])
@@ -66,15 +65,15 @@ class AppState {
     var allRequiredAuthorizationsAreGranted: Bool {
         worldSensingAuthorizationStatus == .allowed
     }
-
+    
     var allRequiredProvidersAreSupported: Bool {
         ObjectTrackingProvider.isSupported
     }
-
+    
     var canEnterImmersiveSpace: Bool {
         allRequiredAuthorizationsAreGranted && allRequiredProvidersAreSupported
     }
-
+    
     func requestWorldSensingAuthorization() async {
         let authorizationResult = await arkitSession.requestAuthorization(for: [.worldSensing])
         worldSensingAuthorizationStatus = authorizationResult[.worldSensing]!
@@ -84,7 +83,7 @@ class AppState {
         let authorizationResult = await arkitSession.queryAuthorization(for: [.worldSensing])
         worldSensingAuthorizationStatus = authorizationResult[.worldSensing]!
     }
-
+    
     func monitorSessionEvents() async {
         for await event in arkitSession.events {
             switch event {

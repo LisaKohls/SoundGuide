@@ -5,9 +5,9 @@
 //  Created by Lisa Kohls on 22.03.25.
 
 /*
-Abstract:
-The visualization of an object anchor.
-*/
+ Abstract:
+ The visualization of an object anchor.
+ */
 
 import ARKit
 import RealityKit
@@ -22,7 +22,7 @@ class ObjectAnchorVisualization {
     
     var boundingBoxOutline: BoundingBoxOutline
     var entity: Entity
-
+    
     init(for anchor: ObjectAnchor, withModel model: Entity? = nil) {
         boundingBoxOutline = BoundingBoxOutline(anchor: anchor, alpha: alpha)
         let entity = Entity()
@@ -30,19 +30,6 @@ class ObjectAnchorVisualization {
         entity.transform = Transform(matrix: anchor.originFromAnchorTransform)
         entity.isEnabled = anchor.isTracked
         
-        // create an anchor 3d text with reference object name
-        let font = MeshResource.Font(name: "Helvetica", size: CGFloat(textBaseHeight))!
-        let mesh = MeshResource.generateText(anchor.referenceObject.name.replacingOccurrences(of: "_", with: " "), extrusionDepth: textBaseHeight * 0.05, font: font)
-        
-        print("object text: \(anchor.referenceObject.name)")
-        
-        let material = UnlitMaterial(color: .white)
-        let text = ModelEntity(mesh: mesh, materials: [material])
-        print("material text: \(text)")
-        text.transform.translation.x = anchor.boundingBox.center.x - mesh.bounds.max.x / 2
-        text.transform.translation.y = anchor.boundingBox.extent.y
-        
-        entity.addChild(text)
         entity.addChild(boundingBoxOutline.entity)
         
         self.entity = entity
@@ -51,8 +38,7 @@ class ObjectAnchorVisualization {
             var wireFrameMaterial = PhysicallyBasedMaterial()
             wireFrameMaterial.triangleFillMode = .lines
             wireFrameMaterial.faceCulling = .back
-            wireFrameMaterial.baseColor = .init(tint: .red)
-            wireFrameMaterial.blending = .transparent(opacity: 0.4)
+            wireFrameMaterial.baseColor = .init(tint: .black)
             
             self.applyMaterialRecursively(withModel: model, withMaterial: wireFrameMaterial)
             
@@ -79,23 +65,20 @@ class ObjectAnchorVisualization {
     
     @MainActor
     class BoundingBoxOutline {
-        private let thickness: Float = 0.004
-        
+        private let lineSize: Float = 0.01
         private var extent: SIMD3<Float> = [0, 0, 0]
-        
-        private var wires: [Entity] = []
+        private var box: [Entity] = []
         
         var entity: Entity
-
-        fileprivate init(anchor: ObjectAnchor, color: UIColor = .red, alpha: CGFloat = 1.0) {
+        
+        fileprivate init(anchor: ObjectAnchor, color: UIColor = .white, alpha: CGFloat = 1.0) {
             let entity = Entity()
-            
             let materials = [UnlitMaterial(color: color.withAlphaComponent(alpha))]
             let mesh = MeshResource.generateBox(size: [1.0, 1.0, 1.0])
-
+            
             for _ in 0...11 {
                 let wire = ModelEntity(mesh: mesh, materials: materials)
-                wires.append(wire)
+                box.append(wire)
                 entity.addChild(wire)
             }
             
@@ -107,23 +90,22 @@ class ObjectAnchorVisualization {
         fileprivate func update(with anchor: ObjectAnchor) {
             entity.transform.translation = anchor.boundingBox.center
             
-            // Update the outline only if the extent has changed.
             guard anchor.boundingBox.extent != extent else { return }
             extent = anchor.boundingBox.extent
-
+            
             for index in 0...3 {
-                wires[index].scale = SIMD3<Float>(extent.x, thickness, thickness)
-                wires[index].position = [0, extent.y / 2 * (index % 2 == 0 ? -1 : 1), extent.z / 2 * (index < 2 ? -1 : 1)]
+                box[index].scale = SIMD3<Float>(extent.x, lineSize, lineSize)
+                box[index].position = [0, extent.y / 2 * (index % 2 == 0 ? -1 : 1), extent.z / 2 * (index < 2 ? -1 : 1)]
             }
             
             for index in 4...7 {
-                wires[index].scale = SIMD3<Float>(thickness, extent.y, thickness)
-                wires[index].position = [extent.x / 2 * (index % 2 == 0 ? -1 : 1), 0, extent.z / 2 * (index < 6 ? -1 : 1)]
+                box[index].scale = SIMD3<Float>(lineSize, extent.y, lineSize)
+                box[index].position = [extent.x / 2 * (index % 2 == 0 ? -1 : 1), 0, extent.z / 2 * (index < 6 ? -1 : 1)]
             }
             
             for index in 8...11 {
-                wires[index].scale = SIMD3<Float>(thickness, thickness, extent.z)
-                wires[index].position = [extent.x / 2 * (index % 2 == 0 ? -1 : 1), extent.y / 2 * (index < 10 ? -1 : 1), 0]
+                box[index].scale = SIMD3<Float>(lineSize, lineSize, extent.z)
+                box[index].position = [extent.x / 2 * (index % 2 == 0 ? -1 : 1), extent.y / 2 * (index < 10 ? -1 : 1), 0]
             }
         }
     }

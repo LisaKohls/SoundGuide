@@ -17,15 +17,33 @@ class SpeechRecognizerViewModel: ObservableObject {
     private var recognitionTask: SFSpeechRecognitionTask?
     
     var onResult: ((String) -> Void)?
-
+    
+    func setupAudio() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
+        } catch {
+            print("AudioSession Error: \(error)")
+        }
+    }
+    
+    func preWarmSpeechEngine() {
+        let dummy = AVSpeechUtterance(string: "")
+        dummy.voice = AVSpeechSynthesisVoice(language: "de-DE")
+        dummy.rate = AVSpeechUtteranceDefaultSpeechRate
+        synthesizer.speak(dummy)
+    }
+    
     func speak(text: String, language: String = "de-DE", rate: Float = AVSpeechUtteranceDefaultSpeechRate) {
-        print("Sprachausgabe erhalten: \(text)")
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language)
         utterance.rate = rate
+        
         synthesizer.speak(utterance)
+        print(utterance)
     }
-
+    
     func startRecognition() {
         stopRecognition()
         
@@ -44,8 +62,8 @@ class SpeechRecognizerViewModel: ObservableObject {
                 
                 self.recognitionTask = self.recognizer?.recognitionTask(with: self.request!) { result, error in
                     if let error = error {
-                           print("Fehler bei der Spracherkennung: \(error.localizedDescription)")
-                           return
+                        print("Fehler bei der Spracherkennung: \(error.localizedDescription)")
+                        return
                     }
                     
                     if let result = result {
@@ -61,17 +79,17 @@ class SpeechRecognizerViewModel: ObservableObject {
     }
     
     func stopRecognition() {
-          recognitionTask?.cancel()
-          recognitionTask = nil
-          request?.endAudio()
-          request = nil
-          
-          if audioEngine.isRunning {
-              audioEngine.stop()
-              audioEngine.reset()
-              audioEngine.inputNode.removeTap(onBus: 0)
-          }
+        recognitionTask?.cancel()
+        recognitionTask = nil
+        request?.endAudio()
+        request = nil
+        
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            audioEngine.reset()
+            audioEngine.inputNode.removeTap(onBus: 0)
+        }
     }
-  
+    
     
 }
