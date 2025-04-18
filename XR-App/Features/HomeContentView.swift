@@ -10,7 +10,7 @@ import RealityKit
 struct HomeContentView: View {
     let immersiveSpaceIdentifier: String
     @ObservedObject var appState: AppState
-   
+    
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
@@ -41,7 +41,7 @@ struct HomeContentView: View {
             if appState.canEnterImmersiveSpace {
                 VStack {
                     if !appState.isImmersiveSpaceOpened {
-                            if !showSpeechRecognizer {
+                        if !showSpeechRecognizer {
                             Text("Gesuchtes Objekt: \(appState.recognizedText)")
                                 .font(.headline)
                                 .padding()
@@ -49,23 +49,23 @@ struct HomeContentView: View {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                         viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText)")
                                     }
-                             }
+                                }
                             
                             Button(repeatBtn) {
                                 showSpeechRecognizer = true
                                 repeatSpeechRecognizer = true
                             }.padding()
-                                 .accessibilityLabel(repeatBtn)
-                                 .onAppear {
-                                     viewModel.speak(text: repeatBtn)
-                            }
+                                .accessibilityLabel(repeatBtn)
+                                .onAppear {
+                                    viewModel.speak(text: repeatBtn)
+                                }
                             
                             Button(repeatContentBtn) {
                                 viewModel.speak(text: "Gesuchtes Objekt: \(appState.recognizedText), \(repeatBtn), \(startBtn)")
                             }.padding()
-                             .accessibilityLabel(repeatContentBtn)
-                               
-                                
+                                .accessibilityLabel(repeatContentBtn)
+                            
+                            
                             
                             Button(startBtn) {
                                 Task {
@@ -86,14 +86,14 @@ struct HomeContentView: View {
                             .onAppear {
                                 viewModel.speak(text: startBtn)
                             }
-                            } else {
-                                SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer, repeatSpeechRecognizer: $repeatSpeechRecognizer){ newText in
-                                    appState.recognizedText = newText
-                                }
+                        } else {
+                            SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer, repeatSpeechRecognizer: $repeatSpeechRecognizer){ newText in
+                                appState.recognizedText = newText
                             }
+                        }
                     } else {
                         
-                       
+                        
                         Button(stopBtn) {
                             Task {
                                 await dismissImmersiveSpace()
@@ -110,24 +110,24 @@ struct HomeContentView: View {
                         Button(repeatContentBtn) {
                             viewModel.speak(text: stopBtn)
                         }.padding()
-                         .accessibilityLabel(repeatContentBtn)
+                            .accessibilityLabel(repeatContentBtn)
                         
                         
                         if !appState.objectTrackingStartedRunning {
                             HStack {
                                 Text(LoadObjectsText)
-                                .accessibilityLabel(LoadObjectsText)
-                                .onAppear {
-                                    viewModel.speak(text: LoadObjectsText)
-                                }
+                                    .accessibilityLabel(LoadObjectsText)
+                                    .onAppear {
+                                        viewModel.speak(text: LoadObjectsText)
+                                    }
                             }
                         }else{
                             
                             Text(text)
-                            .accessibilityLabel(text)
-                            .onAppear {
-                                viewModel.speak(text: text)
-                            }
+                                .accessibilityLabel(text)
+                                .onAppear {
+                                    viewModel.speak(text: text)
+                                }
                         }
                     }
                 }

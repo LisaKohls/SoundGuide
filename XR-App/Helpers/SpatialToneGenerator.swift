@@ -1,5 +1,5 @@
 //
-//  AudioEngine.swift
+//  SpatialToneGenerator.swift
 //  XR-App
 //
 //  Created by Lisa Kohls on 05.04.25.
@@ -19,7 +19,6 @@ class SpatialToneGenerator {
     private var interval: TimeInterval
     private var audioFormat: AVAudioFormat!
 
-    // 🔁 Live aktualisierte Werte
     private var sourcePosition = AVAudio3DPoint(x: 0, y: 0, z: 0)
     private var listenerPosition = AVAudio3DPoint(x: 0, y: 0, z: 0)
     private var dynamicVolume: Float = 1.0
@@ -110,11 +109,13 @@ class SpatialToneGenerator {
     /// 📍 Quellposition des Sounds im 3D-Raum aktualisieren
     func updateSourcePosition(x: Float, y: Float, z: Float) {
         self.sourcePosition = AVAudio3DPoint(x: x, y: y, z: z)
+        print("source Position: \(sourcePosition)")
     }
 
     /// 🎧 Listener-Position aktualisieren (z. B. Kamera/Nutzer)
     func updateListenerPosition(x: Float, y: Float, z: Float) {
-        self.listenerPosition = AVAudio3DPoint(x: x, y: y, z: z)
+        listenerPosition = AVAudio3DPoint(x: x, y: y, z: z)
+        print("listenerPosition: \(listenerPosition)")
     }
 
     /// 🛑 AudioEngine stoppen
