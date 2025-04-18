@@ -5,22 +5,23 @@
 //  Created by Lisa Kohls on 22.03.25.
 
 /*
-Abstract:
-The view shown inside the immersive space.
-*/
+ Abstract:
+ The view shown inside the immersive space.
+ */
 
 import RealityKit
 import ARKit
 import SwiftUI
+import RealityKitContent
 
 @MainActor
 struct ObjectTrackingRealityView: View {
     
     @Bindable var appState: AppState
     var root = Entity()
-
+    
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
-
+    
     var body: some View {
         RealityView { content in
             content.add(root)
@@ -44,11 +45,9 @@ struct ObjectTrackingRealityView: View {
                     case "bell peppers":
                         detectedObject = "paprika"
                     default:
-                    break;
+                        break;
                     }
-                    
-                
-                    
+         
                     print("detectedObject: \(detectedObject)")
                     if(detectedObject == appState.recognizedText){
                         
@@ -73,12 +72,11 @@ struct ObjectTrackingRealityView: View {
                             self.objectVisualizations.removeValue(forKey: id)
                             
                         }}
-                    }
-                   
                 }
                 
             }
-        
+            
+        }
         .onAppear() {
             appState.isImmersiveSpaceOpened = true
         }

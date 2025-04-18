@@ -24,6 +24,7 @@ struct SpeechRecognizerView: View {
     private let startRocordingBtn = "Aufnahme beginnen"
     private let beginRecordingHeading = "Beginne mit der Spracherkennung"
     private let noRecordedObject = "Nenne jetzt das gesuchte Objekt..."
+    private let repeatContentBtn = "Inhalte erneut vorlesen"
 
     var onResult: (String) -> Void
 
@@ -36,12 +37,13 @@ struct SpeechRecognizerView: View {
                 .padding()
                 .accessibilityLabel(beginRecordingHeading)
                 .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         viewModel.speak(text: beginRecordingHeading)
+                    }
                         if repeatSpeechRecognizer {
                             recognizedText = ""
                             startButton = false
                             viewModel.onResult = { textResult in
-                                
                                 if !textResult.isEmpty && !textResult.contains("ein") && !textResult.contains("klicken") {
                                     recognizedText = textResult
                                     print("Erkannt recognized Text: \(recognizedText)")
@@ -59,7 +61,7 @@ struct SpeechRecognizerView: View {
                             .onAppear {
                                viewModel.speak(text: recordedText)
                             }.onChange(of: recordedText) {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     showSpeechRecognizer = false
                                     viewModel.stopRecognition()
                                     onResult(recognizedText)
