@@ -25,7 +25,7 @@ struct HomeContentView: View {
     private let stopBtn = "Suche beenden"
     private let text = "Das Tracking ist gestartet, bewege den Kopf und bewege dich leicht um die Objekte zu finden."
     private let LoadObjectsText = "Objekte werden geladen."
-    private let welcomeText = "Willkommen zu SoundGuide. Das System ließt dir die möglichen Aktionen vor um die Objekterkennung zu verwenden. Um einen Batten zu klicken, sage den Namen des vorgelesenen Battens und klicken dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken. Folge anschließend der Richtung der Musik um das Objekt zu finden."
+    private let welcomeText = "Willkommen zu SoundGuide. Das System ließt dir die möglichen Aktionen vor um das Object Twracking zu verwenden.Um einen Batten zu klicken, sage den Namen des vorgelesenen Battens und klicken dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken. Folge anschließend der Richtung der Musik um das Objekt zu finden."
     
     var body: some View {
         
@@ -59,11 +59,12 @@ struct HomeContentView: View {
                                         }
                                     }
                                 
-                                Button("") {
-                                    viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText), \(repeatBtn), \(startBtn)")
+                                Button(repeatContentBtn) {
+                                    viewModel.speak(text: "Gesuchtes Objekt: \(appState.recognizedText), \(repeatBtn), \(startBtn)")
                                 }.padding()
                                     .accessibilityLabel(repeatContentBtn)
-                        
+                                    .accessibilityHidden(false)  
+                                    .hidden()
                                 
                                 
                                 Button(startBtn) {

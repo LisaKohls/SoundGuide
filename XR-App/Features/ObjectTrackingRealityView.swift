@@ -25,7 +25,7 @@ struct ObjectTrackingRealityView: View {
     var body: some View {
         RealityView { content in
             content.add(root)
-            print("recognized Text: \(appState.recognizedText)")
+            
             Task {
                 let objectTracking = await appState.startTracking()
                 guard let objectTracking else {
@@ -49,7 +49,7 @@ struct ObjectTrackingRealityView: View {
                     }
                     
                     print("detectedObject: \(detectedObject)")
-                    if(detectedObject == appState.recognizedText){
+                    if(detectedObject == "gewürz"){
                         
                         switch anchorUpdate.event {
                         case .added:
