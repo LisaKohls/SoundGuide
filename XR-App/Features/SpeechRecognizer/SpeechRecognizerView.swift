@@ -32,6 +32,11 @@ struct SpeechRecognizerView: View {
     var body: some View {
         VStack {
             
+            Button("") {
+                viewModel.speak(text: "\(recognizedText) ")
+            }.padding()
+                .accessibilityLabel(repeatContentBtn)
+            
             Text(beginRecordingHeading)
                 .font(.title2)
                 .padding()

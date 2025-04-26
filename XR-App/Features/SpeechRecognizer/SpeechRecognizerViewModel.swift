@@ -35,10 +35,10 @@ class SpeechRecognizerViewModel: ObservableObject {
         synthesizer.speak(dummy)
     }
     
-    func speak(text: String, language: String = "de-DE", rate: Float = AVSpeechUtteranceDefaultSpeechRate) {
+    func speak(text: String) {
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: language)
-        utterance.rate = rate
+        utterance.voice = AVSpeechSynthesisVoice(language: "de-DE")
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         
         synthesizer.speak(utterance)
         print(utterance)
