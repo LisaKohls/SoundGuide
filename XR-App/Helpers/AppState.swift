@@ -38,14 +38,6 @@ class AppState: ObservableObject {
     
     private var objectTracking: ObjectTrackingProvider? = nil
     
-    var objectTrackingStartedRunning = false
-    
-    var providersStoppedWithError = false
-    
-    var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
-    
-    var recognizedText: String = ""
-    
     func startTracking() async -> ObjectTrackingProvider? {
         let referenceObjects = referenceObjectLoader.enabledReferenceObjects
         guard !referenceObjects.isEmpty else {
@@ -123,7 +115,6 @@ class AppState: ObservableObject {
         }
     }
 
-    // Falls du die Session woanders brauchst:
     var arSession: ARKitSession {
         arkitSession
     }

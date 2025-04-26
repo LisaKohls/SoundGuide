@@ -9,7 +9,7 @@ import RealityKit
 
 struct HomeContentView: View {
     let immersiveSpaceIdentifier: String
-    @Bindable var appState: AppState
+    @ObservedObject var appState: AppState
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace

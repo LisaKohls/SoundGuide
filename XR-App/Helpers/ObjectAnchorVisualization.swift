@@ -25,38 +25,25 @@ class ObjectAnchorVisualization {
     
     init(for anchor: ObjectAnchor, withModel model: Entity? = nil) {
         boundingBoxOutline = BoundingBoxOutline(anchor: anchor, alpha: alpha)
-        let entity = Entity()
-        
-        entity.transform = Transform(matrix: anchor.originFromAnchorTransform)
-        entity.isEnabled = anchor.isTracked
-        
-        // create an anchor 3d text with reference object name
-        let font = MeshResource.Font(name: "Helvetica", size: CGFloat(textBaseHeight))!
-        let mesh = MeshResource.generateText(anchor.referenceObject.name.replacingOccurrences(of: "_", with: " "), extrusionDepth: textBaseHeight * 0.05, font: font)
-        
-        print("object text: \(anchor.referenceObject.name)")
-        
-        let material = UnlitMaterial(color: .white)
-        let text = ModelEntity(mesh: mesh, materials: [material])
-        print("material text: \(text)")
-        text.transform.translation.x = anchor.boundingBox.center.x - mesh.bounds.max.x / 2
-        text.transform.translation.y = anchor.boundingBox.extent.y
-        
-        entity.addChild(text)
-        entity.addChild(boundingBoxOutline.entity)
-        
-        self.entity = entity
-        
-        // ✅ Optional: Drahtgittermodell anzeigen
-        if let model {
-            var wireFrameMaterial = PhysicallyBasedMaterial()
-            wireFrameMaterial.triangleFillMode = .lines
-            wireFrameMaterial.faceCulling = .back
-            wireFrameMaterial.baseColor = .init(tint: .black)
-            
-            self.applyMaterialRecursively(withModel: model, withMaterial: wireFrameMaterial)
-            self.entity.addChild(model)
-        }
+                let entity = Entity()
+                
+                entity.transform = Transform(matrix: anchor.originFromAnchorTransform)
+                entity.isEnabled = anchor.isTracked
+                
+                entity.addChild(boundingBoxOutline.entity)
+                
+                self.entity = entity
+                
+                if let model {
+                    var wireFrameMaterial = PhysicallyBasedMaterial()
+                    wireFrameMaterial.triangleFillMode = .lines
+                    wireFrameMaterial.faceCulling = .back
+                    wireFrameMaterial.baseColor = .init(tint: .black)
+                    
+                    self.applyMaterialRecursively(withModel: model, withMaterial: wireFrameMaterial)
+                    
+                    self.entity.addChild(model)
+                }
     }
     
     private func applyMaterialRecursively(withModel model: Entity, withMaterial material: RealityFoundation.Material) {
