@@ -22,38 +22,13 @@ struct SpeechRecognizerView: View {
     @State private var startButton: Bool = true
     
     private let startRocordingBtn = "Aufnahme beginnen"
-    private let beginRecordingHeading = "Beginne mit der Spracherkennung"
     private let noRecordedObject = "Nenne jetzt das gesuchte Objekt..."
     private let repeatContentBtn = "Inhalte erneut vorlesen"
     
     var onResult: (String) -> Void
     
-    
     var body: some View {
         VStack {
-            
-            Text(beginRecordingHeading)
-                .font(.title2)
-                .padding()
-                .accessibilityLabel(beginRecordingHeading)
-                .onAppear {
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        viewModel.speak(text: beginRecordingHeading)
-                    }
-                    if repeatSpeechRecognizer {
-                        recognizedText = ""
-                        startButton = false
-                        viewModel.onResult = { textResult in
-                            if !textResult.isEmpty && !textResult.contains("ein") && !textResult.contains("klicken") {
-                                recognizedText = textResult
-                                print("Erkannt recognized Text: \(recognizedText)")
-                            }
-                        }
-                        isListening = true
-                        viewModel.startRecognition()
-                    }
-                }
             
             if !startButton {
                 let recordedText = recognizedText.isEmpty && isListening ? noRecordedObject : recognizedText
@@ -92,15 +67,28 @@ struct SpeechRecognizerView: View {
                             .clipShape(Capsule())
                             .accessibilityLabel(startRocordingBtn)
                             .onAppear {
-                                
                                 if !repeatSpeechRecognizer {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                                        viewModel.speak(text: startRocordingBtn)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                                        viewModel.speak(text: "Sage \(startRocordingBtn) klicken um die Sprachaufnahme zu starten")
                                     }
                                 }
                             }
                     }
                 }
+            }
+        }
+        .onAppear {
+            if repeatSpeechRecognizer {
+                recognizedText = ""
+                startButton = false
+                viewModel.onResult = { textResult in
+                    if !textResult.isEmpty && !textResult.contains("ein") && !textResult.contains("klicken") {
+                        recognizedText = textResult
+                        print("Erkannt recognized Text: \(recognizedText)")
+                    }
+                }
+                isListening = true
+                viewModel.startRecognition()
             }
         }
         .onDisappear {

@@ -44,6 +44,11 @@ class SpeechRecognizerViewModel: ObservableObject {
         print(utterance)
     }
     
+    func stopSpeaking() {
+        print("Stop Speaking")
+        synthesizer.stopSpeaking(at: .immediate)
+    }
+    
     func startRecognition() {
         stopRecognition()
         
