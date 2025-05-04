@@ -116,9 +116,9 @@ struct HomeContentView: View {
                 .font(.footnote)
                 .padding(.horizontal)
                 .onAppear {
+                    // For higher quality speech output
                     viewModel.preWarmSpeechEngine()
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         viewModel.speak(text: welcomeText)
                     }
                     repeatSpeechRecognizer = false
@@ -134,9 +134,6 @@ struct HomeContentView: View {
                     await appState.queryWorldSensingAuthorization()
                 }
             } else {
-                // Make sure to leave the immersive space if this view is no longer active
-                // - such as when a person closes this view - otherwise they may be stuck
-                // in the immersive space without the controls this view provides.
                 if appState.isImmersiveSpaceOpened {
                     Task {
                         await dismissImmersiveSpace()
