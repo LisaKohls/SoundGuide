@@ -9,7 +9,7 @@ import RealityKit
 
 struct HomeContentView: View {
     let immersiveSpaceIdentifier: String
-    @Bindable var appState: AppState
+    @ObservedObject var appState: AppState
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -28,21 +28,15 @@ struct HomeContentView: View {
     private let welcomeText = "Willkommen zu SoundGuide. Das System ließt dir die möglichen Aktionen vor um das Object Twracking zu verwenden.Um einen Batten zu klicken, sage den Namen des vorgelesenen Battens und klicken dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken. Folge anschließend der Richtung der Musik um das Objekt zu finden."
     
     var body: some View {
-        
-        VStack {
-            
-            Text("Willkommen zu SoundGuide")
-                .font(.system(size: 25, weight:. bold))
-                .padding(30)
-            
-                .onAppear {
-                    viewModel.speak(text: welcomeText)
-                }
-        }
-        
+ 
         VStack {
             if appState.canEnterImmersiveSpace {
                 VStack {
+                    
+                    Text("Willkommen zu SoundGuide")
+                        .font(.system(size: 25, weight:. bold))
+                        .padding(30)
+                    
                     if !appState.isImmersiveSpaceOpened {
                         if !showSpeechRecognizer {
                             
@@ -51,8 +45,7 @@ struct HomeContentView: View {
                                 .padding()
                                 .onAppear {
                                         viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText). Sage einen der folgenden Optionen: Suche Starten klicken, Erneut eingeben klicken")
-                                    
-                                }
+                           }
                             
                             Button(repeatBtn) {
                                 showSpeechRecognizer = true
@@ -65,8 +58,6 @@ struct HomeContentView: View {
                                 viewModel.speak(text: "Gesuchtes Objekt: \(appState.recognizedText), \(repeatBtn), \(startBtn)")
                             }.padding()
                                 .accessibilityLabel(repeatContentBtn)
-                            
-                            
                             
                             Button(startBtn) {
                                 Task {
@@ -128,17 +119,17 @@ struct HomeContentView: View {
                 .foregroundStyle(.secondary)
                 .font(.footnote)
                 .padding(.horizontal)
+                .onAppear {
+                    viewModel.preWarmSpeechEngine()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        viewModel.speak(text: welcomeText)
+                    }
+                    repeatSpeechRecognizer = false
+            }
             }
         }
         .padding()
-        .onAppear(){
-            viewModel.preWarmSpeechEngine()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                viewModel.speak(text: welcomeText)
-            }
-            repeatSpeechRecognizer = false
-        }
         .onChange(of: scenePhase, initial: true) {
             print("Scene phase: \(scenePhase)")
             if scenePhase == .active {

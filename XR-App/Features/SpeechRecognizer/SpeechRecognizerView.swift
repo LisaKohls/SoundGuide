@@ -37,10 +37,6 @@ struct SpeechRecognizerView: View {
                 .padding()
                 .accessibilityLabel(beginRecordingHeading)
                 .onAppear {
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        viewModel.speak(text: beginRecordingHeading)
-                    }
                     if repeatSpeechRecognizer {
                         recognizedText = ""
                         startButton = false
