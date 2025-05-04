@@ -94,8 +94,8 @@ struct SpeechRecognizerView: View {
                             .onAppear {
                                 
                                 if !repeatSpeechRecognizer {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                                        viewModel.speak(text: startRocordingBtn)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                                        viewModel.speak(text: "Sage \(startRocordingBtn) klicken um die Sprachaufnahme zu starten")
                                     }
                                 }
                             }

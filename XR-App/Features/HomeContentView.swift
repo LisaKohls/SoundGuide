@@ -9,7 +9,7 @@ import RealityKit
 
 struct HomeContentView: View {
     let immersiveSpaceIdentifier: String
-    @ObservedObject var appState: AppState
+    @Bindable var appState: AppState
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -35,6 +35,12 @@ struct HomeContentView: View {
                 .font(.system(size: 25, weight:. bold))
                 .padding(30)
             
+                .onAppear {
+                    viewModel.speak(text: welcomeText)
+                }
+        }
+        
+        VStack {
             if appState.canEnterImmersiveSpace {
                 VStack {
                     if !appState.isImmersiveSpaceOpened {
@@ -44,51 +50,40 @@ struct HomeContentView: View {
                                 .font(.headline)
                                 .padding()
                                 .onAppear {
-                                    viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText)")
+                                        viewModel.speak(text: "Das gesuchte Objekt ist \(appState.recognizedText). Sage einen der folgenden Optionen: Suche Starten klicken, Erneut eingeben klicken")
+                                    
                                 }
                             
-                            HStack {
-                                Button(repeatBtn) {
-                                    showSpeechRecognizer = true
-                                    repeatSpeechRecognizer = true
-                                }.padding()
-                                    .accessibilityLabel(repeatBtn)
-                                    .onAppear {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                            viewModel.speak(text: repeatBtn)
-                                        }
-                                    }
+                            Button(repeatBtn) {
+                                showSpeechRecognizer = true
+                                repeatSpeechRecognizer = true
+                            }.padding()
+                                .accessibilityLabel(repeatBtn)
                                 
-                                Button(repeatContentBtn) {
-                                    viewModel.speak(text: "Gesuchtes Objekt: \(appState.recognizedText), \(repeatBtn), \(startBtn)")
-                                }.padding()
-                                    .accessibilityLabel(repeatContentBtn)
-                                    .accessibilityHidden(false)  
-                                    .hidden()
-                                
-                                
-                                Button(startBtn) {
-                                    Task {
-                                        switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
-                                        case .opened:
-                                            break
-                                        case .error:
-                                            print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
-                                        case .userCancelled:
-                                            print("The user declined opening immersive space \(immersiveSpaceIdentifier)")
-                                        @unknown default:
-                                            break
-                                        }
-                                    }
-                                }
-                                .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
-                                .accessibilityLabel(startBtn)
-                                .onAppear {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                        viewModel.speak(text: startBtn)
+                            
+                            Button(repeatContentBtn) {
+                                viewModel.speak(text: "Gesuchtes Objekt: \(appState.recognizedText), \(repeatBtn), \(startBtn)")
+                            }.padding()
+                                .accessibilityLabel(repeatContentBtn)
+                            
+                            
+                            
+                            Button(startBtn) {
+                                Task {
+                                    switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
+                                    case .opened:
+                                        break
+                                    case .error:
+                                        print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
+                                    case .userCancelled:
+                                        print("The user declined opening immersive space \(immersiveSpaceIdentifier)")
+                                    @unknown default:
+                                        break
                                     }
                                 }
                             }
+                            .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
+                            .accessibilityLabel(startBtn)
                         } else {
                             SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer, repeatSpeechRecognizer: $repeatSpeechRecognizer){ newText in
                                 appState.recognizedText = newText
@@ -107,27 +102,19 @@ struct HomeContentView: View {
                             }
                         }.accessibilityLabel(stopBtn)
                             .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    viewModel.speak(text: stopBtn)
-                                }
+                                viewModel.speak(text: "Sage \(stopBtn) klicken um das Tracking zu stoppen")
                             }
                         
                         Button(repeatContentBtn) {
                             viewModel.speak(text: stopBtn)
                         }.padding()
                             .accessibilityLabel(repeatContentBtn)
-                            .accessibilityLabel(repeatContentBtn)
-                            .accessibilityHidden(false)
-                            .hidden()
                         
                         
                         if !appState.objectTrackingStartedRunning {
                             HStack {
                                 Text(LoadObjectsText)
                                     .accessibilityLabel(LoadObjectsText)
-                                    .onAppear {
-                                        viewModel.speak(text: LoadObjectsText)
-                                    }
                             }
                         }else{
                             Text(text)
