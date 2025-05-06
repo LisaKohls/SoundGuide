@@ -21,17 +21,13 @@ struct SpeechRecognizerView: View {
     @State private var isListening = false
     @State private var startButton: Bool = true
     
-    private let startRocordingBtn = "Aufnahme beginnen"
-    private let noRecordedObject = "Nenne jetzt das gesuchte Objekt..."
-    private let repeatContentBtn = "Inhalte erneut vorlesen"
-    
     var onResult: (String) -> Void
     
     var body: some View {
         VStack {
             
             if !startButton {
-                let recordedText = recognizedText.isEmpty && isListening ? noRecordedObject : recognizedText
+                let recordedText = recognizedText.isEmpty && isListening ? "NORECORDEDOBJECT".localized : recognizedText
                 Text(recordedText)
                     .font(.headline)
                     .onAppear {
@@ -63,13 +59,13 @@ struct SpeechRecognizerView: View {
                         viewModel.startRecognition()
                     }
                     ) {
-                        Text(startRocordingBtn)
+                        Text("STARTRECORDINGBTN".localized)
                             .clipShape(Capsule())
-                            .accessibilityLabel(startRocordingBtn)
+                            .accessibilityLabel("STARTRECORDING_BTN".localized)
                             .onAppear {
                                 if !repeatSpeechRecognizer {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
-                                        viewModel.speak(text: "Sage \(startRocordingBtn) klicken um die Sprachaufnahme zu starten")
+                                        viewModel.speak(text: "STARTRECORDINGINSTRUCTION".localizedWithArgs("STARTRECORDING_BTN".localized))
                                     }
                                 }
                             }
@@ -93,6 +89,7 @@ struct SpeechRecognizerView: View {
         }
         .onDisappear {
             viewModel.stopRecognition()
+            viewModel.stopSpeaking()
             isListening = false
             repeatSpeechRecognizer = false
         }

@@ -11,7 +11,7 @@ import Speech
 
 class SpeechRecognizerViewModel: ObservableObject {
     private let synthesizer = AVSpeechSynthesizer()
-    private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "de-DE"))
+    private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "LANG".localized))
     private let audioEngine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
@@ -30,12 +30,12 @@ class SpeechRecognizerViewModel: ObservableObject {
     
     func preWarmSpeechEngine() {
         let dummy = AVSpeechUtterance(string: "")
-        dummy.voice = AVSpeechSynthesisVoice(language: "de-DE")
+        dummy.voice = AVSpeechSynthesisVoice(language: "LANG".localized)
         dummy.rate = AVSpeechUtteranceDefaultSpeechRate
         synthesizer.speak(dummy)
     }
     
-    func speak(text: String, language: String = "de-DE", rate: Float = AVSpeechUtteranceDefaultSpeechRate) {
+    func speak(text: String, language: String = "LANG".localized, rate: Float = AVSpeechUtteranceDefaultSpeechRate) {
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language)
         utterance.rate = rate
