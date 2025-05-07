@@ -23,6 +23,7 @@
 "START_STOP_TRACKING_BTN" = "Скажіть %@ натиснути, щоб %@ відстеження";
 "UNKNOWNOBJECTS_BTN" = "Шукати невідомі об'єкти";
 "LOOKFORUNKNOWNOBJECTS" = "Скажіть: натиснути «Шукати невідомі об'єкти»";
+"FOUNDUNKNOWNOBJECT" = "Ви знайшли об'єкт %@."; 
 
 //Reference Objects
 "MUG" = "горня";

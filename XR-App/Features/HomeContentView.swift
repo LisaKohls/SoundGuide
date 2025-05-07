@@ -60,8 +60,8 @@ struct HomeContentView: View {
                                         @unknown default:
                                             break
                                         }
+                                    showHomeButtons = false
                                     }
-                                showHomeButtons = false
                             }) {
                                 Text("UNKNOWNOBJECTS_BTN".localized)
                                     .clipShape(Capsule())
@@ -73,6 +73,8 @@ struct HomeContentView: View {
                                         }
                                     }
                             }
+                        }.onDisappear {
+                            viewModel.stopSpeaking()
                         }
                     }
                     

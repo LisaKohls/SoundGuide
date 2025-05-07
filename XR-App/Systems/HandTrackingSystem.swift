@@ -10,30 +10,31 @@ import ARKit
 /// A system that provides hand-tracking capabilities.
 struct HandTrackingSystem: System {
     
-    static let handTracking = HandTrackingProvider()
-    
+    static var handTrackingProvider: HandTrackingProvider?
     static var arSession = ARKitSession()
     
-    /// The most recent anchor that the provider detects on the left hand.
     static var latestLeftHand: HandAnchor?
-
-    /// The most recent anchor that the provider detects on the right hand.
     static var latestRightHand: HandAnchor?
+    
+    static var detectedObjects: [Entity] = []
+    static var onObjectTouched: ((String) -> Void)?
 
-    init(scene: RealityKit.Scene) {
-        Task { await Self.runSession() }
+    init(scene: RealityKit.Scene) {}
+    
+    @MainActor
+    static func configure(with appState: AppState) {
+        Task {
+            self.handTrackingProvider = await appState.startHandTracking()
+            await runSession()
+        }
     }
 
     @MainActor
     static func runSession() async {
-        do {
-            // Attempt to run the ARKit session with the hand-tracking provider.
-            try await arSession.run([handTracking])
-        } catch let error as ARKitSession.Error {
-            print("The app has encountered an error while running providers: \(error.localizedDescription)")
-        } catch let error {
-            print("The app has encountered an unexpected error: \(error.localizedDescription)")
-        }
+        guard let handTracking = self.handTrackingProvider else {
+           return
+      }
+        
         // Start to collect each hand-tracking anchor.
         for await anchorUpdate in handTracking.anchorUpdates {
             // Check whether the anchor is on the left or right hand.
@@ -53,11 +54,10 @@ struct HandTrackingSystem: System {
     /// - Parameter context: The context for the system to update.
     func update(context: SceneUpdateContext) {
         let handEntities = context.entities(matching: Self.query, updatingSystemWhen: .rendering)
-
+     
         for entity in handEntities {
             guard var handComponent = entity.components[HandTrackingComponent.self] else { continue }
 
-            // Set up the finger joint entities if you haven't already.
             if handComponent.fingers.isEmpty {
                 self.addJoints(to: entity, handComponent: &handComponent)
             }
@@ -80,6 +80,17 @@ struct HandTrackingSystem: System {
                         handAnchor.originFromAnchorTransform * anchorFromJointTransform,
                         relativeTo: nil
                     )
+                   
+                    for object in Self.detectedObjects {
+                        // Distance between hands and each found object
+                        let distance = simd_distance(jointEntity.position(relativeTo: nil), object.position(relativeTo: nil))
+                        if distance < 0.1 {
+                            let name = object.name
+                            if !name.isEmpty {
+                                Self.onObjectTouched?(name)
+                            }
+                        }
+                    }
                 }
             }
         }

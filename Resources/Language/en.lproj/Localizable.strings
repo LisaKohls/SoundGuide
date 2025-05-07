@@ -23,6 +23,7 @@
 "START_STOP_TRACKING_BTN" = "Say tap %@ to %@ the Tracking";
 "UNKNOWNOBJECTS_BTN" = "Look for unknown objects";
 "LOOKFORUNKNOWNOBJECTS" = "Say tap look for unknown objects";
+"FOUNDUNKNOWNOBJECT" = "You found the object %@.";
 
 //Reference Objects
 "MUG" = "mug";

@@ -23,6 +23,7 @@
 "START_STOP_TRACKING_BTN" = "Sage %@ klicken um das Tracking zu %@";
 "UNKNOWNOBJECTS_BTN" = "Unbekannte Objekte suchen";
 "LOOKFORUNKNOWNOBJECTS" = "Sage unbekannte Objekte suchen klicken";
+"FOUNDUNKNOWNOBJECT" = "Du hast das Objekt %@ gefunden.";
 
 //Reference Objects
 "MUG" = "tasse";
