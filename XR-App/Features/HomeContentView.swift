@@ -50,7 +50,8 @@ struct HomeContentView: View {
                             Button(action: {
                                 //show searchObjectsView
                                 Task {
-                                        switch await openImmersiveSpace(id: "UnknownObjectDetection") {
+                                    appState.realityView = "UnknownObjectDetection"
+                                        switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                         case .opened:
                                             print("UnknownObjectDetection Immersive Space opened")
                                         case .error:
@@ -101,6 +102,7 @@ struct HomeContentView: View {
                                     
                                     Button("START_BTN".localized) {
                                         Task {
+                                            appState.realityView = immersiveSpaceIdentifier
                                             switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                             case .opened:
                                                 break
@@ -220,8 +222,10 @@ struct HomeContentView: View {
         
         
     }
+    
 }
 
 #Preview(windowStyle: .automatic) {
     HomeContentView(immersiveSpaceIdentifier: "ObjectTracking", appState: AppState())
 }
+

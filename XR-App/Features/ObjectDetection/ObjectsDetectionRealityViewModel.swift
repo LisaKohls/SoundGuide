@@ -52,4 +52,14 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
             onTouch(name)
         }
     }
+    
+    func playSpatialSound(for entity: Entity, named resourceName: String = "spatial-sound.wav") {
+            do {
+                let resource: AudioFileResource = try .load(named: resourceName, in: .main)
+                let controller = entity.prepareAudio(resource)
+                controller.play()
+            } catch {
+                print("Failed to load or play sound: \(error)")
+            }
+    }
 }

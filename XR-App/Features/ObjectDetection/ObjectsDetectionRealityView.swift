@@ -26,7 +26,10 @@ struct ObjectsDetectionRealityView: View {
         RealityView { content in
             content.add(root)
             
-            objectDetectionRealityViewModel.makeHandEntities(in: content)
+            let detectionView = appState.realityView == "UnknownObjectDetection"
+            let trackingView = appState.realityView == "ObjectTracking"
+            
+            if detectionView { objectDetectionRealityViewModel.makeHandEntities(in: content) }
        
             Task {
                 let objectTracking = await appState.startTracking()
@@ -41,39 +44,56 @@ struct ObjectsDetectionRealityView: View {
                     
                     let detectedObjectName = objectDetectionRealityViewModel.getDetectedObjectName(detectedObject: name)
                     
-                    switch anchorUpdate.event {
-                    case .added:
- 
-                        let visualization = ObjectAnchorVisualization(for: anchor)
-                        let entity = visualization.entity
-                        entity.name = detectedObjectName
-                        
-                        objectDetectionRealityViewModel.observeTouchedObject(for: entity) { name in
-                            viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                    if(detectedObjectName == appState.recognizedText || detectionView){
+                        switch anchorUpdate.event {
+                        case .added:
+                            
+                            let visualization = ObjectAnchorVisualization(for: anchor)
+                            let entity = visualization.entity
+                            entity.name = detectedObjectName
+                            
+                            if detectionView {
+                                objectDetectionRealityViewModel.observeTouchedObject(for: entity) { name in
+                                    viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                                }
+                            }
+                            
+                            if trackingView {
+                                objectDetectionRealityViewModel.playSpatialSound(for: visualization.entity)
+                            }
+                            
+                            self.objectVisualizations[id] = visualization
+                            root.addChild(visualization.entity)
+                            
+                        case .updated:
+                            self.objectVisualizations[id]?.update(with: anchor)
+                        case .removed:
+                            self.objectVisualizations[id]?.entity.removeFromParent()
+                            self.objectVisualizations.removeValue(forKey: id)
+                            
                         }
-                        
-                        self.objectVisualizations[id] = visualization
-                        root.addChild(visualization.entity)
-                       
-                    case .updated:
-                        self.objectVisualizations[id]?.update(with: anchor)
-                    case .removed:
-                        self.objectVisualizations[id]?.entity.removeFromParent()
-                        self.objectVisualizations.removeValue(forKey: id)
-                        
                     }
                 }
             }
         }
         .onAppear() {
             appState.isImmersiveSpaceOpened = true
-            Task {
-                HandTrackingSystem.configure(with: appState)
+            if appState.realityView == "UnknownObjectDetection" {
+                Task {
+                    HandTrackingSystem.configure(with: appState)
+                }
             }
         }
         .onDisappear() {
+            if appState.realityView == "UnknownObjectDetection" {
+                HandTrackingSystem.detectedObjects.removeAll()
+            } else {
+                for (_, visualization) in objectVisualizations {
+                    root.removeChild(visualization.entity)
+                }
+                objectVisualizations.removeAll()
+            }
             appState.didLeaveImmersiveSpace()
-            HandTrackingSystem.detectedObjects.removeAll()
         }
     }
 }
