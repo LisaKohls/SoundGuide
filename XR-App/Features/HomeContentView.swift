@@ -41,7 +41,7 @@ struct HomeContentView: View {
                                     .accessibilityLabel("STARTRECORDING_BTN".localized)
                                     .onAppear {
                                         //3.5s
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
                                             viewModel.speak(text: "STARTRECORDINGINSTRUCTION".localizedWithArgs("STARTRECORDING_BTN".localized))
                                         }
                                     }
@@ -49,14 +49,26 @@ struct HomeContentView: View {
                             
                             Button(action: {
                                 //show searchObjectsView
-                                showLookForUnknownObjectsView = true
+                                Task {
+                                        switch await openImmersiveSpace(id: "UnknownObjectDetection") {
+                                        case .opened:
+                                            print("UnknownObjectDetection Immersive Space opened")
+                                        case .error:
+                                            print("Error opening UnknownObjectDetection Immersive Space")
+                                        case .userCancelled:
+                                            print("User cancelled opening")
+                                        @unknown default:
+                                            break
+                                        }
+                                    }
                                 showHomeButtons = false
-                            }) {Text("UNKNOWNOBJECTS_BTN".localized)
+                            }) {
+                                Text("UNKNOWNOBJECTS_BTN".localized)
                                     .clipShape(Capsule())
                                     .accessibilityLabel("UNKNOWNOBJECTS_BTN".localized)
                                     .onAppear {
                                         //3.5s
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
                                             viewModel.speak(text: "LOOKFORUNKNOWNOBJECTS".localized)
                                         }
                                     }
@@ -79,10 +91,11 @@ struct HomeContentView: View {
                                     .accessibilityLabel("REPEATCONTENT_BTN".localized)
                                 
                                 HStack {
+                                    
                                     Button("HOME_BTN".localized) {
                                         showHomeButtons = true
                                     }.padding()
-                                        .accessibilityLabel("HOME_BTN".localized)
+                                    .accessibilityLabel("HOME_BTN".localized)
                                     
                                     Button("START_BTN".localized) {
                                         Task {
@@ -114,8 +127,6 @@ struct HomeContentView: View {
                             SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
                                 appState.recognizedText = newText
                             }
-                        } else if showLookForUnknownObjectsView {
-                            
                         }
                         
                     } else {

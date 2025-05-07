@@ -25,5 +25,9 @@ struct XR_AppApp: App {
           ImmersiveSpace(id: "ObjectTracking") {
               ObjectTrackingRealityView(appState: appState)
           }
+          
+          ImmersiveSpace(id: "UnknownObjectDetection") {
+              ObjectsDetectionRealityView(appState: appState)
+          }
       }
 }
