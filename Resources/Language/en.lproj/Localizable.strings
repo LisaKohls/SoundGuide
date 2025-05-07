@@ -5,24 +5,32 @@
 //  Created by Lisa Kohls on 04.05.25.
 //
 
-"LANG" = "en-EN";
-"REPEATBTN" = "Re-enter";
+"LANG" = "en-US";
+"REPEAT_BTN" = "Re-enter";
 "WELCOMETOSOUNDGUIDE" = "Welcome to SoundGuide";
-"REPEATCONTENTBTN" = "Repeat content";
-"STARTBTN" = "Start search";
-"STOPBTN" = "Stop search";
+"REPEATCONTENT_BTN" = "Repeat content";
+"HOME_BTN" = "Back to start";
+"START_BTN" = "Start search";
+"STOP_BTN" = "Stop search";
 "STOP" = "stop";
 "START" = "start";
 "LOADOBJECTSTEXT" = "Loading objects.";
-"ON" = "on";
-"CLICK" = "click";
-"WELCOMETEXT" = "Welcome to SoundGuide. To click a button, say the name of the spoken button and click it. If you want to hear the content again, say repeat content click. Then follow the direction of the music to find the object.";
-"STARTRECORDINGBTN" = "Start recording";
+"WELCOMETEXT" = "Welcome to SoundGuide. To tap a button, say the name of the spoken button and tap it. If you want to hear the content again, say tap repeat content. Then follow the direction of the music to find the object.";
+"STARTRECORDING_BTN" = "Start recording";
 "NORECORDEDOBJECT" = "Now name the object you're looking for...";
-"OBJECTFOUNDTEXT" = "The searched object is %@. Say one of the following options: %@ click, %@ click";
-"OBJECTFOUNDSHORT" = "The searched object is %@, %@ click, %@ click";
-"STARTRECORDINGINSTRUCTION" = "Say %@ click to start the voice recording";
-"START_STOP_RECORDING_BTN" = "Say %@ click to %@ the Tracking";
+"OBJECTFOUNDTEXT" = "The searched object is %@. Say one of the following options: tap %@, tap %@";
+"OBJECTFOUNDSHORT" = "The searched object is %@, tap %@, tap %@";
+"STARTRECORDINGINSTRUCTION" = "Say tap %@ to start the voice recording";
+"START_STOP_TRACKING_BTN" = "Say tap %@ to %@ the Tracking";
+"UNKNOWNOBJECTS_BTN" = "Look for unknown objects";
+"LOOKFORUNKNOWNOBJECTS" = "Say tap look for unknown objects";
+
+//Reference Objects
+"MUG" = "mug";
+"SPICES" = "spices";
+"LEMONTEA" = "lemon tea";
+"STRAWBERRYTEA" = "strawberry tea";
+
 
 
 

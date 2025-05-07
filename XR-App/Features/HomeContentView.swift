@@ -16,8 +16,9 @@ struct HomeContentView: View {
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @StateObject var viewModel = SpeechRecognizerViewModel()
     
-    @State private var showSpeechRecognizer: Bool  = true
-    @State private var repeatSpeechRecognizer: Bool = false
+    @State private var showSpeechRecognizer: Bool  = false
+    @State private var showLookForUnknownObjectsView: Bool  = false
+    @State private var showHomeButtons: Bool  = true
     
     var body: some View {
  
@@ -27,12 +28,47 @@ struct HomeContentView: View {
                     Text("WELCOMETOSOUNDGUIDE".localized)
                         .font(.system(size: 25, weight:. bold))
                         .padding(30)
+                    
+                    //Home Buttons, Start Recording/ Start looking for unknown objects
+                    if showHomeButtons {
+                        HStack{
+                            Button(action: {
+                                showSpeechRecognizer = true
+                                showHomeButtons = false
+                            }) {
+                                Text("STARTRECORDING_BTN".localized)
+                                    .clipShape(Capsule())
+                                    .accessibilityLabel("STARTRECORDING_BTN".localized)
+                                    .onAppear {
+                                        //3.5s
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            viewModel.speak(text: "STARTRECORDINGINSTRUCTION".localizedWithArgs("STARTRECORDING_BTN".localized))
+                                        }
+                                    }
+                            }
+                            
+                            Button(action: {
+                                //show searchObjectsView
+                                showLookForUnknownObjectsView = true
+                                showHomeButtons = false
+                            }) {Text("UNKNOWNOBJECTS_BTN".localized)
+                                    .clipShape(Capsule())
+                                    .accessibilityLabel("UNKNOWNOBJECTS_BTN".localized)
+                                    .onAppear {
+                                        //3.5s
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                                            viewModel.speak(text: "LOOKFORUNKNOWNOBJECTS".localized)
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                    
                     if !appState.isImmersiveSpaceOpened {
-                        if !showSpeechRecognizer {
+                        if !showSpeechRecognizer && !showHomeButtons {
                             VStack {
                                 Button("REPEAT_BTN".localized) {
                                     showSpeechRecognizer = true
-                                    repeatSpeechRecognizer = true
                                 }.padding()
                                     .accessibilityLabel("REPEAT_BTN".localized)
                                 
@@ -42,31 +78,44 @@ struct HomeContentView: View {
                                 }.padding()
                                     .accessibilityLabel("REPEATCONTENT_BTN".localized)
                                 
-                                Button("START_BTN".localized) {
-                                    Task {
-                                        switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
-                                        case .opened:
-                                            break
-                                        case .error:
-                                            print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
-                                        case .userCancelled:
-                                            print("The user declined opening immersive space \(immersiveSpaceIdentifier)")
-                                        @unknown default:
-                                            break
+                                HStack {
+                                    Button("HOME_BTN".localized) {
+                                        showHomeButtons = true
+                                    }.padding()
+                                        .accessibilityLabel("HOME_BTN".localized)
+                                    
+                                    Button("START_BTN".localized) {
+                                        Task {
+                                            switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
+                                            case .opened:
+                                                break
+                                            case .error:
+                                                print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
+                                            case .userCancelled:
+                                                print("The user declined opening immersive space \(immersiveSpaceIdentifier)")
+                                            @unknown default:
+                                                break
+                                            }
                                         }
                                     }
+                                    .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
+                                    .accessibilityLabel("START_BTN".localized)
                                 }
-                                .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
-                                .accessibilityLabel("START_BTN".localized)
+                                
                             }.onAppear {
-                                viewModel.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"STOP_BTN".localized))
-                            }.onDisappear {
+                                viewModel.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
+                            }.onChange(of: appState.recognizedText) {
+                                viewModel.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
+                            }
+                            .onDisappear {
                                 viewModel.stopSpeaking()
                             }
-                        } else {
-                            SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer, repeatSpeechRecognizer: $repeatSpeechRecognizer){ newText in
+                        } else if showSpeechRecognizer {
+                            SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
                                 appState.recognizedText = newText
                             }
+                        } else if showLookForUnknownObjectsView {
+                            
                         }
                         
                     } else {
@@ -76,17 +125,17 @@ struct HomeContentView: View {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
                                 appState.recognizedText = ""
-                                repeatSpeechRecognizer = false
-                                showSpeechRecognizer = true
+                                showHomeButtons = true
                             }
-                        }.accessibilityLabel("STOP_BTN".localized)
-                            .onAppear {
-                                viewModel.speak(text: "OBJECTFOUNDSHORT".localizedWithArgs("STOP_BTN".localized, "STOP".localized))
-                            }
+                        }
+                        .accessibilityLabel("STOP_BTN".localized)
+                        .onAppear {
+                             viewModel.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
+                       }
                            
                         
                         Button("REPEATCONTENT_BTN".localized) {
-                            viewModel.speak(text: "OBJECTFOUNDSHORT".localizedWithArgs("STOP_BTN".localized, "STOP".localized))
+                            viewModel.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized, "STOP".localized))
                         }.padding()
                             .accessibilityLabel("REPEATCONTENT_BTN".localized)
                         
@@ -105,10 +154,9 @@ struct HomeContentView: View {
                 .onAppear {
                     // For higher quality speech output
                     viewModel.preWarmSpeechEngine()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
                         viewModel.speak(text: "WELCOMETEXT".localized)
                     }
-                    repeatSpeechRecognizer = false
                 }
             }
         }

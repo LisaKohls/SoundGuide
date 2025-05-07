@@ -9,20 +9,27 @@
 "REPEAT_BTN" = "Erneut eingeben";
 "WELCOMETOSOUNDGUIDE" = "Willkommen zu SoundGuide";
 "REPEATCONTENT_BTN" = "Inhalte erneut vorlesen";
+"HOME_BTN" = "Zurück zum start";
 "START_BTN" = "Suche starten";
 "STOP_BTN" = "Suche beenden";
 "STOP" = "beenden";
 "START" = "starten";
 "LOADOBJECTSTEXT" = "Objekte werden geladen.";
-"ON" = "ein";
-"CLICK" = "klicken";
 "WELCOMETEXT" = "Willkommen zu SoundGuide. Um einen Button zu klicken, sage den Namen des vorgelesenen Buttons und klicke dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken. Folge anschließend der Richtung der Musik um das Objekt zu finden.";
 "STARTRECORDING_BTN" = "Aufnahme beginnen";
 "NORECORDEDOBJECT" = "Nenne jetzt das gesuchte Objekt...";
 "OBJECTFOUNDTEXT" = "Das gesuchte Objekt ist %@. Sage einen der folgenden Optionen: %@ klicken, %@ klicken";
 "OBJECTFOUNDSHORT" = "Das gesuchte Objekt ist %@, %@ klicken, %@ klicken";
 "STARTRECORDINGINSTRUCTION" = "Sage %@ klicken um die Sprachaufnahme zu starten";
-"START_STOP_RECORDING_BTN" = "Sage %@ klicken um das Tracking zu %@";
+"START_STOP_TRACKING_BTN" = "Sage %@ klicken um das Tracking zu %@";
+"UNKNOWNOBJECTS_BTN" = "Unbekannte Objekte suchen";
+"LOOKFORUNKNOWNOBJECTS" = "Sage unbekannte Objekte suchen klicken";
+
+//Reference Objects
+"MUG" = "tasse";
+"SPICES" = "gewürz";
+"LEMONTEA" = "zitronentee";
+"STRAWBERRYTEA" = "erdbeertee";
 
 
 

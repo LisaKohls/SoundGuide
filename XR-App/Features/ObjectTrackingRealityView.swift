@@ -38,12 +38,14 @@ struct ObjectTrackingRealityView: View {
                     var detectedObject = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
                     
                     switch detectedObject {
-                    case "mug":
-                        detectedObject = "tasse"
+                    case "tasse":
+                        detectedObject = "MUG".localized
                     case "spices":
-                        detectedObject = "gewürz"
-                    case "bell peppers":
-                        detectedObject = "paprika"
+                        detectedObject = "SPICES".localized
+                    case "erdbeertee":
+                        detectedObject = "STRAWBERRYTEA".localized
+                    case "zitronentee":
+                        detectedObject = "LEMONTEA".localized
                     default:
                         break;
                     }
