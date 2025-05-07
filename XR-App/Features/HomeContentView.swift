@@ -168,6 +168,8 @@ struct HomeContentView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
                         viewModel.speak(text: "WELCOMETEXT".localized)
                     }
+                }.onDisappear() {
+                    viewModel.stopSpeaking()
                 }
             }
         }

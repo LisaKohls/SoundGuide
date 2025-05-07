@@ -52,8 +52,7 @@ struct ObjectsDetectionRealityView: View {
                     if anchorUpdate.event == .added {
                         print("added detected Object: \(detectedObject)")
                         viewModel.speak(text: detectedObject)
-                    }
-                }
+                    }}
             }
             
         }
