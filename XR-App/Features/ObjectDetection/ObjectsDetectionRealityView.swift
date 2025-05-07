@@ -16,11 +16,15 @@ struct ObjectsDetectionRealityView: View {
     
     @Bindable var appState: AppState
     var root = Entity()
+    
     @StateObject var viewModel = SpeechRecognizerViewModel()
+    @StateObject var objectDetectionRealityViewModel = ObjectsDetectionRealityViewModel()
     
     var body: some View {
         RealityView { content in
             content.add(root)
+            
+            objectDetectionRealityViewModel.makeHandEntities(in: content)
             
             Task {
                 let objectTracking = await appState.startTracking()
@@ -64,5 +68,3 @@ struct ObjectsDetectionRealityView: View {
         }
     }
 }
-
-

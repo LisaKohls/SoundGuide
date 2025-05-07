@@ -130,7 +130,7 @@ struct HomeContentView: View {
                         }
                         
                     } else {
-                        
+                 
                         Button("STOP_BTN".localized) {
                             Task {
                                 await dismissImmersiveSpace()
@@ -163,11 +163,11 @@ struct HomeContentView: View {
                 .font(.footnote)
                 .padding(.horizontal)
                 .onAppear {
-                    // For higher quality speech output
+                    /* For higher quality speech output
                     viewModel.preWarmSpeechEngine()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
                         viewModel.speak(text: "WELCOMETEXT".localized)
-                    }
+                    }*/
                 }.onDisappear() {
                     viewModel.stopSpeaking()
                 }

@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct XR_AppApp: App {
 
-    @State private var appState = AppState()
+      @State private var appState = AppState()
       
       var body: some Scene {
           WindowGroup {
@@ -20,14 +20,17 @@ struct XR_AppApp: App {
                           await appState.referenceObjectLoader.loadBuiltInReferenceObjects()
                       }
                   }
-          }.defaultSize(CGSize(width: 600, height: 400))
+          }
+          .defaultSize(CGSize(width: 600, height: 400))
           
           ImmersiveSpace(id: "ObjectTracking") {
               ObjectTrackingRealityView(appState: appState)
+              HandTrackingView()
           }
           
           ImmersiveSpace(id: "UnknownObjectDetection") {
               ObjectsDetectionRealityView(appState: appState)
           }
+         
       }
 }

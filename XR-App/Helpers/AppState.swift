@@ -10,6 +10,7 @@
  */
 
 import ARKit
+import RealityKit
 import RealityKitContent;
 import RealityFoundation
 
@@ -36,6 +37,8 @@ class AppState {
     
     private var objectTracking: ObjectTrackingProvider? = nil
     
+    private var handTracking: HandTrackingProvider? = nil
+    
     var objectTrackingStartedRunning = false
     
     var providersStoppedWithError = false
@@ -55,11 +58,23 @@ class AppState {
         do {
             try await arkitSession.run([objectTracking])
         } catch {
-            print("Error: \(error)" )
+            print("Error starting object tracking: \(error)" )
             return nil
         }
         self.objectTracking = objectTracking
         return objectTracking
+    }
+    
+    func startHandTracking() async -> HandTrackingProvider? {
+        let handTracking = HandTrackingProvider()
+        do {
+            try await arkitSession.run([handTracking])
+        } catch {
+            print("Error starting hand tracking: \(error)" )
+            return nil
+        }
+        self.handTracking = handTracking
+        return handTracking
     }
     
     var allRequiredAuthorizationsAreGranted: Bool {
