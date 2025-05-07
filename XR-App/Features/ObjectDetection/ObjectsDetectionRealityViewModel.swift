@@ -13,6 +13,8 @@ import Combine
 @MainActor
 class ObjectsDetectionRealityViewModel: ObservableObject {
     
+    private var spokenObjectNames: Set<String> = []
+    
     func makeHandEntities(in content: any RealityViewContentProtocol) {
         // Add the left hand.
         let leftHand = Entity()
@@ -29,5 +31,25 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
         rightHand.components.set(CollisionComponent(shapes: [.generateSphere(radius: 0.03)]))
         rightHand.components.set(PhysicsBodyComponent(mode: .kinematic))
         content.add(rightHand)
+    }
+    
+    func getDetectedObjectName(detectedObject: String) -> String {
+        return switch detectedObject {
+        case "tasse": "MUG".localized
+        case "spices": "SPICES".localized
+        case "erdbeertee": "STRAWBERRYTEA".localized
+        case "zitronentee": "LEMONTEA".localized
+        default: detectedObject.lowercased()
+        }
+    }
+    
+    func observeTouchedObject(for entity: Entity, onTouch: @escaping (String) -> Void) {
+        HandTrackingSystem.detectedObjects.append(entity)
+        
+        HandTrackingSystem.onObjectTouched = { [weak self] name in
+            guard let self, !self.spokenObjectNames.contains(name) else { return }
+            self.spokenObjectNames.insert(name)
+            onTouch(name)
+        }
     }
 }

@@ -20,7 +20,6 @@ struct ObjectsDetectionRealityView: View {
     @StateObject var viewModel = SpeechRecognizerViewModel()
     @StateObject var objectDetectionRealityViewModel = ObjectsDetectionRealityViewModel()
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
-    @State private var spokenObjectNames: Set<String> = []
     
     
     var body: some View {
@@ -40,14 +39,7 @@ struct ObjectsDetectionRealityView: View {
                     let id = anchor.id
                     let name = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
                     
-                    
-                    let detectedObjectName = switch name {
-                    case "tasse": "MUG".localized
-                    case "spices": "SPICES".localized
-                    case "erdbeertee": "STRAWBERRYTEA".localized
-                    case "zitronentee": "LEMONTEA".localized
-                    default: name.lowercased()
-                    }
+                    let detectedObjectName = objectDetectionRealityViewModel.getDetectedObjectName(detectedObject: name)
                     
                     switch anchorUpdate.event {
                     case .added:
@@ -55,12 +47,8 @@ struct ObjectsDetectionRealityView: View {
                         let visualization = ObjectAnchorVisualization(for: anchor)
                         let entity = visualization.entity
                         entity.name = detectedObjectName
-                        HandTrackingSystem.detectedObjects.append(entity)
                         
-                        HandTrackingSystem.onObjectTouched = { name in
-                            guard !spokenObjectNames.contains(name) else { return }
-                                
-                            spokenObjectNames.insert(name)
+                        objectDetectionRealityViewModel.observeTouchedObject(for: entity) { name in
                             viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                         }
                         
@@ -74,7 +62,7 @@ struct ObjectsDetectionRealityView: View {
                         self.objectVisualizations.removeValue(forKey: id)
                         
                     }
-                }      
+                }
             }
         }
         .onAppear() {

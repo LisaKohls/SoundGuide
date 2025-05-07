@@ -33,7 +33,7 @@ struct HandTrackingSystem: System {
     static func runSession() async {
         guard let handTracking = self.handTrackingProvider else {
            return
-      }
+        }
         
         // Start to collect each hand-tracking anchor.
         for await anchorUpdate in handTracking.anchorUpdates {
