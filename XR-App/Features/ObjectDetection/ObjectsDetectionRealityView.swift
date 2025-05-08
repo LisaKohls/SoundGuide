@@ -29,7 +29,7 @@ struct ObjectsDetectionRealityView: View {
             let detectionView = appState.realityView == "UnknownObjectDetection"
             let trackingView = appState.realityView == "ObjectTracking"
             
-            if detectionView { objectDetectionRealityViewModel.makeHandEntities(in: content) }
+            objectDetectionRealityViewModel.makeHandEntities(in: content)
        
             Task {
                 let objectTracking = await appState.startTracking()
@@ -45,12 +45,16 @@ struct ObjectsDetectionRealityView: View {
                     let detectedObjectName = objectDetectionRealityViewModel.getDetectedObjectName(detectedObject: name)
                     
                     if(detectedObjectName == appState.recognizedText || detectionView){
+                        //searched for object has been found by Aplle Vision Pro
                         switch anchorUpdate.event {
                         case .added:
                             
                             let visualization = ObjectAnchorVisualization(for: anchor)
                             let entity = visualization.entity
                             entity.name = detectedObjectName
+                            
+                            self.objectVisualizations[id] = visualization
+                            root.addChild(visualization.entity)
                             
                             if detectionView {
                                 objectDetectionRealityViewModel.observeTouchedObject(for: entity) { name in
@@ -59,18 +63,23 @@ struct ObjectsDetectionRealityView: View {
                             }
                             
                             if trackingView {
+                                //Add Spatial sound to the Object
                                 objectDetectionRealityViewModel.playSpatialSound(for: visualization.entity)
+                                
+                                //if object has been found by user, stop sound, play feedback Ping
+                                objectDetectionRealityViewModel.observeTouchedObject(for: visualization.entity) { name in
+                                    objectDetectionRealityViewModel.stopSpatialSound()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                                    }
+                                }
+                                
                             }
-                            
-                            self.objectVisualizations[id] = visualization
-                            root.addChild(visualization.entity)
-                            
                         case .updated:
                             self.objectVisualizations[id]?.update(with: anchor)
                         case .removed:
                             self.objectVisualizations[id]?.entity.removeFromParent()
                             self.objectVisualizations.removeValue(forKey: id)
-                            
                         }
                     }
                 }
@@ -78,22 +87,21 @@ struct ObjectsDetectionRealityView: View {
         }
         .onAppear() {
             appState.isImmersiveSpaceOpened = true
-            if appState.realityView == "UnknownObjectDetection" {
-                Task {
-                    HandTrackingSystem.configure(with: appState)
-                }
+            Task {
+                HandTrackingSystem.configure(with: appState)
             }
         }
         .onDisappear() {
-            if appState.realityView == "UnknownObjectDetection" {
+        print("disappeared objects detection")
+            Task {
                 HandTrackingSystem.detectedObjects.removeAll()
-            } else {
+                
                 for (_, visualization) in objectVisualizations {
                     root.removeChild(visualization.entity)
                 }
                 objectVisualizations.removeAll()
+                appState.didLeaveImmersiveSpace()
             }
-            appState.didLeaveImmersiveSpace()
         }
     }
 }

@@ -9,11 +9,13 @@ import RealityKit
 
 struct HomeContentView: View {
     let immersiveSpaceIdentifier: String
+    
     @Bindable var appState: AppState
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
+    
     @StateObject var viewModel = SpeechRecognizerViewModel()
     
     @State private var showSpeechRecognizer: Bool  = false
@@ -105,6 +107,7 @@ struct HomeContentView: View {
                                             appState.realityView = immersiveSpaceIdentifier
                                             switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                             case .opened:
+                                                showHomeButtons = false
                                                 break
                                             case .error:
                                                 print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
@@ -134,8 +137,8 @@ struct HomeContentView: View {
                         }
                         
                     } else {
-                 
                         Button("STOP_BTN".localized) {
+                            viewModel.stopSpeaking()
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()

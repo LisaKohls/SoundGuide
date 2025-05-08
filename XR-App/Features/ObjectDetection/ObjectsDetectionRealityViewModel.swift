@@ -14,6 +14,7 @@ import Combine
 class ObjectsDetectionRealityViewModel: ObservableObject {
     
     private var spokenObjectNames: Set<String> = []
+    private var currentAudioController: AudioPlaybackController?
     
     func makeHandEntities(in content: any RealityViewContentProtocol) {
         // Add the left hand.
@@ -58,8 +59,14 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
                 let resource: AudioFileResource = try .load(named: resourceName, in: .main)
                 let controller = entity.prepareAudio(resource)
                 controller.play()
+                self.currentAudioController = controller
             } catch {
                 print("Failed to load or play sound: \(error)")
             }
+        }
+
+    func stopSpatialSound() {
+        currentAudioController?.stop()
+        currentAudioController = nil
     }
 }
