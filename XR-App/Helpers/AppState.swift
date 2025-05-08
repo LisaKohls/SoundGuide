@@ -49,6 +49,8 @@ class AppState {
     
     var realityView: String = ""
     
+    var didFinishObjectDetection = false
+    
     func startTracking() async -> ObjectTrackingProvider? {
         let referenceObjects = referenceObjectLoader.enabledReferenceObjects
         

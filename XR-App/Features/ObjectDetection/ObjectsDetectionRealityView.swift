@@ -64,14 +64,21 @@ struct ObjectsDetectionRealityView: View {
                             
                             if trackingView {
                                 //Add Spatial sound to the Object
-                                objectDetectionRealityViewModel.playSpatialSound(for: visualization.entity)
+                                objectDetectionRealityViewModel.playSpatialSound(for: visualization.entity, resourceName: "spatial-sound.wav")
                                 
                                 //if object has been found by user, stop sound, play feedback Ping
                                 objectDetectionRealityViewModel.observeTouchedObject(for: visualization.entity) { name in
                                     objectDetectionRealityViewModel.stopSpatialSound()
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                        viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
-                                    }
+                                    viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                                    Task {
+                                        HandTrackingSystem.detectedObjects.removeAll()
+                                         
+                                         for (_, visualization) in objectVisualizations {
+                                             root.removeChild(visualization.entity)
+                                         }
+                                         objectVisualizations.removeAll()
+                                         appState.didFinishObjectDetection = true
+                                     }
                                 }
                                 
                             }

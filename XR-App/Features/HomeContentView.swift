@@ -210,6 +210,17 @@ struct HomeContentView: View {
                 appState.providersStoppedWithError = false
             }
         })
+        .onChange(of: appState.didFinishObjectDetection) { _, didFinish in
+            if didFinish {
+                Task {
+                    await dismissImmersiveSpace()
+                    appState.didLeaveImmersiveSpace()
+                    appState.recognizedText = ""
+                    showHomeButtons = true
+                    appState.didFinishObjectDetection = false
+                }
+            }
+        }
         .task {
             // Ask for authorization before a person attempts to open the immersive space.
             // This gives the app opportunity to respond gracefully if authorization isn't granted.

@@ -84,7 +84,7 @@ struct HandTrackingSystem: System {
                     for object in Self.detectedObjects {
                         // Distance between hands and each found object
                         let distance = simd_distance(jointEntity.position(relativeTo: nil), object.position(relativeTo: nil))
-                        if distance < 0.1 {
+                        if distance < 0.09 {
                             let name = object.name
                             if !name.isEmpty {
                                 Self.onObjectTouched?(name)
@@ -102,7 +102,7 @@ struct HandTrackingSystem: System {
     ///   - handComponent: The hand-tracking component to update.
     func addJoints(to handEntity: Entity, handComponent: inout HandTrackingComponent) {
         /// The size of the sphere mesh.
-        let radius: Float = 0.01
+        let radius: Float = 0.001
 
         /// The material to apply to the sphere entity.
         let material = SimpleMaterial(color: .white, isMetallic: false)

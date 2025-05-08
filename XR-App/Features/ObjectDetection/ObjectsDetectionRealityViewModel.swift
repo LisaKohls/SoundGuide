@@ -54,19 +54,20 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
         }
     }
     
-    func playSpatialSound(for entity: Entity, named resourceName: String = "spatial-sound.wav") {
+    func playSpatialSound(for entity: Entity, resourceName: String) {
             do {
                 let resource: AudioFileResource = try .load(named: resourceName, in: .main)
                 let controller = entity.prepareAudio(resource)
-                controller.play()
                 self.currentAudioController = controller
+                self.currentAudioController?.play()
             } catch {
                 print("Failed to load or play sound: \(error)")
             }
-        }
+    }
 
     func stopSpatialSound() {
         currentAudioController?.stop()
         currentAudioController = nil
     }
+    
 }
