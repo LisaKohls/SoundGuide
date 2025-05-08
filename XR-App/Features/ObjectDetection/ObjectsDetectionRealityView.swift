@@ -17,8 +17,7 @@ struct ObjectsDetectionRealityView: View {
     @Bindable var appState: AppState
     var root = Entity()
     
-    @StateObject var viewModel = SpeechRecognizerViewModel()
-    @StateObject var objectDetectionRealityViewModel = ObjectsDetectionRealityViewModel()
+    @StateObject var viewModel = ObjectsDetectionRealityViewModel()
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
     
     
@@ -29,7 +28,7 @@ struct ObjectsDetectionRealityView: View {
             let detectionView = appState.realityView == "UnknownObjectDetection"
             let trackingView = appState.realityView == "ObjectTracking"
             
-            objectDetectionRealityViewModel.makeHandEntities(in: content)
+            viewModel.makeHandEntities(in: content)
        
             Task {
                 let objectTracking = await appState.startTracking()
@@ -42,10 +41,10 @@ struct ObjectsDetectionRealityView: View {
                     let id = anchor.id
                     let name = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
                     
-                    let detectedObjectName = objectDetectionRealityViewModel.getDetectedObjectName(detectedObject: name)
+                    let detectedObjectName = viewModel.getDetectedObjectName(detectedObject: name)
                     
                     if(detectedObjectName == appState.recognizedText || detectionView){
-                        //searched for object has been found by Aplle Vision Pro
+                        //searched for object has been found by Apple Vision Pro
                         switch anchorUpdate.event {
                         case .added:
                             
@@ -57,19 +56,19 @@ struct ObjectsDetectionRealityView: View {
                             root.addChild(visualization.entity)
                             
                             if detectionView {
-                                objectDetectionRealityViewModel.observeTouchedObject(for: entity) { name in
-                                    viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                                viewModel.observeTouchedObject(for: entity) { name in
+                                    SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                 }
                             }
                             
                             if trackingView {
                                 //Add Spatial sound to the Object
-                                objectDetectionRealityViewModel.playSpatialSound(for: visualization.entity, resourceName: "spatial-sound.wav")
+                                viewModel.playSpatialSound(for: visualization.entity, resourceName: "spatial-sound.wav")
                                 
                                 //if object has been found by user, stop sound, play feedback Ping
-                                objectDetectionRealityViewModel.observeTouchedObject(for: visualization.entity) { name in
-                                    objectDetectionRealityViewModel.stopSpatialSound()
-                                    viewModel.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                                viewModel.observeTouchedObject(for: visualization.entity) { name in
+                                    viewModel.stopSpatialSound()
+                                    SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                     Task {
                                         HandTrackingSystem.detectedObjects.removeAll()
                                          

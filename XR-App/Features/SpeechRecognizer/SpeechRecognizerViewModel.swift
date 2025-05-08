@@ -18,37 +18,6 @@ class SpeechRecognizerViewModel: ObservableObject {
     
     var onResult: ((String) -> Void)?
     
-    func setupAudio() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
-            try AVAudioSession.sharedInstance().setActive(true)
-            try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
-        } catch {
-            print("AudioSession Error: \(error)")
-        }
-    }
-    
-    func preWarmSpeechEngine() {
-        let dummy = AVSpeechUtterance(string: "")
-        dummy.voice = AVSpeechSynthesisVoice(language: "LANG".localized)
-        dummy.rate = AVSpeechUtteranceDefaultSpeechRate
-        synthesizer.speak(dummy)
-    }
-    
-    func speak(text: String, language: String = "LANG".localized, rate: Float = AVSpeechUtteranceDefaultSpeechRate) {
-        let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: language)
-        utterance.rate = rate
-        
-        synthesizer.speak(utterance)
-        print(utterance)
-    }
-    
-    func stopSpeaking() {
-        print("Stop Speaking")
-        synthesizer.stopSpeaking(at: .immediate)
-    }
-    
     func startRecognition() {
         stopRecognition()
         

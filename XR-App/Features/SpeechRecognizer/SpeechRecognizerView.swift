@@ -26,7 +26,7 @@ struct SpeechRecognizerView: View {
             Text(recordedText)
                 .font(.headline)
                 .onAppear {
-                    viewModel.speak(text: "NORECORDEDOBJECT".localized)
+                    SpeechHelper.shared.speak(text: "NORECORDEDOBJECT".localized)
             }
         }
         .onAppear {
@@ -49,7 +49,6 @@ struct SpeechRecognizerView: View {
         }
         .onDisappear {
             viewModel.stopRecognition()
-            viewModel.stopSpeaking()
         }
         .padding()
     }

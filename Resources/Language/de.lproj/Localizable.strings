@@ -15,15 +15,16 @@
 "STOP" = "beenden";
 "START" = "starten";
 "LOADOBJECTSTEXT" = "Objekte werden geladen.";
-"WELCOMETEXT" = "Willkommen zu SoundGuide. Um einen Button zu klicken, sage den Namen des vorgelesenen Buttons und klicke dazu. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken. Folge anschließend der Richtung der Musik um das Objekt zu finden.";
+"WELCOMETEXT" = "Willkommen zu SoundGuide. Folge den Anweisungen des Systems um Objekte zu finden. Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken.";
 "STARTRECORDING_BTN" = "Aufnahme beginnen";
 "NORECORDEDOBJECT" = "Nenne jetzt das gesuchte Objekt...";
 "OBJECTFOUNDTEXT" = "Das gesuchte Objekt ist %@. Sage einen der folgenden Optionen: %@ klicken, %@ klicken, %@ klicken";
 "STARTRECORDINGINSTRUCTION" = "Sage %@ klicken um die Sprachaufnahme zu starten";
 "START_STOP_TRACKING_BTN" = "Sage %@ klicken um das Tracking zu %@";
 "UNKNOWNOBJECTS_BTN" = "Unbekannte Objekte suchen";
-"LOOKFORUNKNOWNOBJECTS" = "Sage unbekannte Objekte suchen klicken";
+"LOOKFORUNKNOWNOBJECTS" = "Sage unbekannte Objekte suchen klicken um herauszufinden, welche Objekte sich vor dir befinden";
 "FOUNDUNKNOWNOBJECT" = "Du hast das Objekt %@ gefunden.";
+"REPEATCONTENT_HOME" = "Du hast die Optionen Aufnahme beginnen klicken oder unbekannte Objekte suchen klicken zu sagen.";
 
 //Reference Objects
 "MUG" = "tasse";

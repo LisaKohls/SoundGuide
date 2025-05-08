@@ -15,15 +15,17 @@
 "STOP" = "stop";
 "START" = "start";
 "LOADOBJECTSTEXT" = "Loading objects.";
-"WELCOMETEXT" = "Welcome to SoundGuide. To tap a button, say the name of the spoken button and tap it. If you want to hear the content again, say tap repeat content. Then follow the direction of the music to find the object.";
+"WELCOMETEXT" = "Welcome to SoundGuide. Follow the system instructions to find the object. If you want the content to be read aloud again, say tap repeat content'.";
 "STARTRECORDING_BTN" = "Start recording";
 "NORECORDEDOBJECT" = "Now name the object you're looking for...";
 "OBJECTFOUNDTEXT" = "The searched object is %@. Say one of the following options: tap %@, tap %@, tap %@";
 "STARTRECORDINGINSTRUCTION" = "Say tap %@ to start the voice recording";
 "START_STOP_TRACKING_BTN" = "Say tap %@ to %@ the Tracking";
 "UNKNOWNOBJECTS_BTN" = "Look for unknown objects";
-"LOOKFORUNKNOWNOBJECTS" = "Say tap look for unknown objects";
+"LOOKFORUNKNOWNOBJECTS" = "Say tap search for unknown objects to find out which objects are in front of you.";
 "FOUNDUNKNOWNOBJECT" = "You found the object %@.";
+"REPEATCONTENT_HOME" = "You can say tap Start recording or tap Search for unknown objects.";
+
 
 //Reference Objects
 "MUG" = "mug";

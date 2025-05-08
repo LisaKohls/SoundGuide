@@ -21,7 +21,8 @@ struct HomeContentView: View {
     @State private var showSpeechRecognizer: Bool  = false
     @State private var showLookForUnknownObjectsView: Bool  = false
     @State private var showHomeButtons: Bool  = true
-    
+    @State private var isSpeaking = true
+  
     var body: some View {
  
         VStack {
@@ -30,6 +31,26 @@ struct HomeContentView: View {
                     Text("WELCOMETOSOUNDGUIDE".localized)
                         .font(.system(size: 25, weight:. bold))
                         .padding(30)
+                    
+                    if !showSpeechRecognizer{
+                        Button("REPEATCONTENT_BTN".localized) {
+                            let tempContentOnView = {
+                                if showHomeButtons {
+                                    return "REPEATCONTENT_HOME".localized
+                                } else if !appState.isImmersiveSpaceOpened && !showSpeechRecognizer && !showHomeButtons {
+                                    return "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText, "START_BTN".localized, "REPEAT_BTN".localized)
+                                } else if appState.isImmersiveSpaceOpened {
+                                    return "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized)
+                                } else {
+                                    return "WELCOMETOSOUNDGUIDE".localized
+                                }
+                            }()
+                            
+                            SpeechHelper.shared.speak(text: tempContentOnView)
+                        }
+                        .padding()
+                        .accessibilityLabel("REPEATCONTENT_BTN".localized)
+                    }
                     
                     //Home Buttons, Start Recording/ Start looking for unknown objects
                     if showHomeButtons {
@@ -42,12 +63,13 @@ struct HomeContentView: View {
                                     .clipShape(Capsule())
                                     .accessibilityLabel("STARTRECORDING_BTN".localized)
                                     .onAppear {
-                                        //3.5s
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
-                                            viewModel.speak(text: "STARTRECORDINGINSTRUCTION".localizedWithArgs("STARTRECORDING_BTN".localized))
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                                            SpeechHelper.shared.speak(text: "STARTRECORDINGINSTRUCTION".localizedWithArgs("STARTRECORDING_BTN".localized)) {
+                                                isSpeaking = false
+                                            }
                                         }
                                     }
-                            }
+                            }.disabled(isSpeaking)
                             
                             Button(action: {
                                 //show searchObjectsView
@@ -70,14 +92,13 @@ struct HomeContentView: View {
                                     .clipShape(Capsule())
                                     .accessibilityLabel("UNKNOWNOBJECTS_BTN".localized)
                                     .onAppear {
-                                        //3.5s
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
-                                            viewModel.speak(text: "LOOKFORUNKNOWNOBJECTS".localized)
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            SpeechHelper.shared.speak(text: "LOOKFORUNKNOWNOBJECTS".localized) {
+                                                isSpeaking = true
+                                            }
                                         }
                                     }
-                            }
-                        }.onDisappear {
-                            viewModel.stopSpeaking()
+                            }.disabled(isSpeaking)
                         }
                     }
                     
@@ -88,12 +109,6 @@ struct HomeContentView: View {
                                     showSpeechRecognizer = true
                                 }.padding()
                                     .accessibilityLabel("REPEAT_BTN".localized)
-                                
-                                
-                                Button("REPEATCONTENT_BTN".localized) {
-                                    viewModel.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized))
-                                }.padding()
-                                    .accessibilityLabel("REPEATCONTENT_BTN".localized)
                                 
                                 HStack {
                                     
@@ -123,12 +138,13 @@ struct HomeContentView: View {
                                 }
                                 
                             }.onAppear {
-                                viewModel.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
+                                SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
+                               
                             }.onChange(of: appState.recognizedText) {
-                                viewModel.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
+                                    SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
                             }
                             .onDisappear {
-                                viewModel.stopSpeaking()
+                                SpeechHelper.shared.stopSpeaking()
                             }
                         } else if showSpeechRecognizer {
                             SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
@@ -138,7 +154,7 @@ struct HomeContentView: View {
                         
                     } else {
                         Button("STOP_BTN".localized) {
-                            viewModel.stopSpeaking()
+                            SpeechHelper.shared.stopSpeaking()
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
@@ -148,15 +164,8 @@ struct HomeContentView: View {
                         }
                         .accessibilityLabel("STOP_BTN".localized)
                         .onAppear {
-                             viewModel.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
+                            SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
                        }
-                           
-                        
-                        Button("REPEATCONTENT_BTN".localized) {
-                            viewModel.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized, "STOP".localized))
-                        }.padding()
-                            .accessibilityLabel("REPEATCONTENT_BTN".localized)
-                        
                         
                         if !appState.objectTrackingStartedRunning {
                             HStack {
@@ -170,13 +179,15 @@ struct HomeContentView: View {
                 .font(.footnote)
                 .padding(.horizontal)
                 .onAppear {
-                    /* For higher quality speech output
-                    viewModel.preWarmSpeechEngine()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
-                        viewModel.speak(text: "WELCOMETEXT".localized)
-                    }*/
+                    // Required for better quality speech output
+                    Task {
+                        SpeechHelper.shared.preWarmSpeechEngine()
+                        SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
+                            isSpeaking = true
+                        }
+                    }
                 }.onDisappear() {
-                    viewModel.stopSpeaking()
+                    SpeechHelper.shared.stopSpeaking()
                 }
             }
         }
@@ -212,6 +223,7 @@ struct HomeContentView: View {
         })
         .onChange(of: appState.didFinishObjectDetection) { _, didFinish in
             if didFinish {
+                
                 Task {
                     await dismissImmersiveSpace()
                     appState.didLeaveImmersiveSpace()
