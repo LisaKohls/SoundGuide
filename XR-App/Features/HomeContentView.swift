@@ -143,9 +143,6 @@ struct HomeContentView: View {
                             }.onChange(of: appState.recognizedText) {
                                     SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
                             }
-                            .onDisappear {
-                                SpeechHelper.shared.stopSpeaking()
-                            }
                         } else if showSpeechRecognizer {
                             SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
                                 appState.recognizedText = newText
@@ -164,6 +161,7 @@ struct HomeContentView: View {
                         }
                         .accessibilityLabel("STOP_BTN".localized)
                         .onAppear {
+                            SpeechHelper.shared.stopSpeaking()
                             SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
                        }
                         
