@@ -25,7 +25,8 @@
 "LOOKFORUNKNOWNOBJECTS" = "Say tap search for unknown objects to find out which objects are in front of you.";
 "FOUNDUNKNOWNOBJECT" = "You found the object %@.";
 "REPEATCONTENT_HOME" = "You can say tap Start recording or tap Search for unknown objects.";
-
+"WELCOMETEXT2" = "If you want the content to be read out again, say or click 'Read content again'.";
+"VIEWLOADEDSUCCESSFULLY" = "Object detection has started, move slightly to find an object.";
 
 //Reference Objects
 "MUG" = "mug";

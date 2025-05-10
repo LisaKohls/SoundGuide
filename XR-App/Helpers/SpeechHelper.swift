@@ -53,8 +53,8 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     }
     
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-            onFinishSpeaking?()
-            onFinishSpeaking = nil
+        onFinishSpeaking?()
+        onFinishSpeaking = nil
    }
     
 }

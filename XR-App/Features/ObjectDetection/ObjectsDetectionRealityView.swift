@@ -25,8 +25,8 @@ struct ObjectsDetectionRealityView: View {
         RealityView { content in
             content.add(root)
             
-            let detectionView = appState.realityView == "UnknownObjectDetection"
-            let trackingView = appState.realityView == "ObjectTracking"
+            let detectionView = appState.realityView == "UNKNOWNOBJECTS_BTN".localized
+            let trackingView = appState.realityView == "START_BTN".localized
             
             viewModel.makeHandEntities(in: content)
        
@@ -47,26 +47,32 @@ struct ObjectsDetectionRealityView: View {
                         //searched for object has been found by Apple Vision Pro
                         switch anchorUpdate.event {
                         case .added:
-                            
+                            print("Object has been found by Apple Vision pro: \(detectedObjectName)--- At: \(Date())", to: &logger)
+                           
                             let visualization = ObjectAnchorVisualization(for: anchor)
                             let entity = visualization.entity
                             entity.name = detectedObjectName
                             
-                            self.objectVisualizations[id] = visualization
-                            root.addChild(visualization.entity)
-                            
                             if detectionView {
                                 viewModel.observeTouchedObject(for: entity) { name in
+                                    print("\(name) has been touched by user at: \(Date()) ----- Current view: \(appState.realityView)", to: &logger)
+                                   
                                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                 }
                             }
                             
                             if trackingView {
+                                //Add outlines to detected object
+                                self.objectVisualizations[id] = visualization
+                                root.addChild(visualization.entity)
+                                
                                 //Add Spatial sound to the Object
                                 viewModel.playSpatialSound(for: visualization.entity, resourceName: "spatial-sound.wav")
                                 
                                 //if object has been found by user, stop sound, play feedback Ping
                                 viewModel.observeTouchedObject(for: visualization.entity) { name in
+                                    print("\(name) has been found by user at: \(Date()) ------- Current view: \(appState.realityView)", to: &logger)
+                                   
                                     viewModel.stopSpatialSound()
                                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                     Task {
@@ -93,12 +99,13 @@ struct ObjectsDetectionRealityView: View {
         }
         .onAppear() {
             appState.isImmersiveSpaceOpened = true
+            print("-------\(appState.realityView)---------- opened at: \(Date())", to: &logger)
             Task {
                 HandTrackingSystem.configure(with: appState)
             }
         }
         .onDisappear() {
-        print("disappeared objects detection")
+            print("View \(appState.realityView) disappeared at: \(Date())",to: &logger)
             Task {
                 HandTrackingSystem.detectedObjects.removeAll()
                 
