@@ -10,6 +10,7 @@
  */
 
 import ARKit
+import RealityKit
 import RealityKitContent;
 import RealityFoundation
 @MainActor
@@ -38,6 +39,20 @@ class AppState: ObservableObject {
     
     private var objectTracking: ObjectTrackingProvider? = nil
     
+    private var handTracking: HandTrackingProvider? = nil
+    
+    var objectTrackingStartedRunning = false
+    
+    var providersStoppedWithError = false
+    
+    var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
+    
+    var recognizedText: String = ""
+    
+    var realityView: String = ""
+    
+    var didFinishObjectDetection = false
+    
     func startTracking() async -> ObjectTrackingProvider? {
         let referenceObjects = referenceObjectLoader.enabledReferenceObjects
         guard !referenceObjects.isEmpty else {
@@ -48,11 +63,23 @@ class AppState: ObservableObject {
         do {
             try await arkitSession.run([objectTracking])
         } catch {
-            print("Error: \(error)")
+            print("Error starting object tracking: \(error)" )
             return nil
         }
         self.objectTracking = objectTracking
         return objectTracking
+    }
+    
+    func startHandTracking() async -> HandTrackingProvider? {
+        let handTracking = HandTrackingProvider()
+        do {
+            try await arkitSession.run([handTracking])
+        } catch {
+            print("Error starting hand tracking: \(error)" )
+            return nil
+        }
+        self.handTracking = handTracking
+        return handTracking
     }
     
     var allRequiredAuthorizationsAreGranted: Bool {

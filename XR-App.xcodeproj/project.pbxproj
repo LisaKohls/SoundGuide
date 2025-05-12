@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		752D11742D969034000CD54F /* spatial-sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 752D11732D969034000CD54F /* spatial-sound.wav */; };
 		756F00072D8F102E006F3D67 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 756F00062D8F102E006F3D67 /* RealityKitContent */; };
 /* End PBXBuildFile section */
 
@@ -22,7 +21,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		752D11732D969034000CD54F /* spatial-sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "spatial-sound.wav"; sourceTree = "<group>"; };
 		756F00012D8F102E006F3D67 /* XR-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XR-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		756F00052D8F102E006F3D67 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		756F001C2D8F1030006F3D67 /* XR-AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XR-AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,7 +34,24 @@
 			);
 			target = 756F00002D8F102E006F3D67 /* XR-App */;
 		};
+		75A9C3B42DC7DF5100F458DE /* Exceptions for "Resources" folder in "XR-App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Language/Localizable.strings",
+			);
+			target = 756F00002D8F102E006F3D67 /* XR-App */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		75A9C3B52DC7DF5100F458DE /* Exceptions for "Resources" folder in "Compile Sources" phase from "XR-App" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 756FFFFD2D8F102E006F3D67 /* Sources */;
+			membershipExceptions = (
+				"/Localized: Language/Localizable.strings",
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		756F00032D8F102E006F3D67 /* XR-App */ = {
@@ -52,9 +67,13 @@
 			path = "XR-AppTests";
 			sourceTree = "<group>";
 		};
-		756F002B2D902003006F3D67 /* ReferenceObjects */ = {
+		75A9C39E2DC7DD9700F458DE /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ReferenceObjects;
+			exceptions = (
+				75A9C3B42DC7DF5100F458DE /* Exceptions for "Resources" folder in "XR-App" target */,
+				75A9C3B52DC7DF5100F458DE /* Exceptions for "Resources" folder in "Compile Sources" phase from "XR-App" target */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -98,12 +117,11 @@
 		756FFFF82D8F102E006F3D67 = {
 			isa = PBXGroup;
 			children = (
-				756F002B2D902003006F3D67 /* ReferenceObjects */,
+				75A9C39E2DC7DD9700F458DE /* Resources */,
 				756F00032D8F102E006F3D67 /* XR-App */,
 				756F00042D8F102E006F3D67 /* Packages */,
 				756F001F2D8F1030006F3D67 /* XR-AppTests */,
 				756F00022D8F102E006F3D67 /* Products */,
-				752D11732D969034000CD54F /* spatial-sound.wav */,
 			);
 			sourceTree = "<group>";
 		};
@@ -124,7 +142,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				756F00032D8F102E006F3D67 /* XR-App */,
-				756F002B2D902003006F3D67 /* ReferenceObjects */,
+				75A9C39E2DC7DD9700F458DE /* Resources */,
 			);
 			name = "XR-App";
 			packageProductDependencies = (
@@ -182,6 +200,8 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				uk,
 			);
 			mainGroup = 756FFFF82D8F102E006F3D67;
 			minimizedProjectReferenceProxies = 1;
@@ -208,7 +228,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				752D11742D969034000CD54F /* spatial-sound.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +320,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -364,6 +384,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

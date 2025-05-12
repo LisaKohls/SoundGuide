@@ -1,0 +1,39 @@
+//
+//  Localizable Language EN
+//  XR-App
+//
+//  Created by Lisa Kohls on 04.05.25.
+//
+
+"LANG" = "en-US";
+"REPEAT_BTN" = "Re-enter";
+"WELCOMETOSOUNDGUIDE" = "Welcome to SoundGuide";
+"REPEATCONTENT_BTN" = "Repeat content";
+"HOME_BTN" = "Back to start";
+"START_BTN" = "Start search";
+"STOP_BTN" = "Stop search";
+"STOP" = "stop";
+"START" = "start";
+"LOADOBJECTSTEXT" = "Loading objects.";
+"WELCOMETEXT" = "Welcome to SoundGuide. Follow the system instructions to find the object. If you want the content to be read aloud again, say tap repeat content'.";
+"STARTRECORDING_BTN" = "Start recording";
+"NORECORDEDOBJECT" = "Now name the object you're looking for...";
+"OBJECTFOUNDTEXT" = "The searched object is %@. Say one of the following options: tap %@, tap %@, tap %@";
+"STARTRECORDINGINSTRUCTION" = "Say tap %@ to start the voice recording";
+"START_STOP_TRACKING_BTN" = "Say tap %@ to %@ the Tracking";
+"UNKNOWNOBJECTS_BTN" = "Look for unknown objects";
+"LOOKFORUNKNOWNOBJECTS" = "Say tap search for unknown objects to find out which objects are in front of you.";
+"FOUNDUNKNOWNOBJECT" = "You found the object %@.";
+"REPEATCONTENT_HOME" = "You can say tap Start recording or tap Search for unknown objects.";
+"WELCOMETEXT2" = "If you want the content to be read out again, say or click 'Read content again'.";
+"VIEWLOADEDSUCCESSFULLY" = "Object detection has started, move slightly to find an object.";
+
+//Reference Objects
+"MUG" = "mug";
+"SPICES" = "spices";
+"LEMONTEA" = "lemon tea";
+"STRAWBERRYTEA" = "strawberry tea";
+
+
+
+

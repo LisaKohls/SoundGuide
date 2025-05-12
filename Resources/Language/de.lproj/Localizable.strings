@@ -1,0 +1,38 @@
+//
+//  Localizable Language DE
+//  XR-App
+//
+//  Created by Lisa Kohls on 04.05.25.
+//
+
+"LANG" = "de-DE";
+"REPEAT_BTN" = "Erneut eingeben";
+"WELCOMETOSOUNDGUIDE" = "Willkommen zu SoundGuide";
+"REPEATCONTENT_BTN" = "Inhalte erneut vorlesen";
+"HOME_BTN" = "Zurück zum start";
+"START_BTN" = "Suche starten";
+"STOP_BTN" = "Suche beenden";
+"STOP" = "beenden";
+"START" = "starten";
+"LOADOBJECTSTEXT" = "Objekte werden geladen.";
+"WELCOMETEXT" = "Willkommen zu SoundGuide. Folge den Anweisungen des Systems um Objekte zu finden.";
+"WELCOMETEXT2" = "Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken.";
+"STARTRECORDING_BTN" = "Aufnahme beginnen";
+"NORECORDEDOBJECT" = "Nenne jetzt das gesuchte Objekt...";
+"OBJECTFOUNDTEXT" = "Das gesuchte Objekt ist %@. Sage einen der folgenden Optionen: %@ klicken, %@ klicken, %@ klicken";
+"STARTRECORDINGINSTRUCTION" = "Sage %@ klicken um die Sprachaufnahme zu starten";
+"START_STOP_TRACKING_BTN" = "Sage %@ klicken um das Tracking zu %@";
+"UNKNOWNOBJECTS_BTN" = "Unbekannte Objekte suchen";
+"LOOKFORUNKNOWNOBJECTS" = "Sage unbekannte Objekte suchen klicken um herauszufinden, welche Objekte sich vor dir befinden";
+"FOUNDUNKNOWNOBJECT" = "Du hast das Objekt %@ gefunden.";
+"REPEATCONTENT_HOME" = "Du hast die Optionen Aufnahme beginnen klicken oder unbekannte Objekte suchen klicken zu sagen.";
+"VIEWLOADEDSUCCESSFULLY" = "Die Objekterkennung wurde gestartet, bewege dich leicht um ein Objekt zu finden";
+
+//Reference Objects
+"MUG" = "tasse";
+"SPICES" = "gewürz";
+"LEMONTEA" = "zitronentee";
+"STRAWBERRYTEA" = "erdbeertee";
+
+
+
