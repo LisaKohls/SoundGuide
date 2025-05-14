@@ -67,13 +67,14 @@ struct ObjectsDetectionRealityView: View {
                                 root.addChild(visualization.entity)
                                 
                                 //Add Spatial sound to the Object
-                                viewModel.playSpatialSound(for: visualization.entity, resourceName: "spatial-sound.wav")
+                                let pos = anchor.originFromAnchorTransform.translation
+                                viewModel.playSound(for: id, entity: visualization.entity, at: pos)
                                 
                                 //if object has been found by user, stop sound, play feedback Ping
                                 viewModel.observeTouchedObject(for: visualization.entity) { name in
                                     print("\(name) has been found by user at: \(Date()) ------- Current view: \(appState.realityView)", to: &logger)
                                    
-                                    viewModel.stopSpatialSound()
+                                    viewModel.stopSound(for: id)
                                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                     Task {
                                         HandTrackingSystem.detectedObjects.removeAll()
@@ -87,11 +88,23 @@ struct ObjectsDetectionRealityView: View {
                                 }
                                 
                             }
+                        // case .updated:
+                            // self.objectVisualizations[id]?.update(with: anchor)
+                            // let pos = anchor.originFromAnchorTransform.translation
+                            // viewModel.updateSound(for: id, at: pos)
+                            
                         case .updated:
                             self.objectVisualizations[id]?.update(with: anchor)
+                            let objectPosition = anchor.originFromAnchorTransform.translation
+                            viewModel.updateSound(for: id, at: objectPosition)
+
+                                print("📦 Object position: x: \(objectPosition.x), y: \(objectPosition.y), z: \(objectPosition.z)")
+                        
+                            
                         case .removed:
                             self.objectVisualizations[id]?.entity.removeFromParent()
                             self.objectVisualizations.removeValue(forKey: id)
+                            viewModel.stopSound(for: id)
                         }
                     }
                 }

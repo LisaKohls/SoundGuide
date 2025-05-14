@@ -13,15 +13,13 @@ import ARKit
 import RealityKit
 import RealityKitContent;
 import RealityFoundation
-@MainActor
-class AppState: ObservableObject {
-    
-    @Published var isImmersiveSpaceOpened = false
-    @Published var recognizedText: String = ""
-    @Published var objectTrackingStartedRunning = false
-    @Published var providersStoppedWithError = false
-    @Published var worldSensingAuthorizationStatus = ARKitSession.AuthorizationStatus.notDetermined
 
+@MainActor
+@Observable
+class AppState {
+    
+    var isImmersiveSpaceOpened = false
+    
     let referenceObjectLoader = ReferenceObjectLoader()
     
     func didLeaveImmersiveSpace() {
@@ -36,6 +34,8 @@ class AppState: ObservableObject {
     // MARK: - ARKit state
     
     private var arkitSession = ARKitSession()
+    
+    var arKitSession: ARKitSession?
     
     private var objectTracking: ObjectTrackingProvider? = nil
     
@@ -55,10 +55,11 @@ class AppState: ObservableObject {
     
     func startTracking() async -> ObjectTrackingProvider? {
         let referenceObjects = referenceObjectLoader.enabledReferenceObjects
+        
         guard !referenceObjects.isEmpty else {
             fatalError("No reference objects to start tracking")
         }
-
+        
         let objectTracking = ObjectTrackingProvider(referenceObjects: referenceObjects)
         do {
             try await arkitSession.run([objectTracking])
@@ -95,13 +96,13 @@ class AppState: ObservableObject {
     }
     
     func requestWorldSensingAuthorization() async {
-        let result = await arkitSession.requestAuthorization(for: [.worldSensing])
-        worldSensingAuthorizationStatus = result[.worldSensing]!
+        let authorizationResult = await arkitSession.requestAuthorization(for: [.worldSensing])
+        worldSensingAuthorizationStatus = authorizationResult[.worldSensing]!
     }
-
+    
     func queryWorldSensingAuthorization() async {
-        let result = await arkitSession.queryAuthorization(for: [.worldSensing])
-        worldSensingAuthorizationStatus = result[.worldSensing]!
+        let authorizationResult = await arkitSession.queryAuthorization(for: [.worldSensing])
+        worldSensingAuthorizationStatus = authorizationResult[.worldSensing]!
     }
     
     func monitorSessionEvents() async {
@@ -133,16 +134,13 @@ class AppState: ObservableObject {
                     break
                 }
             case .authorizationChanged(let type, let status):
+                print("Authorization type \(type) changed to \(status)")
                 if type == .worldSensing {
                     worldSensingAuthorizationStatus = status
                 }
             default:
-                print("Unknown event: \(event)")
+                print("An unknown event occurred \(event)")
             }
         }
-    }
-
-    var arSession: ARKitSession {
-        arkitSession
     }
 }
