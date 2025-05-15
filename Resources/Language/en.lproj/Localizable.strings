@@ -27,6 +27,7 @@
 "REPEATCONTENT_HOME" = "You can say tap Start recording or tap Search for unknown objects.";
 "WELCOMETEXT2" = "If you want the content to be read aloud again, say tap repeat content'.";
 "VIEWLOADEDSUCCESSFULLY" = "Object detection has started, move slightly to find an object.";
+"UNKNOWNOBJECTSVIEW" = "Touch objects to find out about their name";
 
 //Reference Objects
 "MUG" = "mug";

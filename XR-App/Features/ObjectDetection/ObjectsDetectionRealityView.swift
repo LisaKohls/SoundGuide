@@ -109,6 +109,8 @@ struct ObjectsDetectionRealityView: View {
             
             if appState.realityView == "START_BTN".localized {
                 SpeechHelper.shared.speak(text: "VIEWLOADEDSUCCESSFULLY".localized)
+            } else {
+                SpeechHelper.shared.speak(text: "UNKNOWNOBJECTSVIEW".localized)
             }
             
             SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))

@@ -27,6 +27,7 @@
 "FOUNDUNKNOWNOBJECT" = "Du hast das Objekt %@ gefunden.";
 "REPEATCONTENT_HOME" = "Du hast die Optionen Aufnahme beginnen klicken oder unbekannte Objekte suchen klicken zu sagen.";
 "VIEWLOADEDSUCCESSFULLY" = "Die Objekterkennung wurde gestartet, bewege dich leicht um ein Objekt zu finden";
+"UNKNOWNOBJECTSVIEW" = "Berühre Objekte um den Namen zu erfahren";
 
 //Reference Objects
 "MUG" = "tasse";
