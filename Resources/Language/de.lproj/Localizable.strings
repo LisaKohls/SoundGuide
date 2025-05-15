@@ -19,7 +19,7 @@
 "WELCOMETEXT2" = "Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken.";
 "STARTRECORDING_BTN" = "Aufnahme beginnen";
 "NORECORDEDOBJECT" = "Nenne jetzt das gesuchte Objekt...";
-"OBJECTFOUNDTEXT" = "Das gesuchte Objekt ist %@. Sage einen der folgenden Optionen: %@ klicken, %@ klicken, %@ klicken";
+"OBJECTFOUNDTEXT" = "Das gesuchte Objekt ist %@. Sage einen der folgenden Optionen: %@ klicken, %@ klicken";
 "STARTRECORDINGINSTRUCTION" = "Sage %@ klicken um die Sprachaufnahme zu starten";
 "START_STOP_TRACKING_BTN" = "Sage %@ klicken um das Tracking zu %@";
 "UNKNOWNOBJECTS_BTN" = "Unbekannte Objekte suchen";
@@ -33,6 +33,6 @@
 "SPICES" = "gewürz";
 "LEMONTEA" = "zitronentee";
 "STRAWBERRYTEA" = "erdbeertee";
-
-
+"VANILLATEA" = "vanilletee";
+"MY_MUG" = "kaffeetasse";
 

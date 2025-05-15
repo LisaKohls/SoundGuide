@@ -26,6 +26,7 @@ struct SpeechRecognizerView: View {
             Text(recordedText)
                 .font(.headline)
                 .onAppear {
+                    print("Inhalt der Sprachaufnahme: \(recordedText)")
                     SpeechHelper.shared.speak(text: "NORECORDEDOBJECT".localized)
             }
         }

@@ -81,35 +81,25 @@ struct HomeContentView: View {
                     
                     if !appState.isImmersiveSpaceOpened {
                         if !showSpeechRecognizer && !showHomeButtons {
-                            VStack {
+                            HStack {
                                 Button("REPEAT_BTN".localized) {
                                     print("Button Interaction: User tapped REPEAT BUTTON", to: &logger)
                                     showSpeechRecognizer = true
                                 }.padding()
                                     .accessibilityLabel("REPEAT_BTN".localized)
                                 
-                                HStack {
-                                    
-                                    Button("HOME_BTN".localized) {
-                                        print("Button Interaction: User tapped HOME BUTTON", to: &logger)
-                                        showHomeButtons = true
-                                    }.padding()
-                                    .accessibilityLabel("HOME_BTN".localized)
-                                    
                                     StartImmersiveSpaceBtn(
                                         immersiveSpaceIdentifier: immersiveSpaceIdentifier,
                                         showHomeButtons: $showHomeButtons,
                                         appState: appState,
                                         btnName: "START_BTN".localized
                                     )
-
-                                }
                                 
                             }.onAppear {
-                                SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
+                                SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized))
                                
                             }.onChange(of: appState.recognizedText) {
-                                SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized, "HOME_BTN".localized))
+                                SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized))
                             }
                         } else if showSpeechRecognizer {
                             SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
@@ -131,8 +121,6 @@ struct HomeContentView: View {
                         .accessibilityLabel("STOP_BTN".localized)
                         .onAppear {
                             SpeechHelper.shared.stopSpeaking()
-                            SpeechHelper.shared.speak(text: "VIEWLOADEDSUCCESSFULLY".localized)
-                            SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
                         }
                         
                         if !appState.objectTrackingStartedRunning {
@@ -149,6 +137,7 @@ struct HomeContentView: View {
                 .onAppear {
                     print("Welcome to Soundguide. User test started with User 1. at: \(Date())", to: &logger)
                     // Required for better quality speech output
+                    
                     Task {
                         SpeechHelper.shared.preWarmSpeechEngine()
                         SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
