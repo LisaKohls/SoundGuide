@@ -121,6 +121,8 @@ struct HomeContentView: View {
                         .accessibilityLabel("STOP_BTN".localized)
                         .onAppear {
                             SpeechHelper.shared.stopSpeaking()
+                            SpeechHelper.shared.speak(text: "VIEWLOADEDSUCCESSFULLY".localized)
+                            SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
                         }
                         
                         if !appState.objectTrackingStartedRunning {
@@ -135,9 +137,8 @@ struct HomeContentView: View {
                 .font(.footnote)
                 .padding(.horizontal)
                 .onAppear {
-                    print("Welcome to Soundguide. User test started with User 1. at: \(Date())", to: &logger)
+                    print("Welcome to Soundguide. User test started with User 2. at: \(Date())", to: &logger)
                     // Required for better quality speech output
-                    
                     Task {
                         SpeechHelper.shared.preWarmSpeechEngine()
                         SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {

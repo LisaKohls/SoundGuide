@@ -42,8 +42,8 @@ struct ObjectsDetectionRealityView: View {
                     let name = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
                     
                     let detectedObjectName = viewModel.getDetectedObjectName(detectedObject: name)
-                    print("determined object: \(detectedObjectName), \(appState.recognizedText) ")
-                    if(detectedObjectName == appState.recognizedText || detectionView){
+                    print("determined object: \(detectedObjectName), recognized Text:\(appState.recognizedText) ")
+                    if(appState.recognizedText.contains(detectedObjectName) || detectionView){
                         //searched for object has been found by Apple Vision Pro
                         switch anchorUpdate.event {
                         case .added:
@@ -105,12 +105,6 @@ struct ObjectsDetectionRealityView: View {
             print("-------\(appState.realityView)---------- opened")
             Task {
                 HandTrackingSystem.configure(with: appState)
-            }
-            
-            if appState.realityView == "START_BTN".localized {
-                SpeechHelper.shared.speak(text: "VIEWLOADEDSUCCESSFULLY".localized)
-            } else {
-                SpeechHelper.shared.speak(text: "UNKNOWNOBJECTSVIEW".localized)
             }
             
             SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
