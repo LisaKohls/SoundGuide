@@ -5,6 +5,11 @@
 //  Created by Lisa Kohls on 29.03.25.
 //
 
+/*
+ Abstract:
+ The applications view for speech input when the user is looking for a specific object.
+ */
+
 import SwiftUI
 import Speech
 

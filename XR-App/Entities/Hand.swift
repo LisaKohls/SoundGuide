@@ -1,6 +1,10 @@
-/*
-See the LICENSE.txt file for this sample’s licensing information.
+//
+//  Hand.swift
+//  XR-App
+//
+//  Created by Lisa Kohls on 01.05.25.
 
+/*
 Abstract:
 A structure containing all entities attached to hand-tracking anchors.
 */

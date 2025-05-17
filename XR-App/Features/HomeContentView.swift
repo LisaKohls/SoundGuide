@@ -4,6 +4,11 @@
 //
 //  Created by Lisa Kohls on 22.03.25.
 
+/*
+ Abstract:
+ The applications main view.
+ */
+
 import SwiftUI
 import RealityKit
 
@@ -196,15 +201,11 @@ struct HomeContentView: View {
             }
         }
         .task {
-            // Ask for authorization before a person attempts to open the immersive space.
-            // This gives the app opportunity to respond gracefully if authorization isn't granted.
             if appState.allRequiredProvidersAreSupported {
                 await appState.requestWorldSensingAuthorization()
             }
         }
         .task {
-            // Start monitoring for changes in authorization, in case a person brings the
-            // Settings app to the foreground and changes authorizations there.
             await appState.monitorSessionEvents()
         }
         

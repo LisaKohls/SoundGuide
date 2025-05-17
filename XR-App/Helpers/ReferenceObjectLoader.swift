@@ -6,7 +6,7 @@
 
 /*
  Abstract:
- The class that loads all available reference objects.
+ The class that loads all available reference objects, max of 10 objects possible.
  */
 
 import ARKit

@@ -5,6 +5,10 @@
 //  Created by Lisa Kohls on 07.05.25.
 //
 
+/*
+ Abstract:
+ The applications immersive view, which enables the Object Tracking.
+ */
 
 import RealityKit
 import ARKit
