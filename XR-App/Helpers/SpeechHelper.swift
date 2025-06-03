@@ -32,7 +32,7 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     }
     
     func preWarmSpeechEngine() {
-        let dummy = AVSpeechUtterance(string: "")
+        let dummy = AVSpeechUtterance(string: "                       ")
         dummy.voice = AVSpeechSynthesisVoice(language: "LANG".localized)
         dummy.rate = AVSpeechUtteranceDefaultSpeechRate
         synthesizer.speak(dummy)

@@ -19,7 +19,7 @@
 "WELCOMETEXT2" = "Falls du erneut die Inhalte vorgelesen bekommen möchtest, sage Inhalte erneut vorlesen klicken.";
 "STARTRECORDING_BTN" = "Aufnahme beginnen";
 "NORECORDEDOBJECT" = "Nenne jetzt das gesuchte Objekt...";
-"OBJECTFOUNDTEXT" = "Das gesuchte Objekt ist %@. Sage einen der folgenden Optionen: %@ klicken, %@ klicken, %@ klicken";
+"OBJECTFOUNDTEXT" = "Das gesuchte Objekt ist %@. Sage einen der folgenden Optionen: %@ klicken, %@ klicken";
 "STARTRECORDINGINSTRUCTION" = "Sage %@ klicken um die Sprachaufnahme zu starten";
 "START_STOP_TRACKING_BTN" = "Sage %@ klicken um das Tracking zu %@";
 "UNKNOWNOBJECTS_BTN" = "Unbekannte Objekte suchen";
@@ -27,12 +27,13 @@
 "FOUNDUNKNOWNOBJECT" = "Du hast das Objekt %@ gefunden.";
 "REPEATCONTENT_HOME" = "Du hast die Optionen Aufnahme beginnen klicken oder unbekannte Objekte suchen klicken zu sagen.";
 "VIEWLOADEDSUCCESSFULLY" = "Die Objekterkennung wurde gestartet, bewege dich leicht um ein Objekt zu finden";
+"UNKNOWNOBJECTSVIEW" = "Berühre Objekte um den Namen zu erfahren";
 
 //Reference Objects
 "MUG" = "tasse";
 "SPICES" = "gewürz";
 "LEMONTEA" = "zitronentee";
 "STRAWBERRYTEA" = "erdbeertee";
-"MY_MUG" = "meine tasse"
-
+"VANILLATEA" = "vanilletee";
+"MY_MUG" = "kaffeetasse";
 

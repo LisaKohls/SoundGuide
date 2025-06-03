@@ -84,7 +84,7 @@ struct HandTrackingSystem: System {
                     for object in Self.detectedObjects {
                         // Distance between hands and each found object
                         let distance = simd_distance(jointEntity.position(relativeTo: nil), object.position(relativeTo: nil))
-                        if distance < 0.09 {
+                        if distance < 0.06 {
                             let name = object.name
                             if !name.isEmpty {
                                 Self.onObjectTouched?(name)

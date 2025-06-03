@@ -18,7 +18,7 @@
 "WELCOMETEXT" = "Welcome to SoundGuide. Follow the system instructions to find the object.";
 "STARTRECORDING_BTN" = "Start recording";
 "NORECORDEDOBJECT" = "Now name the object you're looking for...";
-"OBJECTFOUNDTEXT" = "The searched object is %@. Say one of the following options: tap %@, tap %@, tap %@";
+"OBJECTFOUNDTEXT" = "The searched object is %@. Say one of the following options: tap %@, tap %@";
 "STARTRECORDINGINSTRUCTION" = "Say tap %@ to start the voice recording";
 "START_STOP_TRACKING_BTN" = "Say tap %@ to %@ the Tracking";
 "UNKNOWNOBJECTS_BTN" = "Search for unknown objects";
@@ -27,13 +27,15 @@
 "REPEATCONTENT_HOME" = "You can say tap Start recording or tap Search for unknown objects.";
 "WELCOMETEXT2" = "If you want the content to be read aloud again, say tap repeat content'.";
 "VIEWLOADEDSUCCESSFULLY" = "Object detection has started, move slightly to find an object.";
+"UNKNOWNOBJECTSVIEW" = "Touch objects to find out about their name";
 
 //Reference Objects
 "MUG" = "mug";
 "SPICES" = "spices";
 "LEMONTEA" = "lemon tea";
 "STRAWBERRYTEA" = "strawberry tea";
-"MY_MUG" = "my mug"
+"VANILLATEA" = "vanilla tea";
+"MY_MUG" = "coffee cup";
 
 
 

@@ -45,7 +45,7 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
         case "spices": "SPICES".localized
         case "erdbeertee": "STRAWBERRYTEA".localized
         case "zitronentee": "LEMONTEA".localized
-        case "meine tasse": "MY_MUG".localized
+        case "vanille tee": "VANILLATEA".localized
         default: detectedObject.lowercased()
         }
     }
