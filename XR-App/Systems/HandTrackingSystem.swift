@@ -1,9 +1,14 @@
-/*
-See the LICENSE.txt file for this sample’s licensing information.
+//
+//  HandTrackingSystem.swift
+//  XR-App
+//
+//  Created by Lisa Kohls on 01.05.25.
 
+/*
 Abstract:
 A system that updates entities that have hand-tracking components.
 */
+
 import RealityKit
 import ARKit
 

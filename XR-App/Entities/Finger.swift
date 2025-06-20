@@ -1,6 +1,10 @@
-/*
-See the LICENSE.txt file for this sample’s licensing information.
+//
+//  Finger.swift
+//  XR-App
+//
+//  Created by Lisa Kohls on 01.05.25.
 
+/*
 Abstract:
 An enumeration representing each part of the finger that forms the hand's skeleton.
 */

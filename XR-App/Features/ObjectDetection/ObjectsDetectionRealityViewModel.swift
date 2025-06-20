@@ -5,6 +5,11 @@
 //  Created by Lisa Kohls on 07.05.25.
 //
 
+/*
+ Abstract:
+ ObjectsDetectionRealityViewModel which creates hand entities and enables an easy use for the ObjectsDetectionRealityView.
+ */
+
 import Foundation
 import RealityKit
 import SwiftUI
@@ -20,6 +25,7 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     //Set Default Sound
     //var soundMode: SoundMode = .staticFile(name: "spatial-sound.wav") // Soundfile
     var soundMode: SoundMode = .dynamic //Dynamic sound generation
+    
     
     func makeHandEntities(in content: any RealityViewContentProtocol) {
         // Add the left hand.
