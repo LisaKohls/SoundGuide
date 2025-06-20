@@ -30,7 +30,7 @@
 "UNKNOWNOBJECTSVIEW" = "Touch objects to find out about their name";
 
 //Reference Objects
-"MUG" = "mug";
+"MUG" = "cup";
 "SPICES" = "spices";
 "LEMONTEA" = "lemon tea";
 "STRAWBERRYTEA" = "strawberry tea";

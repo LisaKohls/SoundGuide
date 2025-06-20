@@ -5,6 +5,11 @@
 //  Created by Lisa Kohls on 13.04.25.
 //
 
+/*
+ Abstract:
+ The applications SpeechRecognizerViewModel which handles the voice recording.
+ */
+
 import AVFoundation
 import Foundation
 import Speech

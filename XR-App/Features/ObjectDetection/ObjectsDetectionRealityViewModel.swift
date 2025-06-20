@@ -5,6 +5,11 @@
 //  Created by Lisa Kohls on 07.05.25.
 //
 
+/*
+ Abstract:
+ ObjectsDetectionRealityViewModel which creates hand entities and enables an easy use for the ObjectsDetectionRealityView.
+ */
+
 import Foundation
 import RealityKit
 import SwiftUI
@@ -15,6 +20,7 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     
     private var spokenObjectNames: Set<String> = []
     private var currentAudioController: AudioPlaybackController?
+    
     
     func makeHandEntities(in content: any RealityViewContentProtocol) {
         // Add the left hand.

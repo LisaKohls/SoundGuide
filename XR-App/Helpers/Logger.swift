@@ -4,6 +4,12 @@
 //
 //  Created by Lisa Kohls on 08.05.25.
 //
+  
+/*
+ Abstract:
+ This file is for debugging purposes only
+ */
+
 import Foundation
 
 struct Log: TextOutputStream {

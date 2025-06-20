@@ -5,9 +5,14 @@
 //  Created by Lisa Kohls on 04.05.25.
 //
 
+/*
+ Abstract:
+ The string localization file for different languages within the app.
+ */
+
 import Foundation
 
-extension String {
+public extension String {
     var localized: String {
         NSLocalizedString(self, comment: "")
     }

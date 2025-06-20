@@ -5,10 +5,16 @@
 //  Created by Lisa Kohls on 08.05.25.
 //
 
+/*
+ Abstract:
+ The speech helper for the speech output.
+ */
+
 import AVFoundation
 import Foundation
 import Speech
 
+@MainActor
 class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     static let shared = SpeechHelper()
     
@@ -17,9 +23,9 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     private var onFinishSpeaking: (() -> Void)?
  
     private override init() {
-            super.init()
-            synthesizer.delegate = self
-        }
+        super.init()
+        synthesizer.delegate = self
+    }
     
     func setupAudio() {
         do {
