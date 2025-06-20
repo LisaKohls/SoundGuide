@@ -49,8 +49,11 @@ struct ObjectsDetectionRealityView: View {
                         case .added:
                             print("Object has been found by Apple Vision pro: \(detectedObjectName)--- At: \(Date())", to: &logger)
                             print("Object has been found by Apple Vision pro: \(detectedObjectName)")
-                           
-                            let visualization = ObjectAnchorVisualization(for: anchor)
+                  
+                            let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
+                            
+                            let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
+                            
                             let entity = visualization.entity
                             entity.name = detectedObjectName
                             
