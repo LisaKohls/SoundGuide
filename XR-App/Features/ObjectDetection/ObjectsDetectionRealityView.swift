@@ -105,6 +105,7 @@ struct ObjectsDetectionRealityView: View {
                         case .updated:
                             self.objectVisualizations[id]?.update(with: anchor)
                             let objectPosition = anchor.originFromAnchorTransform.translation
+                            self.objectVisualizations[id]?.entity.position = objectPosition
                             viewModel.updateSound(for: id, at: objectPosition)
 
                                 print("📦 Object position: x: \(objectPosition.x), y: \(objectPosition.y), z: \(objectPosition.z)")

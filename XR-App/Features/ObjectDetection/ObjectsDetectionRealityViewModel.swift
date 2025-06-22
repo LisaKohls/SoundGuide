@@ -24,7 +24,8 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     
     //Set Default Sound
     //var soundMode: SoundMode = .staticFile(name: "spatial-sound.wav") // Soundfile
-    var soundMode: SoundMode = .dynamic //Dynamic sound generation
+    var soundMode: SoundMode = .staticFile(name: "E10.wav") // Soundfile
+    //var soundMode: SoundMode = .dynamic //Dynamic sound generation
     
     
     func makeHandEntities(in content: any RealityViewContentProtocol) {
@@ -92,10 +93,27 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     
     
     
+    private func configureSpatialAudio(
+        on entity: Entity,
+        gain: Double = -10.0,
+        focus: Double = 0.2,
+        reverblevel: Double = 1.0,
+        rolloffFactor: Double = 2.0
+    ){
+        var spatialAudio = SpatialAudioComponent()
+        spatialAudio.gain = Audio.Decibel(gain)
+        spatialAudio.directivity = .beam(focus: focus)
+        spatialAudio.reverbLevel = reverblevel
+        spatialAudio.distanceAttenuation = .rolloff(factor: rolloffFactor)
+        entity.components.set(spatialAudio)
+    }
+    
+    
     func playAmbientSound(for entity: Entity, resourceName: String) {
         do {
-            let resource: AudioFileResource = try .load(named: resourceName, in: .main)
-            let controller = entity.prepareAudio(resource)
+            configureSpatialAudio(on: entity, gain: 0, focus: 1.0, reverblevel: 5, rolloffFactor: 3.0)
+            let audiosource: AudioFileResource = try .load(named: resourceName, in: .main, configuration: .init(shouldLoop: true))
+            let controller = entity.prepareAudio(audiosource)
             self.currentAudioController = controller
             self.currentAudioController?.play()
         } catch {
@@ -141,7 +159,5 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
             generator.updateDistanceFeedback(distance: distance)
         }
     }
-    
-    
     
 }
