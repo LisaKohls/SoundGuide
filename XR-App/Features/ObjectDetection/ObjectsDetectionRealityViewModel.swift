@@ -24,8 +24,8 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     //Set Default Sound
     //var soundMode: SoundMode = .staticFile1(name: "E10.wav") // Soundfile
     //var soundMode: SoundMode = .staticFile2(name: "spatial-sound.wav") // Soundfile
-    var soundMode: SoundMode = .staticFile3(name: "E1.wav") // Soundfile
-    //var soundMode: SoundMode = .staticFile4(name: "S8.wav") // Soundfile
+    //var soundMode: SoundMode = .staticFile3(name: "E1.wav") // Soundfile
+    var soundMode: SoundMode = .staticFile4(name: "S8.wav") // Soundfile
     //var soundMode: SoundMode = .staticFile5(name: "S6.wav") // Soundfile
     
     
@@ -93,6 +93,8 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
             case .staticFile3(name: let name):
                 playSpatialSound(for: entity, resourceName: name)
             case .staticFile4(name: let name):
+                playSpatialSound(for: entity, resourceName: name)
+            case .staticFile5(name: let name):
                 playSpatialSound(for: entity, resourceName: name)
             }
         }
