@@ -27,194 +27,206 @@ struct HomeContentView: View {
     @State private var showLookForUnknownObjectsView: Bool  = false
     @State private var showHomeButtons: Bool  = true
     @State private var isSpeaking = true
-  
+    
+    @State private var showSettings = false
+    @State private var speechRate: Float = UserDefaults.standard.float(forKey: "speechRate") == 0 ? 0.55 : UserDefaults.standard.float(forKey: "speechRate")
+    
     var body: some View {
- 
-        VStack {
-            if appState.canEnterImmersiveSpace {
-                VStack {
-                    Text("WELCOMETOSOUNDGUIDE".localized)
-                        .font(.system(size: 25, weight:. bold))
-                        .padding(30)
-                    
-                    if !showSpeechRecognizer{
-                        Button("REPEATCONTENT_BTN".localized) {
-                            print("Button Interaction: User tapped REPEAT CONTENT BUTTON", to: &logger)
-                            let tempContentOnView = {
-                                if showHomeButtons {
-                                    return "REPEATCONTENT_HOME".localized
-                                } else if !appState.isImmersiveSpaceOpened && !showSpeechRecognizer && !showHomeButtons {
-                                    return "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText, "START_BTN".localized, "REPEAT_BTN".localized)
-                                } else if appState.isImmersiveSpaceOpened {
-                                    return "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized)
-                                } else {
-                                    return "WELCOMETOSOUNDGUIDE".localized
-                                }
-                            }()
-                            
-                            SpeechHelper.shared.speak(text: tempContentOnView)
+        NavigationStack {
+            VStack {
+                if appState.canEnterImmersiveSpace {
+                    VStack {
+                        Text("WELCOMETOSOUNDGUIDE".localized)
+                            .font(.system(size: 25, weight:. bold))
+                            .padding(30)
+                        
+                        if !showSpeechRecognizer{
+                            Button("REPEATCONTENT_BTN".localized) {
+                                print("Button Interaction: User tapped REPEAT CONTENT BUTTON", to: &logger)
+                                let tempContentOnView = {
+                                    if showHomeButtons {
+                                        return "REPEATCONTENT_HOME".localized
+                                    } else if !appState.isImmersiveSpaceOpened && !showSpeechRecognizer && !showHomeButtons {
+                                        return "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText, "START_BTN".localized, "REPEAT_BTN".localized)
+                                    } else if appState.isImmersiveSpaceOpened {
+                                        return "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized)
+                                    } else {
+                                        return "WELCOMETOSOUNDGUIDE".localized
+                                    }
+                                }()
+                                
+                                SpeechHelper.shared.speak(text: tempContentOnView)
+                            }
+                            .padding()
+                            .accessibilityLabel("REPEATCONTENT_BTN".localized)
                         }
-                        .padding()
-                        .accessibilityLabel("REPEATCONTENT_BTN".localized)
-                    }
-                    
-                    //Home Buttons, Start Recording/ Start looking for unknown objects
-                    if showHomeButtons {
-                        HStack{
-                            StartRecordingButton(
-                                showSpeechRecognizer: $showSpeechRecognizer,
-                                showHomeButtons: $showHomeButtons,
-                                isSpeaking: $isSpeaking
-                            )
-                            
-                            StartImmersiveSpaceBtn(
-                                immersiveSpaceIdentifier: immersiveSpaceIdentifier,
-                                showHomeButtons: $showHomeButtons,
-                                appState: appState,
-                                btnName: "UNKNOWNOBJECTS_BTN".localized
-                            )
-                            .disabled(isSpeaking)
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    SpeechHelper.shared.speak(text: "LOOKFORUNKNOWNOBJECTS".localized) {
-                                        isSpeaking = true
+                        
+                        //Home Buttons, Start Recording/ Start looking for unknown objects
+                        if showHomeButtons {
+                            HStack{
+                                StartRecordingButton(
+                                    showSpeechRecognizer: $showSpeechRecognizer,
+                                    showHomeButtons: $showHomeButtons,
+                                    isSpeaking: $isSpeaking
+                                )
+                                
+                                StartImmersiveSpaceBtn(
+                                    immersiveSpaceIdentifier: immersiveSpaceIdentifier,
+                                    showHomeButtons: $showHomeButtons,
+                                    appState: appState,
+                                    btnName: "UNKNOWNOBJECTS_BTN".localized
+                                )
+                                .disabled(isSpeaking)
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        SpeechHelper.shared.speak(text: "LOOKFORUNKNOWNOBJECTS".localized) {
+                                            isSpeaking = true
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    
-                    if !appState.isImmersiveSpaceOpened {
-                        if !showSpeechRecognizer && !showHomeButtons {
-                            HStack {
-                                Button("REPEAT_BTN".localized) {
-                                    print("Button Interaction: User tapped REPEAT BUTTON", to: &logger)
-                                    showSpeechRecognizer = true
-                                }.padding()
-                                    .accessibilityLabel("REPEAT_BTN".localized)
-                                
+                        
+                        if !appState.isImmersiveSpaceOpened {
+                            if !showSpeechRecognizer && !showHomeButtons {
+                                HStack {
+                                    Button("REPEAT_BTN".localized) {
+                                        print("Button Interaction: User tapped REPEAT BUTTON", to: &logger)
+                                        showSpeechRecognizer = true
+                                    }.padding()
+                                        .accessibilityLabel("REPEAT_BTN".localized)
+                                    
                                     StartImmersiveSpaceBtn(
                                         immersiveSpaceIdentifier: immersiveSpaceIdentifier,
                                         showHomeButtons: $showHomeButtons,
                                         appState: appState,
                                         btnName: "START_BTN".localized
                                     )
-                                
-                            }.onAppear {
-                                SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized))
-                               
-                            }.onChange(of: appState.recognizedText) {
-                                SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized))
+                                    
+                                }.onAppear {
+                                    SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized))
+                                    
+                                }.onChange(of: appState.recognizedText) {
+                                    SpeechHelper.shared.speak(text: "OBJECTFOUNDTEXT".localizedWithArgs(appState.recognizedText,"START_BTN".localized,"REPEAT_BTN".localized))
+                                }
+                            } else if showSpeechRecognizer {
+                                SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
+                                    appState.recognizedText = newText
+                                }
                             }
-                        } else if showSpeechRecognizer {
-                            SpeechRecognizerView(viewModel: viewModel, showSpeechRecognizer: $showSpeechRecognizer){ newText in
-                                appState.recognizedText = newText
+                            
+                        } else {
+                            Button("STOP_BTN".localized) {
+                                print("Button Interaction: User tapped STOP BUTTON", to: &logger)
+                                SpeechHelper.shared.stopSpeaking()
+                                Task {
+                                    await dismissImmersiveSpace()
+                                    appState.didLeaveImmersiveSpace()
+                                    appState.recognizedText = ""
+                                    showHomeButtons = true
+                                }
                             }
-                        }
-                        
-                    } else {
-                        Button("STOP_BTN".localized) {
-                            print("Button Interaction: User tapped STOP BUTTON", to: &logger)
-                            SpeechHelper.shared.stopSpeaking()
-                            Task {
-                                await dismissImmersiveSpace()
-                                appState.didLeaveImmersiveSpace()
-                                appState.recognizedText = ""
-                                showHomeButtons = true
+                            .accessibilityLabel("STOP_BTN".localized)
+                            .onAppear {
+                                SpeechHelper.shared.stopSpeaking()
+                                SpeechHelper.shared.speak(text: "VIEWLOADEDSUCCESSFULLY".localized)
+                                SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
                             }
-                        }
-                        .accessibilityLabel("STOP_BTN".localized)
-                        .onAppear {
-                            SpeechHelper.shared.stopSpeaking()
-                            SpeechHelper.shared.speak(text: "VIEWLOADEDSUCCESSFULLY".localized)
-                            SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
-                        }
-                        
-                        if !appState.objectTrackingStartedRunning {
-                            HStack {
-                                Text("LOADOBJECTSTEXT".localized)
-                                    .accessibilityLabel("LOADOBJECTSTEXT".localized)
+                            
+                            if !appState.objectTrackingStartedRunning {
+                                HStack {
+                                    Text("LOADOBJECTSTEXT".localized)
+                                        .accessibilityLabel("LOADOBJECTSTEXT".localized)
+                                }
                             }
                         }
                     }
-                }
-                .foregroundStyle(.secondary)
-                .font(.footnote)
-                .padding(.horizontal)
-                .onAppear {
-                    print("Welcome to Soundguide. User test started with User 2. at: \(Date())", to: &logger)
-                    // Required for better quality speech output
-                    Task {
-                        SpeechHelper.shared.preWarmSpeechEngine()
-                        SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
-                            isSpeaking = true
+                    .foregroundStyle(.secondary)
+                    .font(.footnote)
+                    .padding(.horizontal)
+                    .onAppear {
+                        print("Welcome to Soundguide. User test started with User 2. at: \(Date())", to: &logger)
+                        // Required for better quality speech output
+                        Task {
+                            SpeechHelper.shared.preWarmSpeechEngine()
+                            SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
+                                isSpeaking = true
+                            }
+                            SpeechHelper.shared.speak(text: "WELCOMETEXT2".localized){
+                                isSpeaking = true
+                            }
                         }
-                        SpeechHelper.shared.speak(text: "WELCOMETEXT2".localized){
-                            isSpeaking = true
-                        }
+                    }.onDisappear() {
+                        SpeechHelper.shared.stopSpeaking()
                     }
-                }.onDisappear() {
-                    SpeechHelper.shared.stopSpeaking()
                 }
             }
-        }
-        .padding()
-        .onChange(of: scenePhase, initial: true) {
-            print("Scene phase: \(scenePhase)")
-            if scenePhase == .active {
-                Task {
-                    // When returning from the background, check if the authorization has changed.
-                    await appState.queryWorldSensingAuthorization()
+            .padding()
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gear")
+                    }
                 }
-            } else {
-                if appState.isImmersiveSpaceOpened {
+            }
+            .sheet(isPresented: $showSettings) {
+                SpeechSettingsView(speechRate: $speechRate)
+            }
+            .onChange(of: scenePhase, initial: true) {
+                print("Scene phase: \(scenePhase)")
+                if scenePhase == .active {
+                    Task {
+                        // When returning from the background, check if the authorization has changed.
+                        await appState.queryWorldSensingAuthorization()
+                    }
+                } else {
+                    if appState.isImmersiveSpaceOpened {
+                        Task {
+                            await dismissImmersiveSpace()
+                            appState.didLeaveImmersiveSpace()
+                        }
+                    }
+                }
+            }
+            .onChange(of: appState.providersStoppedWithError, { _, providersStoppedWithError in
+                // Immediately close the immersive space if an error occurs.
+                if providersStoppedWithError {
+                    if appState.isImmersiveSpaceOpened {
+                        Task {
+                            await dismissImmersiveSpace()
+                            appState.didLeaveImmersiveSpace()
+                        }
+                    }
+                    
+                    appState.providersStoppedWithError = false
+                }
+            })
+            .onChange(of: appState.didFinishObjectDetection) { _, didFinish in
+                if didFinish {
+                    
                     Task {
                         await dismissImmersiveSpace()
                         appState.didLeaveImmersiveSpace()
+                        appState.recognizedText = ""
+                        showHomeButtons = true
+                        appState.didFinishObjectDetection = false
                     }
                 }
             }
-        }
-        .onChange(of: appState.providersStoppedWithError, { _, providersStoppedWithError in
-            // Immediately close the immersive space if an error occurs.
-            if providersStoppedWithError {
-                if appState.isImmersiveSpaceOpened {
-                    Task {
-                        await dismissImmersiveSpace()
-                        appState.didLeaveImmersiveSpace()
-                    }
-                }
-                
-                appState.providersStoppedWithError = false
-            }
-        })
-        .onChange(of: appState.didFinishObjectDetection) { _, didFinish in
-            if didFinish {
-                
-                Task {
-                    await dismissImmersiveSpace()
-                    appState.didLeaveImmersiveSpace()
-                    appState.recognizedText = ""
-                    showHomeButtons = true
-                    appState.didFinishObjectDetection = false
+            .task {
+                if appState.allRequiredProvidersAreSupported {
+                    await appState.requestWorldSensingAuthorization()
                 }
             }
-        }
-        .task {
-            if appState.allRequiredProvidersAreSupported {
-                await appState.requestWorldSensingAuthorization()
+            .task {
+                await appState.monitorSessionEvents()
             }
+            
+            
         }
-        .task {
-            await appState.monitorSessionEvents()
-        }
-        
         
     }
     
 }
-
-#Preview(windowStyle: .automatic) {
-    HomeContentView(immersiveSpaceIdentifier: "ObjectTracking", appState: AppState())
-}
-
