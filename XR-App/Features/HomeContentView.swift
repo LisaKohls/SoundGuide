@@ -173,7 +173,7 @@ struct HomeContentView: View {
                 }
             }
             .sheet(isPresented: $showSettings) {
-                SpeechSettingsView(speechRate: $speechRate)
+                SettingsView(speechRate: $speechRate)
             }
             .onChange(of: scenePhase, initial: true) {
                 print("Scene phase: \(scenePhase)")
