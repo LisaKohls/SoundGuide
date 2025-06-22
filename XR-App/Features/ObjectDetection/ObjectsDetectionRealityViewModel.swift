@@ -21,6 +21,13 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     private var spokenObjectNames: Set<String> = []
     private var currentAudioController: AudioPlaybackController?
     
+    //Set Default Sound
+    //var soundMode: SoundMode = .staticFile1(name: "E10.wav") // Soundfile
+    //var soundMode: SoundMode = .staticFile2(name: "spatial-sound.wav") // Soundfile
+    var soundMode: SoundMode = .staticFile3(name: "E1.wav") // Soundfile
+    //var soundMode: SoundMode = .staticFile4(name: "S8.wav") // Soundfile
+    //var soundMode: SoundMode = .staticFile5(name: "S6.wav") // Soundfile
+    
     
     func makeHandEntities(in content: any RealityViewContentProtocol) {
         // Add the left hand.
@@ -76,10 +83,24 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
             entity.components.set(spatialAudio)
         }
     
+    
+    func playSound(entity: Entity) {
+            switch soundMode {
+            case .staticFile1(let name):
+                playSpatialSound(for: entity, resourceName: name)
+            case .staticFile2(let name):
+                playSpatialSound(for: entity, resourceName: name)
+            case .staticFile3(name: let name):
+                playSpatialSound(for: entity, resourceName: name)
+            case .staticFile4(name: let name):
+                playSpatialSound(for: entity, resourceName: name)
+            }
+        }
+    
     func playSpatialSound(for entity: Entity, resourceName: String) {
             do {
                 configureSpatialAudio(on: entity, gain: 0, focus: 1.0, reverblevel: 5, rolloffFactor: 4.0)
-                let audioResource: AudioFileResource = try .load(named: resourceName, in: .main)
+                let audioResource: AudioFileResource = try .load(named: resourceName, in: .main, configuration: .init(shouldLoop: true))
                 let controller = entity.prepareAudio(audioResource)
                 self.currentAudioController = controller
                 self.currentAudioController?.play()
