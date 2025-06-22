@@ -169,6 +169,7 @@ struct HomeContentView: View {
                     } label: {
                         Image(systemName: "gear")
                     }
+                    .accessibilityLabel("Einstellungen öffnen")
                 }
             }
             .sheet(isPresented: $showSettings) {

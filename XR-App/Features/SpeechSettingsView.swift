@@ -25,17 +25,20 @@ struct SpeechSettingsView: View {
                 .font(.title2)
                 .bold()
 
-            Slider(value: $speechRate, in: 0.2...0.9, step: 0.05)
-                .padding(.horizontal)
+            Slider(value: $speechRate, in: 0.2...0.9, step: 0.05, onEditingChanged: { isEditing in
+                if !isEditing {
+                    SpeechHelper.shared.speak(text: "Dies ist ein Geschwindigkeitstest", rate: speechRate)
+                }
+            })
+            .padding(.horizontal)
+            .accessibilityLabel("Sprachgeschwindigkeit Slider")
+            .accessibilityValue(speechLabel)
+            
 
             Text("Aktuell: \(speechLabel) (\(String(format: "%.2f", speechRate)))")
                 .foregroundStyle(.secondary)
-
-            Button("Testausgabe") {
-                SpeechHelper.shared.speak(text: "Dies ist ein Geschwindigkeitstest", rate: speechRate)
-            }
-            .padding(.top)
-            .buttonStyle(.bordered)
+                .accessibilityLabel("Aktuelle Sprachgeschwindigkeit: \(speechLabel)")
+    
 
             Spacer()
 
@@ -44,6 +47,7 @@ struct SpeechSettingsView: View {
                 dismiss()
             }
             .buttonStyle(.borderedProminent)
+            .accessibilityLabel("Sprachgeschwindigkeit speichern und zurückgehen")
         }
         .padding()
     }
