@@ -61,10 +61,26 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
         }
     }
     
+    private func configureSpatialAudio(
+            on entity: Entity,
+            gain: Double = -10.0,
+            focus: Double = 0.2,
+            reverblevel: Double = 1.0,
+            rolloffFactor: Double = 2.0
+        ){
+            var spatialAudio = SpatialAudioComponent()
+            spatialAudio.gain = Audio.Decibel(gain)
+            spatialAudio.directivity = .beam(focus: focus)
+            spatialAudio.reverbLevel = reverblevel
+            spatialAudio.distanceAttenuation = .rolloff(factor: rolloffFactor)
+            entity.components.set(spatialAudio)
+        }
+    
     func playSpatialSound(for entity: Entity, resourceName: String) {
             do {
-                let resource: AudioFileResource = try .load(named: resourceName, in: .main)
-                let controller = entity.prepareAudio(resource)
+                configureSpatialAudio(on: entity, gain: 0, focus: 1.0, reverblevel: 5, rolloffFactor: 4.0)
+                let audioResource: AudioFileResource = try .load(named: resourceName, in: .main)
+                let controller = entity.prepareAudio(audioResource)
                 self.currentAudioController = controller
                 self.currentAudioController?.play()
             } catch {

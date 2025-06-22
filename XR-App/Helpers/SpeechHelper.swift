@@ -44,7 +44,7 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
         synthesizer.speak(dummy)
     }
     
-    func speak(text: String, language: String = "LANG".localized, rate: Float = AVSpeechUtteranceDefaultSpeechRate, onFinish: (() -> Void)? = nil) {
+    func speak(text: String, language: String = "LANG".localized, rate: Float = 0.6, onFinish: (() -> Void)? = nil) {
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language)
         utterance.rate = rate
