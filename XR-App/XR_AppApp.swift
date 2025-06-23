@@ -12,6 +12,10 @@ struct XR_AppApp: App {
 
       @State private var appState = AppState()
       
+    init() {
+            AppDefaults.register() // default settings
+        }
+    
       var body: some Scene {
           WindowGroup {
               HomeContentView(immersiveSpaceIdentifier: "ObjectTracking", appState: appState)
