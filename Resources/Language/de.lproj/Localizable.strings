@@ -28,6 +28,16 @@
 "REPEATCONTENT_HOME" = "Du hast die Optionen Aufnahme beginnen klicken oder unbekannte Objekte suchen klicken zu sagen.";
 "VIEWLOADEDSUCCESSFULLY" = "Die Objekterkennung wurde gestartet, bewege dich leicht um ein Objekt zu finden";
 "UNKNOWNOBJECTSVIEW" = "Berühre Objekte um den Namen zu erfahren";
+"SETTINGS_TITLE_SPEECHRATE" = "Sprachgeschwindigkeit";
+"SETTINGS_SPEECHRATE_CURRENT" = "Aktuell: %@ (%.2f)";
+"SETTINGS_SPEECHRATE_TEST" = "Dies ist ein Geschwindigkeitstest";
+"SETTINGS_TITLE_SOUNDMODE" = "Sound zur Objektlokalisierung auswählen";
+"SETTINGS_TITLE_AUDIO" = "Audio Anpassungen";
+"SETTINGS_REVERB_LABEL" = "Nachhallstärke: %.1f";
+"SETTINGS_ROLLOFF_LABEL" = "Lautstärkeabnahme bei Entfernung: %.1f";
+"SETTINGS_SAVE_BTN" = "Speichern & Zurück";
+"SETTINGS_SAVE_BTN_A11Y" = "Einstellungen speichern und zurückgehen";
+
 
 //Reference Objects
 "MUG" = "tasse";

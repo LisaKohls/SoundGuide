@@ -28,6 +28,15 @@
 "WELCOMETEXT2" = "If you want the content to be read aloud again, say tap repeat content'.";
 "VIEWLOADEDSUCCESSFULLY" = "Object detection has started, move slightly to find an object.";
 "UNKNOWNOBJECTSVIEW" = "Touch objects to find out about their name";
+"SETTINGS_TITLE_SPEECHRATE" = "Speech rate";
+"SETTINGS_SPEECHRATE_CURRENT" = "Current: %@ (%.2f)";
+"SETTINGS_SPEECHRATE_TEST" = "This is a speed test";
+"SETTINGS_TITLE_SOUNDMODE" = "Choose sound for locating objects";
+"SETTINGS_TITLE_AUDIO" = "Audio adjustments";
+"SETTINGS_REVERB_LABEL" = "Reverb intensity: %.1f";
+"SETTINGS_ROLLOFF_LABEL" = "Volume reduction with distance: %.1f";
+"SETTINGS_SAVE_BTN" = "Save & Back";
+"SETTINGS_SAVE_BTN_A11Y" = "Save settings and go back";
 
 //Reference Objects
 "MUG" = "cup";

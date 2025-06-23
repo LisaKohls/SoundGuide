@@ -33,83 +33,81 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Text("Sprachgeschwindigkeit")
+            Text("SETTINGS_TITLE_SPEECHRATE".localized)
                 .font(.title2)
                 .bold()
 
             Slider(value: $speechRate, in: 0.2...0.9, step: 0.05, onEditingChanged: { isEditing in
                 if !isEditing {
-                    SpeechHelper.shared.speak(text: "Dies ist ein Geschwindigkeitstest", rate: speechRate)
+                    SpeechHelper.shared.speak(text: "SETTINGS_SPEECHRATE_TEST".localized, rate: speechRate)
                 }
             })
             .padding(.horizontal)
-            .accessibilityLabel("Sprachgeschwindigkeit Slider")
+            .accessibilityLabel("SETTINGS_TITLE_SPEECHRATE".localized)
             .accessibilityValue(speechLabel)
             
 
-            Text("Aktuell: \(speechLabel) (\(String(format: "%.2f", speechRate)))")
+            Text(String(format: "SETTINGS_SPEECHRATE_CURRENT".localized, speechLabel, speechRate))
                 .foregroundStyle(.secondary)
-                .accessibilityLabel("Aktuelle Sprachgeschwindigkeit: \(speechLabel)")
+                .accessibilityLabel(String(format: "SETTINGS_SPEECHRATE_CURRENT".localized, speechLabel, speechRate))
             
             Divider()
             
             // Soundauswahl
-                        Text("Hinweiston auswählen")
+                        Text("SETTINGS_TITLE_SOUNDMODE".localized)
                             .font(.title2)
                             .bold()
                             .accessibilityAddTraits(.isHeader)
 
 
-                        Picker("Ton", selection: $selectedSound) {
+                        Picker("SETTINGS_TITLE_SOUNDMODE".localized, selection: $selectedSound) {
                             ForEach(SoundMode.allCases) { mode in
                                 Text(mode.label).tag(mode)
                             }
                         }
                         .pickerStyle(.inline)
-                        .onChange(of: selectedSound) { newValue in
+                        .onChange(of: selectedSound) { _, newValue in
                             SoundPreviewHelper.shared.playSound(named: newValue.fileName)
                         }
-                        .accessibilityLabel("Hinweiston auswählen")
+                        .accessibilityLabel("SETTINGS_TITLE_SOUNDMODE".localized)
             
                         Divider()
 
-                        // Audio Anpassungen
-                        Text("Audio Anpassungen")
+                        // audio adjustments
+                        Text("SETTINGS_TITLE_AUDIO".localized)
                             .font(.title2)
                             .bold()
                             .accessibilityAddTraits(.isHeader)
 
             VStack(alignment: .leading) {
-                Text("Hall (Nachhallstärke): \(String(format: "%.1f", reverbLevel))")
+                Text(String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
                 Slider(value: $reverbLevel, in: 0...5, step: 1.0, onEditingChanged: { editing in
                         if !editing {
-                            SpeechHelper.shared.speak(text: "Nachhall auf \(Int(reverbLevel))")
+                            SpeechHelper.shared.speak(text: String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
                         }
                     })
-                    .accessibilityLabel("Nachhallstärke")
+                    .accessibilityLabel("SETTINGS_REVERB_LABEL".localized)
                     .accessibilityValue("\(Int(reverbLevel))")
             }
 
 
                 VStack(alignment: .leading) {
-                Text("Lautstärkeabnahme bei Entfernung: \(String(format: "%.1f", rolloffFactor))")
+                Text(String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
                     Slider(value: $rolloffFactor, in: 1.0...6.0, step: 1.0, onEditingChanged: { editing in
                         if !editing {
-                            SpeechHelper.shared.speak(text: "Lautstärkeabnahme auf \(Int(rolloffFactor))")
+                            SpeechHelper.shared.speak(text: String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
                         }
                     })
-                    .accessibilityLabel("Lautstärkeabnahme bei Entfernung")
+                    .accessibilityLabel("SETTINGS_ROLLOFF_LABEL".localized)
                     .accessibilityValue("\(Int(rolloffFactor))")
 
             }
 
 
-            
-
                         Spacer()
 
                         // Speichern
-                        Button("Speichern & Zurück") {
+                        Button("SETTINGS_SAVE_BTN".localized) {
                             UserDefaults.standard.set(speechRate, forKey: "speechRate")
                             UserDefaults.standard.set(selectedSound.rawValue, forKey: "soundMode")
                             UserDefaults.standard.set(reverbLevel, forKey: "reverbLevel")
@@ -117,7 +115,7 @@ struct SettingsView: View {
                             dismiss()
                         }
                         .buttonStyle(.borderedProminent)
-                        .accessibilityLabel("Einstellungen speichern und zurückgehen")
+                        .accessibilityLabel("SETTINGS_SAVE_BTN_A11Y".localized)
                     }
                     .padding()
     }
