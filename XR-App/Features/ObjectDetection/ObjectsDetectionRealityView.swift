@@ -75,7 +75,7 @@ struct ObjectsDetectionRealityView: View {
                                 root.addChild(visualization.entity)
                                 
                                 //Add Spatial sound to the Object
-                                viewModel.playSpatialSound(for: visualization.entity, resourceName: "spatial-sound.wav")
+                                viewModel.playSound(entity: visualization.entity)
                                 
                                 //if object has been found by user, stop sound, play feedback
                                 viewModel.observeTouchedObject(for: visualization.entity) { name in
