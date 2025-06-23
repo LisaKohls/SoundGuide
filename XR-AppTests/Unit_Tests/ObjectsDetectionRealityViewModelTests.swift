@@ -5,6 +5,11 @@
 //  Created by Lisa Kohls on 17.05.25.
 //
 
+/*
+ Abstract:
+ Tests for object name detection, touch handling, and spatial audio playback in ObjectsDetectionRealityViewModel.
+ */
+
 @testable import XR_App
 import XCTest
 import RealityKit
@@ -51,9 +56,16 @@ final class ObjectsDetectionRealityViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    func test_playAndStopSpatialSound_doesNotCrash() {
+    func test_playAndStopSound_doesNotCrashAndPreparesAudio() {
+
         let entity = Entity()
-        sut.playSpatialSound(for: entity, resourceName: "spatial-sound.wav")
+        UserDefaults.standard.set(SoundMode.staticFile1.rawValue, forKey: "soundMode")
+        UserDefaults.standard.set(2.0, forKey: "reverbLevel")
+        UserDefaults.standard.set(3.0, forKey: "rolloffFactor")
+
+        sut.playSound(entity: entity)
         sut.stopSpatialSound()
+
+        XCTAssertNotNil(entity.components[SpatialAudioComponent.self])
     }
 }

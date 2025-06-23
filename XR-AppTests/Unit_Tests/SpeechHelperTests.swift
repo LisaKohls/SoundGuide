@@ -5,6 +5,11 @@
 //  Created by Lisa Kohls on 17.05.25.
 //
 
+/*
+ Abstract:
+ Tests for the SpeechHelper class, verifying audio setup, pre-warming, and speech stopping behavior.
+ */
+
 import XCTest
 import AVFoundation
 @testable import XR_App
