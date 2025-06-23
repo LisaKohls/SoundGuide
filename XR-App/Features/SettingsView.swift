@@ -18,6 +18,9 @@ struct SettingsView: View {
         }
         return .staticFile1
     }()
+    
+    @State private var reverbLevel: Double = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0...10)
+    @State private var rolloffFactor: Double = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 0.1...10)
 
 
     private var speechLabel: String {
@@ -54,6 +57,8 @@ struct SettingsView: View {
                         Text("Hinweiston auswählen")
                             .font(.title2)
                             .bold()
+                            .accessibilityAddTraits(.isHeader)
+
 
                         Picker("Ton", selection: $selectedSound) {
                             ForEach(SoundMode.allCases) { mode in
@@ -64,6 +69,39 @@ struct SettingsView: View {
                         .onChange(of: selectedSound) { newValue in
                             SoundPreviewHelper.shared.playSound(named: newValue.fileName)
                         }
+                        .accessibilityLabel("Hinweiston auswählen")
+            
+                        Divider()
+
+                        // Audio Anpassungen
+                        Text("Audio Anpassungen")
+                            .font(.title2)
+                            .bold()
+                            .accessibilityAddTraits(.isHeader)
+
+                        VStack(alignment: .leading) {
+                            Text("Hall (Nachhallstärke): \(String(format: "%.1f", reverbLevel))")
+                            Slider(value: $reverbLevel, in: 0...10, step: 0.1, onEditingChanged: { editing in
+                                if !editing {
+                                    SpeechHelper.shared.speak(text: "Nachhall auf \(Int(reverbLevel * 10)) Prozent")
+                                }
+                            })
+                            .accessibilityLabel("Nachhallstärke")
+                            .accessibilityValue("\(Int(reverbLevel * 10)) Prozent")
+                        }
+
+                        VStack(alignment: .leading) {
+                            Text("Lautstärkeabnahme bei Entfernung: \(String(format: "%.1f", rolloffFactor))")
+                            Slider(value: $rolloffFactor, in: 0.1...10, step: 0.1, onEditingChanged: { editing in
+                                if !editing {
+                                    SpeechHelper.shared.speak(text: "Lautstärkeabnahme auf \(String(format: "%.1f", rolloffFactor))")
+                                }
+                            })
+                            .accessibilityLabel("Lautstärkeabnahme bei Entfernung")
+                            .accessibilityValue("\(String(format: "%.1f", rolloffFactor))")
+                        }
+
+            
 
                         Spacer()
 
@@ -71,6 +109,8 @@ struct SettingsView: View {
                         Button("Speichern & Zurück") {
                             UserDefaults.standard.set(speechRate, forKey: "speechRate")
                             UserDefaults.standard.set(selectedSound.rawValue, forKey: "soundMode")
+                            UserDefaults.standard.set(reverbLevel, forKey: "reverbLevel")
+                            UserDefaults.standard.set(rolloffFactor, forKey: "rolloffFactor")
                             dismiss()
                         }
                         .buttonStyle(.borderedProminent)
