@@ -5,6 +5,11 @@
 //  Created by Lisa Salzer on 20.06.25.
 //
 
+/*
+ Abstract:
+ The applications settings view.
+ */
+
 import SwiftUI
 
 struct SettingsView: View {

@@ -4,6 +4,12 @@
 //
 //  Created by Lisa Salzer on 22.06.25.
 //
+/*
+ Abstract:
+ An enum representing selectable sound modes.
+ Each case provides a file name, gain value, and display label for use in the settings UI.
+ */
+
 
 enum SoundMode: String, CaseIterable, Identifiable {
     case staticFile1

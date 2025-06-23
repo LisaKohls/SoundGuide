@@ -7,7 +7,7 @@
   
 /*
  Abstract:
- This file is for debugging purposes only
+ This file is for debugging and evaluation purposes only
  */
 
 import Foundation

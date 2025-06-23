@@ -5,6 +5,11 @@
 //  Created by Lisa Salzer on 23.06.25.
 //
 
+/*
+ Abstract:
+ Registering default values in UserDefaults.
+ */
+
 import Foundation
 
 enum AppDefaults {

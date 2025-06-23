@@ -7,7 +7,9 @@
 
 /*
  Abstract:
- ObjectsDetectionRealityViewModel which creates hand entities and enables an easy use for the ObjectsDetectionRealityView.
+ A view model for managing the ObjectsDetectionRealityView.
+ Handles the creation of hand-tracking entities, detection and labeling of objects,
+ and playback of spatial audio for identified objects using user-defined audio settings.
  */
 
 import Foundation
