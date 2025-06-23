@@ -163,13 +163,15 @@ struct HomeContentView: View {
             }
             .padding()
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showSettings = true
-                    } label: {
-                        Image(systemName: "gear")
+                if showHomeButtons && !showSpeechRecognizer && appState.canEnterImmersiveSpace {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gear")
+                        }
+                        .accessibilityLabel("Einstellungen öffnen")
                     }
-                    .accessibilityLabel("Einstellungen öffnen")
                 }
             }
             .sheet(isPresented: $showSettings) {
