@@ -19,8 +19,8 @@ struct SettingsView: View {
         return .staticFile1
     }()
     
-    @State private var reverbLevel: Double = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0...10)
-    @State private var rolloffFactor: Double = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 0.1...10)
+    @State private var reverbLevel: Double = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0.5...5.0)
+    @State private var rolloffFactor: Double = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 1.0...6.0)
 
 
     private var speechLabel: String {
@@ -79,27 +79,30 @@ struct SettingsView: View {
                             .bold()
                             .accessibilityAddTraits(.isHeader)
 
-                        VStack(alignment: .leading) {
-                            Text("Hall (Nachhallstärke): \(String(format: "%.1f", reverbLevel))")
-                            Slider(value: $reverbLevel, in: 0...10, step: 0.1, onEditingChanged: { editing in
-                                if !editing {
-                                    SpeechHelper.shared.speak(text: "Nachhall auf \(Int(reverbLevel * 10)) Prozent")
-                                }
-                            })
-                            .accessibilityLabel("Nachhallstärke")
-                            .accessibilityValue("\(Int(reverbLevel * 10)) Prozent")
+            VStack(alignment: .leading) {
+                Text("Hall (Nachhallstärke): \(String(format: "%.1f", reverbLevel))")
+                Slider(value: $reverbLevel, in: 0...5, step: 1.0, onEditingChanged: { editing in
+                        if !editing {
+                            SpeechHelper.shared.speak(text: "Nachhall auf \(Int(reverbLevel))")
                         }
+                    })
+                    .accessibilityLabel("Nachhallstärke")
+                    .accessibilityValue("\(Int(reverbLevel))")
+            }
 
-                        VStack(alignment: .leading) {
-                            Text("Lautstärkeabnahme bei Entfernung: \(String(format: "%.1f", rolloffFactor))")
-                            Slider(value: $rolloffFactor, in: 0.1...10, step: 0.1, onEditingChanged: { editing in
-                                if !editing {
-                                    SpeechHelper.shared.speak(text: "Lautstärkeabnahme auf \(String(format: "%.1f", rolloffFactor))")
-                                }
-                            })
-                            .accessibilityLabel("Lautstärkeabnahme bei Entfernung")
-                            .accessibilityValue("\(String(format: "%.1f", rolloffFactor))")
+
+                VStack(alignment: .leading) {
+                Text("Lautstärkeabnahme bei Entfernung: \(String(format: "%.1f", rolloffFactor))")
+                    Slider(value: $rolloffFactor, in: 1.0...6.0, step: 1.0, onEditingChanged: { editing in
+                        if !editing {
+                            SpeechHelper.shared.speak(text: "Lautstärkeabnahme auf \(Int(rolloffFactor))")
                         }
+                    })
+                    .accessibilityLabel("Lautstärkeabnahme bei Entfernung")
+                    .accessibilityValue("\(Int(rolloffFactor))")
+
+            }
+
 
             
 
