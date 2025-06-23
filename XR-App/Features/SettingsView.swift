@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Binding var speechRate: Float
     @Environment(\.dismiss) private var dismiss
     
     @State private var selectedSound: SoundMode = {
@@ -21,13 +20,19 @@ struct SettingsView: View {
     
     @State private var reverbLevel: Double = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0.5...5.0)
     @State private var rolloffFactor: Double = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 1.0...6.0)
+    @State private var speechRate: Float = UserDefaults.standard.float(forKey: "speechRate").clamped(to: 0.1...0.8)
 
 
     private var speechLabel: String {
         switch speechRate {
-        case ..<0.35: return "Langsam"
-        case 0.35..<0.7: return "Normal"
-        default: return "Schnell"
+        case ..<0.2:
+            return "SPEECHRATE_LABEL_VERY_SLOW".localized
+        case 0.2..<0.45:
+            return "SPEECHRATE_LABEL_SLOW".localized
+        case 0.45..<0.6:
+            return "SPEECHRATE_LABEL_NORMAL".localized
+        default:
+            return "SPEECHRATE_LABEL_FAST".localized
         }
     }
 
@@ -37,7 +42,7 @@ struct SettingsView: View {
                 .font(.title2)
                 .bold()
 
-            Slider(value: $speechRate, in: 0.2...0.9, step: 0.05, onEditingChanged: { isEditing in
+            Slider(value: $speechRate, in: 0.1...0.8, step: 0.05, onEditingChanged: { isEditing in
                 if !isEditing {
                     SpeechHelper.shared.speak(text: "SETTINGS_SPEECHRATE_TEST".localized, rate: speechRate)
                 }

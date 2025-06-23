@@ -37,6 +37,11 @@
 "SETTINGS_ROLLOFF_LABEL" = "Lautstärkeabnahme bei Entfernung: %.1f";
 "SETTINGS_SAVE_BTN" = "Speichern & Zurück";
 "SETTINGS_SAVE_BTN_A11Y" = "Einstellungen speichern und zurückgehen";
+"SPEECHRATE_LABEL_VERY_SLOW" = "Sehr langsam";
+"SPEECHRATE_LABEL_SLOW" = "Langsam";
+"SPEECHRATE_LABEL_NORMAL" = "Normal";
+"SPEECHRATE_LABEL_FAST" = "Schnell";
+"SETTINGS_BUTTON_LABEL" = "Einstellungen öffnen";
 
 
 //Reference Objects

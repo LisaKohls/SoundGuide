@@ -29,7 +29,7 @@ struct HomeContentView: View {
     @State private var isSpeaking = true
     
     @State private var showSettings = false
-    @State private var speechRate: Float = UserDefaults.standard.float(forKey: "speechRate") == 0 ? 0.55 : UserDefaults.standard.float(forKey: "speechRate")
+
     
     var body: some View {
         NavigationStack {
@@ -170,12 +170,12 @@ struct HomeContentView: View {
                         } label: {
                             Image(systemName: "gear")
                         }
-                        .accessibilityLabel("Einstellungen öffnen")
+                        .accessibilityLabel("SETTINGS_BUTTON_LABEL".localized)
                     }
                 }
             }
             .sheet(isPresented: $showSettings) {
-                SettingsView(speechRate: $speechRate)
+                SettingsView() 
             }
             .onChange(of: scenePhase, initial: true) {
                 print("Scene phase: \(scenePhase)")

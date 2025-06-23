@@ -37,6 +37,13 @@
 "SETTINGS_ROLLOFF_LABEL" = "Volume reduction with distance: %.1f";
 "SETTINGS_SAVE_BTN" = "Save & Back";
 "SETTINGS_SAVE_BTN_A11Y" = "Save settings and go back";
+"SPEECHRATE_LABEL_VERY_SLOW" = "Very slow";
+"SPEECHRATE_LABEL_SLOW" = "Slow";
+"SPEECHRATE_LABEL_NORMAL" = "Normal";
+"SPEECHRATE_LABEL_FAST" = "Fast";
+
+"SETTINGS_BUTTON_LABEL" = "Open settings";
+
 
 //Reference Objects
 "MUG" = "cup";
