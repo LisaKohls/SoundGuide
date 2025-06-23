@@ -85,7 +85,11 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     
     func playSpatialSound(for entity: Entity, resourceName: String, gain: Double) {
             do {
-                configureSpatialAudio(on: entity, gain: gain, focus: 1.0, reverblevel: 5, rolloffFactor: 4.0)
+                let reverb = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0...10)
+                let rolloff = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 0.1...10)
+                
+                configureSpatialAudio(on: entity, gain: gain, focus: 1.0, reverblevel: reverb, rolloffFactor: rolloff)
+                
                 let audioResource: AudioFileResource = try .load(named: resourceName, in: .main, configuration: .init(shouldLoop: true))
                 let controller = entity.prepareAudio(audioResource)
                 self.currentAudioController = controller
