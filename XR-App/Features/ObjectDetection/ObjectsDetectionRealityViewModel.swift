@@ -79,7 +79,6 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     func playSound(entity: Entity) {
         let raw = UserDefaults.standard.string(forKey: "soundMode") ?? SoundMode.staticFile1.rawValue
         let soundMode = SoundMode(rawValue: raw) ?? .staticFile1
-        print("🔊 Loaded soundMode rawValue: \(raw), resolved file: \(soundMode.fileName)")
         playSpatialSound(for: entity, resourceName: soundMode.fileName, gain: soundMode.gain)
     }
     
