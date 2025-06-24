@@ -3,6 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 07.05.25.
+//  Reference: [1] https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 //
 
 /*
@@ -22,7 +23,8 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     
     private var spokenObjectNames: Set<String> = []
     private var currentAudioController: AudioPlaybackController?
-
+    
+    // [1]
     func makeHandEntities(in content: any RealityViewContentProtocol) {
         // Add the left hand.
         let leftHand = Entity()

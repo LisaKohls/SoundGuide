@@ -3,6 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 01.05.25.
+//  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
 Abstract:
@@ -77,7 +78,7 @@ struct HandTrackingSystem: System {
             // Iterate through all of the anchors on the hand skeleton.
             if let handSkeleton = handAnchor.handSkeleton {
                 for (jointName, jointEntity) in handComponent.fingers {
-                    /// The current transform of the person's hand joint.
+                    // The current transform of the person's hand joint.
                     let anchorFromJointTransform = handSkeleton.joint(jointName).anchorFromJointTransform
 
                     // Update the joint entity to match the transform of the person's hand joint.

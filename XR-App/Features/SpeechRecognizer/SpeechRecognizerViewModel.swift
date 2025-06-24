@@ -15,7 +15,6 @@ import Foundation
 import Speech
 
 class SpeechRecognizerViewModel: ObservableObject {
-    private let synthesizer = AVSpeechSynthesizer()
     private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "LANG".localized))
     private let audioEngine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
@@ -41,7 +40,6 @@ class SpeechRecognizerViewModel: ObservableObject {
                 
                 self.recognitionTask = self.recognizer?.recognitionTask(with: self.request!) { result, error in
                     if let error = error {
-                        print("Fehler bei der Spracherkennung: \(error.localizedDescription)")
                         return
                     }
                     

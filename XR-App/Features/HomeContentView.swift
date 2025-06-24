@@ -3,6 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 22.03.25.
+//  Reference: https://github.com/dilmerv/VisionOSObjectTrackingDemo
 
 /*
  Abstract:
@@ -42,7 +43,6 @@ struct HomeContentView: View {
                         
                         if !showSpeechRecognizer{
                             Button("REPEATCONTENT_BTN".localized) {
-                                print("Button Interaction: User tapped REPEAT CONTENT BUTTON", to: &logger)
                                 let tempContentOnView = {
                                     if showHomeButtons {
                                         return "REPEATCONTENT_HOME".localized
@@ -91,7 +91,6 @@ struct HomeContentView: View {
                             if !showSpeechRecognizer && !showHomeButtons {
                                 HStack {
                                     Button("REPEAT_BTN".localized) {
-                                        print("Button Interaction: User tapped REPEAT BUTTON", to: &logger)
                                         showSpeechRecognizer = true
                                     }.padding()
                                         .accessibilityLabel("REPEAT_BTN".localized)
@@ -117,7 +116,6 @@ struct HomeContentView: View {
                             
                         } else {
                             Button("STOP_BTN".localized) {
-                                print("Button Interaction: User tapped STOP BUTTON", to: &logger)
                                 SpeechHelper.shared.stopSpeaking()
                                 Task {
                                     await dismissImmersiveSpace()
@@ -145,7 +143,6 @@ struct HomeContentView: View {
                     .font(.footnote)
                     .padding(.horizontal)
                     .onAppear {
-                        print("Welcome to Soundguide. User test started with User 2. at: \(Date())", to: &logger)
                         // Required for better quality speech output
                         Task {
                             SpeechHelper.shared.preWarmSpeechEngine()

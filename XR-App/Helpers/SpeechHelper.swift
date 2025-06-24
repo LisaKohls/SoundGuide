@@ -20,7 +20,6 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     static let shared = SpeechHelper()
     
     private let synthesizer = AVSpeechSynthesizer()
-    private let audioEngine = AVAudioEngine()
     private var onFinishSpeaking: (() -> Void)?
  
     private override init() {

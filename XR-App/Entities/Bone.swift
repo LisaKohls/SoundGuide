@@ -3,6 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 01.05.25.
+//  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
 Abstract:

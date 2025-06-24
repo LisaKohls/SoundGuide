@@ -3,7 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 07.05.25.
-//
+//  Reference: https://github.com/dilmerv/VisionOSObjectTrackingDemo
 
 /*
  Abstract:
@@ -51,9 +51,6 @@ struct ObjectsDetectionRealityView: View {
                         //searched for object has been found by Apple Vision Pro
                         switch anchorUpdate.event {
                         case .added:
-                            print("Object has been found by Apple Vision pro: \(detectedObjectName)--- At: \(Date())", to: &logger)
-                            print("Object has been found by Apple Vision pro: \(detectedObjectName)")
-                  
                             let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
                             
                             let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
@@ -63,8 +60,6 @@ struct ObjectsDetectionRealityView: View {
                             
                             if detectionView {
                                 viewModel.observeTouchedObject(for: entity) { name in
-                                    print("\(name) has been touched by user at: \(Date()) ----- Current view: \(appState.realityView)", to: &logger)
-                                    print("\(name) has been touched by user ")
                                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                 }
                             }
@@ -79,9 +74,6 @@ struct ObjectsDetectionRealityView: View {
                                 
                                 //if object has been found by user, stop sound, play feedback
                                 viewModel.observeTouchedObject(for: visualization.entity) { name in
-                                    print("\(name) has been found by user at: \(Date()) ------- Current view: \(appState.realityView)", to: &logger)
-                                    print("\(name) has been found by user")
-                                   
                                     viewModel.stopSpatialSound()
                                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                     Task {
@@ -108,8 +100,6 @@ struct ObjectsDetectionRealityView: View {
         }
         .onAppear() {
             appState.isImmersiveSpaceOpened = true
-            print("-------\(appState.realityView)---------- opened at: \(Date())", to: &logger)
-            print("-------\(appState.realityView)---------- opened")
             Task {
                 HandTrackingSystem.configure(with: appState)
             }
@@ -117,8 +107,6 @@ struct ObjectsDetectionRealityView: View {
             SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
         }
         .onDisappear() {
-            print("View \(appState.realityView) disappeared at: \(Date())",to: &logger)
-            print("View \(appState.realityView) disappeared")
             Task {
                 HandTrackingSystem.detectedObjects.removeAll()
                 
