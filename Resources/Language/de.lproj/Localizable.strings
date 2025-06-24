@@ -23,7 +23,7 @@
 "STARTRECORDINGINSTRUCTION" = "Sage %@ klicken um die Sprachaufnahme zu starten";
 "START_STOP_TRACKING_BTN" = "Sage %@ klicken um das Tracking zu %@";
 "UNKNOWNOBJECTS_BTN" = "Identifizieren von Objekten starten";
-"LOOKFORUNKNOWNOBJECTS" = "Sage Objekterkennung starten klicken um herauszufinden, welche Objekte sich vor dir befinden";
+"LOOKFORUNKNOWNOBJECTS" = "Sage Identifizieren von Objekten starten klicken um herauszufinden, welche Objekte sich vor dir befinden";
 "FOUNDUNKNOWNOBJECT" = "Du hast das Objekt %@ gefunden.";
 "REPEATCONTENT_HOME" = "Du hast die Optionen Objektsuche starten klicken oder Identifizieren von Objekten starten klicken zu sagen.";
 "VIEWLOADEDSUCCESSFULLY" = "Die Objekterkennung wurde gestartet, bewege dich leicht um ein Objekt zu finden";
