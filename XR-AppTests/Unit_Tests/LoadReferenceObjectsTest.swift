@@ -5,6 +5,14 @@
 //  Created by Lisa Salzer on 20.06.25.
 //
 
+/*
+ Abstract:
+ Tests loading multiple `.referenceobject` files from the app bundle into ReferenceObjectLoader.
+ Verifies successful loading and correct state updates.
+
+ Note: Reference object files must be included under "Copy Bundle Resources" in the XR-AppTests target.
+ */
+
 @testable import XR_App
 import XCTest
 import RealityKit
@@ -29,18 +37,16 @@ final class ReferenceObjectLoaderTests: XCTestCase {
                 forResource: name,
                 withExtension: "referenceobject",
             ) else {
-                XCTFail("❌ Datei nicht gefunden: \(name).referenceobject")
+                XCTFail("Datei nicht gefunden: \(name).referenceobject")
                 continue
             }
 
             let loader = ReferenceObjectLoader()
             await loader.addReferenceObject(url)
 
-            XCTAssertEqual(loader.referenceObjects.count, 1, "❌ \(name) konnte nicht geladen werden")
+            XCTAssertEqual(loader.referenceObjects.count, 1, "\(name) konnte nicht geladen werden")
             XCTAssertTrue(loader.didFinishLoading)
         }
     }
 
-
-    
 }

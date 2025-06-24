@@ -5,6 +5,11 @@
 //  Created by Lisa Kohls on 17.05.25.
 //
 
+/*
+ Abstract:
+ Tests that the SpeechRecognizerViewModel correctly triggers the onResult closure with the recognized text.
+ */
+
 import XCTest
 @testable import XR_App
 

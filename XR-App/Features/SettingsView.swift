@@ -5,10 +5,14 @@
 //  Created by Lisa Salzer on 20.06.25.
 //
 
+/*
+ Abstract:
+ The applications settings view.
+ */
+
 import SwiftUI
 
 struct SettingsView: View {
-    @Binding var speechRate: Float
     @Environment(\.dismiss) private var dismiss
     
     @State private var selectedSound: SoundMode = {
@@ -18,63 +22,110 @@ struct SettingsView: View {
         }
         return .staticFile1
     }()
+    
+    @State private var reverbLevel: Double = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0.5...5.0)
+    @State private var rolloffFactor: Double = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 1.0...6.0)
+    @State private var speechRate: Float = UserDefaults.standard.float(forKey: "speechRate").clamped(to: 0.1...0.8)
 
 
     private var speechLabel: String {
         switch speechRate {
-        case ..<0.35: return "Langsam"
-        case 0.35..<0.7: return "Normal"
-        default: return "Schnell"
+        case ..<0.2:
+            return "SPEECHRATE_LABEL_VERY_SLOW".localized
+        case 0.2..<0.45:
+            return "SPEECHRATE_LABEL_SLOW".localized
+        case 0.45..<0.6:
+            return "SPEECHRATE_LABEL_NORMAL".localized
+        default:
+            return "SPEECHRATE_LABEL_FAST".localized
         }
     }
 
     var body: some View {
         VStack(spacing: 24) {
-            Text("Sprachgeschwindigkeit")
+            Text("SETTINGS_TITLE_SPEECHRATE".localized)
                 .font(.title2)
                 .bold()
 
-            Slider(value: $speechRate, in: 0.2...0.9, step: 0.05, onEditingChanged: { isEditing in
+            Slider(value: $speechRate, in: 0.1...0.8, step: 0.05, onEditingChanged: { isEditing in
                 if !isEditing {
-                    SpeechHelper.shared.speak(text: "Dies ist ein Geschwindigkeitstest", rate: speechRate)
+                    SpeechHelper.shared.speak(text: "SETTINGS_SPEECHRATE_TEST".localized, rate: speechRate)
                 }
             })
             .padding(.horizontal)
-            .accessibilityLabel("Sprachgeschwindigkeit Slider")
+            .accessibilityLabel("SETTINGS_TITLE_SPEECHRATE".localized)
             .accessibilityValue(speechLabel)
             
 
-            Text("Aktuell: \(speechLabel) (\(String(format: "%.2f", speechRate)))")
+            Text(String(format: "SETTINGS_SPEECHRATE_CURRENT".localized, speechLabel, speechRate))
                 .foregroundStyle(.secondary)
-                .accessibilityLabel("Aktuelle Sprachgeschwindigkeit: \(speechLabel)")
+                .accessibilityLabel(String(format: "SETTINGS_SPEECHRATE_CURRENT".localized, speechLabel, speechRate))
             
             Divider()
             
             // Soundauswahl
-                        Text("Hinweiston auswählen")
+                        Text("SETTINGS_TITLE_SOUNDMODE".localized)
                             .font(.title2)
                             .bold()
+                            .accessibilityAddTraits(.isHeader)
 
-                        Picker("Ton", selection: $selectedSound) {
+
+                        Picker("SETTINGS_TITLE_SOUNDMODE".localized, selection: $selectedSound) {
                             ForEach(SoundMode.allCases) { mode in
                                 Text(mode.label).tag(mode)
                             }
                         }
                         .pickerStyle(.inline)
-                        .onChange(of: selectedSound) { newValue in
+                        .onChange(of: selectedSound) { _, newValue in
                             SoundPreviewHelper.shared.playSound(named: newValue.fileName)
                         }
+                        .accessibilityLabel("SETTINGS_TITLE_SOUNDMODE".localized)
+            
+                        Divider()
+
+                        // audio adjustments
+                        Text("SETTINGS_TITLE_AUDIO".localized)
+                            .font(.title2)
+                            .bold()
+                            .accessibilityAddTraits(.isHeader)
+
+            VStack(alignment: .leading) {
+                Text(String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
+                Slider(value: $reverbLevel, in: 0...5, step: 1.0, onEditingChanged: { editing in
+                        if !editing {
+                            SpeechHelper.shared.speak(text: String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
+                        }
+                    })
+                    .accessibilityLabel("SETTINGS_REVERB_LABEL".localized)
+                    .accessibilityValue("\(Int(reverbLevel))")
+            }
+
+
+                VStack(alignment: .leading) {
+                Text(String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
+                    Slider(value: $rolloffFactor, in: 1.0...6.0, step: 1.0, onEditingChanged: { editing in
+                        if !editing {
+                            SpeechHelper.shared.speak(text: String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
+                        }
+                    })
+                    .accessibilityLabel("SETTINGS_ROLLOFF_LABEL".localized)
+                    .accessibilityValue("\(Int(rolloffFactor))")
+
+            }
+
 
                         Spacer()
 
                         // Speichern
-                        Button("Speichern & Zurück") {
+                        Button("SETTINGS_SAVE_BTN".localized) {
                             UserDefaults.standard.set(speechRate, forKey: "speechRate")
                             UserDefaults.standard.set(selectedSound.rawValue, forKey: "soundMode")
+                            UserDefaults.standard.set(reverbLevel, forKey: "reverbLevel")
+                            UserDefaults.standard.set(rolloffFactor, forKey: "rolloffFactor")
                             dismiss()
                         }
                         .buttonStyle(.borderedProminent)
-                        .accessibilityLabel("Einstellungen speichern und zurückgehen")
+                        .accessibilityLabel("SETTINGS_SAVE_BTN_A11Y".localized)
                     }
                     .padding()
     }

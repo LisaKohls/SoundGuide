@@ -5,6 +5,11 @@
 //  Created by Lisa Salzer on 22.06.25.
 //
 
+/*
+ Abstract:
+ a helper class to play short sound previews in the settings
+ */
+
 import AVFoundation
 
 class SoundPreviewHelper {

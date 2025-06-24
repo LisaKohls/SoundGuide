@@ -7,7 +7,9 @@
 
 /*
  Abstract:
- ObjectsDetectionRealityViewModel which creates hand entities and enables an easy use for the ObjectsDetectionRealityView.
+ A view model for managing the ObjectsDetectionRealityView.
+ Handles the creation of hand-tracking entities, detection and labeling of objects,
+ and playback of spatial audio for identified objects using user-defined audio settings.
  */
 
 import Foundation
@@ -79,13 +81,16 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
     func playSound(entity: Entity) {
         let raw = UserDefaults.standard.string(forKey: "soundMode") ?? SoundMode.staticFile1.rawValue
         let soundMode = SoundMode(rawValue: raw) ?? .staticFile1
-        print("🔊 Loaded soundMode rawValue: \(raw), resolved file: \(soundMode.fileName)")
         playSpatialSound(for: entity, resourceName: soundMode.fileName, gain: soundMode.gain)
     }
     
     func playSpatialSound(for entity: Entity, resourceName: String, gain: Double) {
             do {
-                configureSpatialAudio(on: entity, gain: gain, focus: 1.0, reverblevel: 5, rolloffFactor: 4.0)
+                let reverb = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0.5...5.0)
+                let rolloff = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 1.0...6.0)
+                
+                configureSpatialAudio(on: entity, gain: gain, focus: 1.0, reverblevel: reverb, rolloffFactor: rolloff)
+                
                 let audioResource: AudioFileResource = try .load(named: resourceName, in: .main, configuration: .init(shouldLoop: true))
                 let controller = entity.prepareAudio(audioResource)
                 self.currentAudioController = controller
