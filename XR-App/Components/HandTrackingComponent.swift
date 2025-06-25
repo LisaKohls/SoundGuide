@@ -4,6 +4,7 @@
 //
 //  Created by Lisa Kohls on 07.05.25.
 //
+//  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
 Abstract:

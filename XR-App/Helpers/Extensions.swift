@@ -4,6 +4,9 @@
 //
 //  Created by Lisa Salzer on 23.06.25.
 //
+//  Reference: [1] https://developer.apple.com/documentation/foundation/nslocalizedstring
+//  Reference: [2] https://github.com/swiftlang/swift-evolution/blob/main/proposals/0177-add-clamped-to-method.md
+//
 
 /*
  Abstract:
@@ -13,12 +16,12 @@
 import Foundation
 import SwiftUI
 
-
+// [1]
 public extension String {
     var localized: String {
         NSLocalizedString(self, comment: "")
     }
-
+    
     func localizedWithArgs(_ args: CVarArg...) -> String {
         String(format: self.localized, arguments: args)
     }
@@ -32,7 +35,7 @@ public extension String {
  Ensures the value stays within the specified bounds.
  */
 
-
+// [2]
 extension Comparable {
     /// Gibt den Wert zurück, begrenzt auf den angegebenen Wertebereich.
     func clamped(to limits: ClosedRange<Self>) -> Self {

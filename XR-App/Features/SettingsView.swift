@@ -4,6 +4,10 @@
 //
 //  Created by Lisa Salzer on 20.06.25.
 //
+//  Reference: [1] https://developer.apple.com/documentation/swiftui/slider
+//  Reference: [2] https://developer.apple.com/documentation/foundation/userdefaults
+//  Reference: [3] https://developer.apple.com/documentation/swiftui/view-accessibility
+//
 
 /*
  Abstract:
@@ -26,8 +30,8 @@ struct SettingsView: View {
     @State private var reverbLevel: Double = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0.5...5.0)
     @State private var rolloffFactor: Double = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 1.0...6.0)
     @State private var speechRate: Float = UserDefaults.standard.float(forKey: "speechRate").clamped(to: 0.1...0.8)
-
-
+    
+    
     private var speechLabel: String {
         switch speechRate {
         case ..<0.2:
@@ -40,13 +44,14 @@ struct SettingsView: View {
             return "SPEECHRATE_LABEL_FAST".localized
         }
     }
-
+    
+    // [1], [3]
     var body: some View {
         VStack(spacing: 24) {
             Text("SETTINGS_TITLE_SPEECHRATE".localized)
                 .font(.title2)
                 .bold()
-
+            
             Slider(value: $speechRate, in: 0.1...0.8, step: 0.05, onEditingChanged: { isEditing in
                 if !isEditing {
                     SpeechHelper.shared.speak(text: "SETTINGS_SPEECHRATE_TEST".localized, rate: speechRate)
@@ -56,78 +61,78 @@ struct SettingsView: View {
             .accessibilityLabel("SETTINGS_TITLE_SPEECHRATE".localized)
             .accessibilityValue(speechLabel)
             
-
+            
             Text(String(format: "SETTINGS_SPEECHRATE_CURRENT".localized, speechLabel, speechRate))
                 .foregroundStyle(.secondary)
                 .accessibilityLabel(String(format: "SETTINGS_SPEECHRATE_CURRENT".localized, speechLabel, speechRate))
             
             Divider()
             
-            // Soundauswahl
-                        Text("SETTINGS_TITLE_SOUNDMODE".localized)
-                            .font(.title2)
-                            .bold()
-                            .accessibilityAddTraits(.isHeader)
-
-
-                        Picker("SETTINGS_TITLE_SOUNDMODE".localized, selection: $selectedSound) {
-                            ForEach(SoundMode.allCases) { mode in
-                                Text(mode.label).tag(mode)
-                            }
-                        }
-                        .pickerStyle(.inline)
-                        .onChange(of: selectedSound) { _, newValue in
-                            SoundPreviewHelper.shared.playSound(named: newValue.fileName)
-                        }
-                        .accessibilityLabel("SETTINGS_TITLE_SOUNDMODE".localized)
+            // Sound selection
+            Text("SETTINGS_TITLE_SOUNDMODE".localized)
+                .font(.title2)
+                .bold()
+                .accessibilityAddTraits(.isHeader)
             
-                        Divider()
-
-                        // audio adjustments
-                        Text("SETTINGS_TITLE_AUDIO".localized)
-                            .font(.title2)
-                            .bold()
-                            .accessibilityAddTraits(.isHeader)
-
+            
+            Picker("SETTINGS_TITLE_SOUNDMODE".localized, selection: $selectedSound) {
+                ForEach(SoundMode.allCases) { mode in
+                    Text(mode.label).tag(mode)
+                }
+            }
+            .pickerStyle(.inline)
+            .onChange(of: selectedSound) { _, newValue in
+                SoundPreviewHelper.shared.playSound(named: newValue.fileName)
+            }
+            .accessibilityLabel("SETTINGS_TITLE_SOUNDMODE".localized)
+            
+            Divider()
+            
+            // Audio adjustments
+            Text("SETTINGS_TITLE_AUDIO".localized)
+                .font(.title2)
+                .bold()
+                .accessibilityAddTraits(.isHeader)
+            
             VStack(alignment: .leading) {
                 Text(String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
                 Slider(value: $reverbLevel, in: 0...5, step: 1.0, onEditingChanged: { editing in
-                        if !editing {
-                            SpeechHelper.shared.speak(text: String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
-                        }
-                    })
-                    .accessibilityLabel("SETTINGS_REVERB_LABEL".localized)
-                    .accessibilityValue("\(Int(reverbLevel))")
-            }
-
-
-                VStack(alignment: .leading) {
-                Text(String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
-                    Slider(value: $rolloffFactor, in: 1.0...6.0, step: 1.0, onEditingChanged: { editing in
-                        if !editing {
-                            SpeechHelper.shared.speak(text: String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
-                        }
-                    })
-                    .accessibilityLabel("SETTINGS_ROLLOFF_LABEL".localized)
-                    .accessibilityValue("\(Int(rolloffFactor))")
-
-            }
-
-
-                        Spacer()
-
-                        // Speichern
-                        Button("SETTINGS_SAVE_BTN".localized) {
-                            UserDefaults.standard.set(speechRate, forKey: "speechRate")
-                            UserDefaults.standard.set(selectedSound.rawValue, forKey: "soundMode")
-                            UserDefaults.standard.set(reverbLevel, forKey: "reverbLevel")
-                            UserDefaults.standard.set(rolloffFactor, forKey: "rolloffFactor")
-                            dismiss()
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .accessibilityLabel("SETTINGS_SAVE_BTN_A11Y".localized)
+                    if !editing {
+                        SpeechHelper.shared.speak(text: String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
                     }
-                    .padding()
+                })
+                .accessibilityLabel("SETTINGS_REVERB_LABEL".localized)
+                .accessibilityValue("\(Int(reverbLevel))")
+            }
+            
+            
+            VStack(alignment: .leading) {
+                Text(String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
+                Slider(value: $rolloffFactor, in: 1.0...6.0, step: 1.0, onEditingChanged: { editing in
+                    if !editing {
+                        SpeechHelper.shared.speak(text: String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
+                    }
+                })
+                .accessibilityLabel("SETTINGS_ROLLOFF_LABEL".localized)
+                .accessibilityValue("\(Int(rolloffFactor))")
+                
+            }
+            
+            
+            Spacer()
+            
+            // Save to user defaults [2]
+            Button("SETTINGS_SAVE_BTN".localized) {
+                UserDefaults.standard.set(speechRate, forKey: "speechRate")
+                UserDefaults.standard.set(selectedSound.rawValue, forKey: "soundMode")
+                UserDefaults.standard.set(reverbLevel, forKey: "reverbLevel")
+                UserDefaults.standard.set(rolloffFactor, forKey: "rolloffFactor")
+                dismiss()
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityLabel("SETTINGS_SAVE_BTN_A11Y".localized)
+        }
+        .padding()
     }
 }
 
