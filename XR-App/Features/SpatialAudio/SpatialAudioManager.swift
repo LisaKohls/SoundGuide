@@ -5,7 +5,8 @@
 //  Created by Lisa Salzer on 25.06.25.
 //
 //  References:
-//  [2] https://developer.apple.com/documentation/realitykit/spatialaudiocomponent
+//  [1] https://developer.apple.com/documentation/realitykit/spatialaudiocomponent
+//  [2] https://www.createwithswift.com/adding-spatial-audio-to-an-entity-with-realitykit/
 //  [3] https://developer.apple.com/documentation/realitykit/audiofileresource
 //  [4] https://developer.apple.com/documentation/realitykit/entity
 //
@@ -25,7 +26,7 @@ final class SpatialAudioManager {
     
     private init() {}
     
-    // Configure the spatial audio properties [2]
+    // Configure the spatial audio properties [1], [2]
     func configureSpatialAudio(
         on entity: Entity,
         gain: Double = -2.0,
