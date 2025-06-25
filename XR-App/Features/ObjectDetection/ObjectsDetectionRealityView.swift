@@ -24,98 +24,119 @@ struct ObjectsDetectionRealityView: View {
     @StateObject var viewModel = ObjectsDetectionRealityViewModel()
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
     
-    
     var body: some View {
         RealityView { content in
             content.add(root)
-            
-            let detectionView = appState.realityView == "UNKNOWNOBJECTS_BTN".localized
-            let trackingView = appState.realityView == "START_BTN".localized
-            
             viewModel.makeHandEntities(in: content)
             
+            let currentContent = content
+            
             Task {
-                let objectTracking = await appState.startTracking()
-                guard let objectTracking else {
-                    return
-                }
-                
-                for await anchorUpdate in objectTracking.anchorUpdates {
-                    let anchor = anchorUpdate.anchor
-                    let id = anchor.id
-                    let name = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
-                    
-                    let detectedObjectName = viewModel.getDetectedObjectName(detectedObject: name)
-                    print("determined object: \(detectedObjectName), recognized Text:\(appState.recognizedText) ")
-                    if(appState.recognizedText.contains(detectedObjectName) || detectionView){
-                        //searched for object has been found by Apple Vision Pro
-                        switch anchorUpdate.event {
-                        case .added:
-                            let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
-                            
-                            let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
-                            
-                            let entity = visualization.entity
-                            entity.name = detectedObjectName
-                            
-                            if detectionView {
-                                viewModel.observeTouchedObject(for: entity) { name in
-                                    SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
-                                }
-                            }
-                            
-                            if trackingView {
-                                //Add outlines to detected object
-                                self.objectVisualizations[id] = visualization
-                                root.addChild(visualization.entity)
-                                
-                                //Add Spatial sound to the Object (implemented by Lisa Salzer)
-                                SpatialAudioManager.shared.playSound(for: visualization.entity)
-                                
-                                //if object has been found by user, stop sound, play feedback
-                                viewModel.observeTouchedObject(for: visualization.entity) { name in
-                                    SpatialAudioManager.shared.stopSound()
-                                    
-                                    SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
-                                    Task {
-                                        HandTrackingSystem.detectedObjects.removeAll()
-                                        
-                                        for (_, visualization) in objectVisualizations {
-                                            root.removeChild(visualization.entity)
-                                        }
-                                        objectVisualizations.removeAll()
-                                        appState.didFinishObjectDetection = true
-                                    }
-                                }
-                                
-                            }
-                        case .updated:
-                            self.objectVisualizations[id]?.update(with: anchor)
-                        case .removed:
-                            self.objectVisualizations[id]?.entity.removeFromParent()
-                            self.objectVisualizations.removeValue(forKey: id)
-                        }
-                    }
+                if appState.realityView == "ObjectIdentificationView" {
+                    await handleObjectIdentificationView(content: currentContent)
+                } else if appState.realityView == "SearchForObjectsView" {
+                    await handleSearchForObjectsView(content: currentContent)
                 }
             }
         }
-        .onAppear() {
+        .id(appState.realityView) 
+        .onAppear {
             appState.isImmersiveSpaceOpened = true
             Task {
                 HandTrackingSystem.configure(with: appState)
             }
             
-            SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
         }
-        .onDisappear() {
+        .onDisappear {
             Task {
                 HandTrackingSystem.detectedObjects.removeAll()
-                
                 for (_, visualization) in objectVisualizations {
                     root.removeChild(visualization.entity)
                 }
                 objectVisualizations.removeAll()
                 appState.didLeaveImmersiveSpace()
+            }
+        }
+    }
+    
+    // MARK: - Detection View Handling
+    
+    private func handleObjectIdentificationView(content: RealityViewContent) async {
+        SpeechHelper.shared.speak(text: "VIEWLOADED_UNKNOWNOBJECTS".localized)
+        guard let objectTracking = await appState.startTracking() else { return }
+        
+        for await anchorUpdate in objectTracking.anchorUpdates {
+            let anchor = anchorUpdate.anchor
+            let id = anchor.id
+            let name = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
+            let detectedName = viewModel.getDetectedObjectName(detectedObject: name)
+            
+            switch anchorUpdate.event {
+            case .added:
+                let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
+                let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
+                let entity = visualization.entity
+                entity.name = detectedName
+                
+                viewModel.observeTouchedObject(for: entity) { name in
+                    SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                }
+                
+                objectVisualizations[id] = visualization
+                
+                content.add(visualization.entity)
+            case .updated:
+                objectVisualizations[id]?.update(with: anchor)
+            case .removed:
+                objectVisualizations[id]?.entity.removeFromParent()
+                objectVisualizations.removeValue(forKey: id)
+            }
+        }
+    }
+    
+    // MARK: - Tracking View Handling
+    
+    private func handleSearchForObjectsView(content: RealityViewContent) async {
+        SpeechHelper.shared.speak(text: "VIEWLOADED_SEARCHOBJECTS".localized)
+        guard let objectTracking = await appState.startTracking() else { return }
+        
+        for await anchorUpdate in objectTracking.anchorUpdates {
+            let anchor = anchorUpdate.anchor
+            let id = anchor.id
+            let name = anchor.referenceObject.name.lowercased().replacingOccurrences(of: "_", with: " ")
+            let detectedName = viewModel.getDetectedObjectName(detectedObject: name)
+            
+            if appState.recognizedText.contains(detectedName) {
+                switch anchorUpdate.event {
+                case .added:
+                    let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
+                    let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
+                    let entity = visualization.entity
+                    entity.name = detectedName
+                    
+                    objectVisualizations[id] = visualization
+                    root.addChild(entity)
+                    SpatialAudioManager.shared.playSound(for: entity)
+                    
+                    viewModel.observeTouchedObject(for: entity) { name in
+                        SpatialAudioManager.shared.stopSound()
+                        SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                        
+                        Task {
+                            HandTrackingSystem.detectedObjects.removeAll()
+                            for (_, vis) in objectVisualizations {
+                                root.removeChild(vis.entity)
+                            }
+                            objectVisualizations.removeAll()
+                            appState.didFinishObjectDetection = true
+                        }
+                    }
+                case .updated:
+                    objectVisualizations[id]?.update(with: anchor)
+                case .removed:
+                    objectVisualizations[id]?.entity.removeFromParent()
+                    objectVisualizations.removeValue(forKey: id)
+                }
             }
         }
     }

@@ -26,7 +26,7 @@
 "LOOKFORUNKNOWNOBJECTS" = "Sage Identifizieren von Objekten starten klicken um herauszufinden, welche Objekte sich vor dir befinden";
 "FOUNDUNKNOWNOBJECT" = "Du hast das Objekt %@ gefunden.";
 "REPEATCONTENT_HOME" = "Du hast die Optionen Objektsuche starten klicken oder Identifizieren von Objekten starten klicken zu sagen.";
-"VIEWLOADEDSUCCESSFULLY" = "Die Objekterkennung wurde gestartet, bewege dich leicht um ein Objekt zu finden";
+"VIEWLOADED_SEARCHOBJECTS" = "Die Objekterkennung wurde gestartet, bewege dich leicht um ein Objekt zu finden";
 "VIEWLOADED_UNKNOWNOBJECTS" = "Die Objekterkennung wurde gestartet. Berühre ein Objekt um den Namen gesagt zu bekommen.";
 "UNKNOWNOBJECTSVIEW" = "Berühre Objekte um den Namen zu erfahren";
 "SETTINGS_TITLE_SPEECHRATE" = "Sprachgeschwindigkeit";
