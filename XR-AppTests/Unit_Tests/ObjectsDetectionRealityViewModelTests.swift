@@ -63,8 +63,8 @@ final class ObjectsDetectionRealityViewModelTests: XCTestCase {
         UserDefaults.standard.set(2.0, forKey: "reverbLevel")
         UserDefaults.standard.set(3.0, forKey: "rolloffFactor")
         
-        sut.playSound(entity: entity)
-        sut.stopSpatialSound()
+        SpatialAudioManager.shared.playSound(for: entity)
+                SpatialAudioManager.shared.stopSound()
         
         XCTAssertNotNil(entity.components[SpatialAudioComponent.self])
     }
