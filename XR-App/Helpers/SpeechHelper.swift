@@ -21,7 +21,7 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     
     private let synthesizer = AVSpeechSynthesizer()
     private var onFinishSpeaking: (() -> Void)?
- 
+    
     private override init() {
         super.init()
         synthesizer.delegate = self
@@ -61,6 +61,6 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
         onFinishSpeaking?()
         onFinishSpeaking = nil
-   }
+    }
     
 }

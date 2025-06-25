@@ -3,14 +3,14 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 07.05.25.
+//
 //  Reference: [1] https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 //
 
 /*
  Abstract:
  A view model for managing the ObjectsDetectionRealityView.
- Handles the creation of hand-tracking entities, detection and labeling of objects,
- and playback of spatial audio for identified objects using user-defined audio settings.
+ Handles the creation of hand-tracking entities, detection and labeling of objects.
  */
 
 import Foundation
@@ -33,7 +33,7 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
         leftHand.components.set(CollisionComponent(shapes: [.generateSphere(radius: 0.03)]))
         leftHand.components.set(PhysicsBodyComponent(mode: .kinematic))
         content.add(leftHand)
-
+        
         // Add the right hand.
         let rightHand = Entity()
         rightHand.name = "rightHand"
@@ -63,48 +63,4 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
             onTouch(name)
         }
     }
-    
-    private func configureSpatialAudio(
-            on entity: Entity,
-            gain: Double = -10.0,
-            focus: Double = 0.2,
-            reverblevel: Double = 1.0,
-            rolloffFactor: Double = 2.0
-        ){
-            var spatialAudio = SpatialAudioComponent()
-            spatialAudio.gain = Audio.Decibel(gain)
-            spatialAudio.directivity = .beam(focus: focus)
-            spatialAudio.reverbLevel = reverblevel
-            spatialAudio.distanceAttenuation = .rolloff(factor: rolloffFactor)
-            entity.components.set(spatialAudio)
-        }
-    
-    
-    func playSound(entity: Entity) {
-        let raw = UserDefaults.standard.string(forKey: "soundMode") ?? SoundMode.staticFile1.rawValue
-        let soundMode = SoundMode(rawValue: raw) ?? .staticFile1
-        playSpatialSound(for: entity, resourceName: soundMode.fileName, gain: soundMode.gain)
-    }
-    
-    func playSpatialSound(for entity: Entity, resourceName: String, gain: Double) {
-            do {
-                let reverb = UserDefaults.standard.double(forKey: "reverbLevel").clamped(to: 0.5...5.0)
-                let rolloff = UserDefaults.standard.double(forKey: "rolloffFactor").clamped(to: 1.0...6.0)
-                
-                configureSpatialAudio(on: entity, gain: gain, focus: 1.0, reverblevel: reverb, rolloffFactor: rolloff)
-                
-                let audioResource: AudioFileResource = try .load(named: resourceName, in: .main, configuration: .init(shouldLoop: true))
-                let controller = entity.prepareAudio(audioResource)
-                self.currentAudioController = controller
-                self.currentAudioController?.play()
-            } catch {
-                print("Failed to load or play sound: \(error)")
-            }
-    }
-
-    func stopSpatialSound() {
-        currentAudioController?.stop()
-        currentAudioController = nil
-    }
-    
 }

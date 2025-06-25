@@ -4,6 +4,8 @@
 //
 //  Created by Lisa Salzer on 23.06.25.
 //
+//  Reference: https://developer.apple.com/documentation/foundation/userdefaults/
+//
 
 /*
  Abstract:

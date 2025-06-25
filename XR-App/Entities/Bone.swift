@@ -6,9 +6,9 @@
 //  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
-Abstract:
-An enumeration that represents each part of the bone and defines the joint name from the hand skeleton.
-*/
+ Abstract:
+ An enumeration that represents each part of the bone and defines the joint name from the hand skeleton.
+ */
 
 enum Bone: Int, CaseIterable {
     case arm

@@ -12,7 +12,7 @@ struct StartRecordingButton: View {
     @Binding var showSpeechRecognizer: Bool
     @Binding var showHomeButtons: Bool
     @Binding var isSpeaking: Bool
-
+    
     var body: some View {
         Button(action: {
             print("Button Interaction: User tapped start recording button", to: &logger)

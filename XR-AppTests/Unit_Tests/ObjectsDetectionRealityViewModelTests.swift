@@ -28,12 +28,12 @@ final class ObjectsDetectionRealityViewModelTests: XCTestCase {
         sut = nil
         try await super.tearDown()
     }
-
+    
     func test_getDetectedObjectName_knownObject_returnsLocalizedName() {
         let name = sut.getDetectedObjectName(detectedObject: "tasse")
         XCTAssertEqual(name, "MUG".localized)
     }
-
+    
     func test_getDetectedObjectName_unknownObject_returnsLowercased() {
         let name = sut.getDetectedObjectName(detectedObject: "unbekannt")
         XCTAssertEqual(name, "unbekannt")
@@ -42,30 +42,30 @@ final class ObjectsDetectionRealityViewModelTests: XCTestCase {
     func test_observeTouchedObject_triggersCallbackOnce() {
         let entity = Entity()
         entity.name = "testObject"
-
+        
         let expectation = XCTestExpectation(description: "Callback called once")
-
+        
         sut.observeTouchedObject(for: entity) { name in
             XCTAssertEqual(name, "testObject")
             expectation.fulfill()
         }
-
+        
         HandTrackingSystem.onObjectTouched?("testObject")
         HandTrackingSystem.onObjectTouched?("testObject")
-
+        
         wait(for: [expectation], timeout: 1.0)
     }
-
+    
     func test_playAndStopSound_doesNotCrashAndPreparesAudio() {
-
+        
         let entity = Entity()
         UserDefaults.standard.set(SoundMode.staticFile1.rawValue, forKey: "soundMode")
         UserDefaults.standard.set(2.0, forKey: "reverbLevel")
         UserDefaults.standard.set(3.0, forKey: "rolloffFactor")
-
-        sut.playSound(entity: entity)
-        sut.stopSpatialSound()
-
+        
+        SpatialAudioManager.shared.playSound(for: entity)
+                SpatialAudioManager.shared.stopSound()
+        
         XCTAssertNotNil(entity.components[SpatialAudioComponent.self])
     }
 }

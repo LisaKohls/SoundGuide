@@ -4,12 +4,14 @@
 //
 //  Created by Lisa Salzer on 20.06.25.
 //
+//  Reference: https://developer.apple.com/documentation/xctest/xctestcase
+//
 
 /*
  Abstract:
  Tests loading multiple `.referenceobject` files from the app bundle into ReferenceObjectLoader.
  Verifies successful loading and correct state updates.
-
+ 
  Note: Reference object files must be included under "Copy Bundle Resources" in the XR-AppTests target.
  */
 
@@ -20,12 +22,12 @@ import RealityKit
 @MainActor
 final class ReferenceObjectLoaderTests: XCTestCase {
     private var sut: ReferenceObjectLoader!
-
+    
     override func setUp() async throws {
         try await super.setUp()
         sut = ReferenceObjectLoader()
     }
-
+    
     override func tearDown() {
         sut = nil
         super.tearDown()
@@ -40,13 +42,13 @@ final class ReferenceObjectLoaderTests: XCTestCase {
                 XCTFail("Datei nicht gefunden: \(name).referenceobject")
                 continue
             }
-
+            
             let loader = ReferenceObjectLoader()
             await loader.addReferenceObject(url)
-
+            
             XCTAssertEqual(loader.referenceObjects.count, 1, "\(name) konnte nicht geladen werden")
             XCTAssertTrue(loader.didFinishLoading)
         }
     }
-
+    
 }

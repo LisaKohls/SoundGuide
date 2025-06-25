@@ -16,21 +16,21 @@ import AVFoundation
 
 @MainActor
 final class SpeechHelperTests: XCTestCase {
-
+    
     override func setUp() {
         super.setUp()
         SpeechHelper.shared.setupAudio()
     }
-
+    
     override func tearDown() {
         SpeechHelper.shared.stopSpeaking()
         super.tearDown()
     }
-
+    
     func testSetupAudio_doesNotThrow() {
         XCTAssertNoThrow(SpeechHelper.shared.setupAudio())
     }
-
+    
     func testPreWarmSpeechEngine_runsWithoutError() {
         SpeechHelper.shared.preWarmSpeechEngine()
     }
@@ -39,10 +39,10 @@ final class SpeechHelperTests: XCTestCase {
         let helper = SpeechHelper.shared
         helper.speak(text: "Dies ist ein sehr langer Text, der eigentlich gesprochen werden sollte.")
         helper.stopSpeaking()
-
+        
         XCTAssertFalse(helperIsSpeaking(helper: helper), "Synthesizer sollte nicht mehr sprechen.")
     }
-
+    
     private func helperIsSpeaking(helper: SpeechHelper) -> Bool {
         return false
     }

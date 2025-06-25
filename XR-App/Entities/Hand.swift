@@ -6,9 +6,9 @@
 //  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
-Abstract:
-A structure containing all entities attached to hand-tracking anchors.
-*/
+ Abstract:
+ A structure containing all entities attached to hand-tracking anchors.
+ */
 
 import ARKit.hand_skeleton
 
@@ -21,35 +21,35 @@ struct Hand {
         (.thumbIntermediateBase, .thumb, .intermediateBase),
         (.thumbIntermediateTip, .thumb, .intermediateTip),
         (.thumbTip, .thumb, .tip),
-
+        
         // Define the index-finger bones.
         (.indexFingerMetacarpal, .index, .metacarpal),
         (.indexFingerKnuckle, .index, .knuckle),
         (.indexFingerIntermediateBase, .index, .intermediateBase),
         (.indexFingerIntermediateTip, .index, .intermediateTip),
         (.indexFingerTip, .index, .tip),
-
+        
         // Define the middle-finger bones.
         (.middleFingerMetacarpal, .middle, .metacarpal),
         (.middleFingerKnuckle, .middle, .knuckle),
         (.middleFingerIntermediateBase, .middle, .intermediateBase),
         (.middleFingerIntermediateTip, .middle, .intermediateTip),
         (.middleFingerTip, .middle, .tip),
-
+        
         // Define the ring-finger bones.
         (.ringFingerMetacarpal, .ring, .metacarpal),
         (.ringFingerKnuckle, .ring, .knuckle),
         (.ringFingerIntermediateBase, .ring, .intermediateBase),
         (.ringFingerIntermediateTip, .ring, .intermediateBase),
         (.ringFingerTip, .ring, .tip),
-
+        
         // Define the little-finger bones.
         (.littleFingerMetacarpal, .little, .metacarpal),
         (.littleFingerKnuckle, .little, .knuckle),
         (.littleFingerIntermediateBase, .little, .intermediateBase),
         (.littleFingerIntermediateTip, .little, .intermediateTip),
         (.littleFingerTip, .little, .tip),
-
+        
         // Define wrist and arm bones.
         (.forearmWrist, .forearm, .wrist),
         (.forearmArm, .forearm, .arm)

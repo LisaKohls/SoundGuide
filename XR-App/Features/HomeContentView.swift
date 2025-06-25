@@ -30,7 +30,7 @@ struct HomeContentView: View {
     @State private var isSpeaking = true
     
     @State private var showSettings = false
-
+    
     
     var body: some View {
         NavigationStack {

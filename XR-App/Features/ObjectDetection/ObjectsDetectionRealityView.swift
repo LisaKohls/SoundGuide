@@ -33,7 +33,7 @@ struct ObjectsDetectionRealityView: View {
             let trackingView = appState.realityView == "START_BTN".localized
             
             viewModel.makeHandEntities(in: content)
-       
+            
             Task {
                 let objectTracking = await appState.startTracking()
                 guard let objectTracking else {
@@ -69,22 +69,23 @@ struct ObjectsDetectionRealityView: View {
                                 self.objectVisualizations[id] = visualization
                                 root.addChild(visualization.entity)
                                 
-                                //Add Spatial sound to the Object
-                                viewModel.playSound(entity: visualization.entity)
+                                //Add Spatial sound to the Object (implemented by Lisa Salzer)
+                                SpatialAudioManager.shared.playSound(for: visualization.entity)
                                 
                                 //if object has been found by user, stop sound, play feedback
                                 viewModel.observeTouchedObject(for: visualization.entity) { name in
-                                    viewModel.stopSpatialSound()
+                                    SpatialAudioManager.shared.stopSound()
+                                    
                                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                     Task {
                                         HandTrackingSystem.detectedObjects.removeAll()
-                                         
-                                         for (_, visualization) in objectVisualizations {
-                                             root.removeChild(visualization.entity)
-                                         }
-                                         objectVisualizations.removeAll()
-                                         appState.didFinishObjectDetection = true
-                                     }
+                                        
+                                        for (_, visualization) in objectVisualizations {
+                                            root.removeChild(visualization.entity)
+                                        }
+                                        objectVisualizations.removeAll()
+                                        appState.didFinishObjectDetection = true
+                                    }
                                 }
                                 
                             }
