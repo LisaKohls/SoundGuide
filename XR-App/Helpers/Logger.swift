@@ -4,7 +4,7 @@
 //
 //  Created by Lisa Kohls on 08.05.25.
 //
-  
+
 /*
  Abstract:
  This file is for debugging and evaluation purposes only
@@ -13,7 +13,7 @@
 import Foundation
 
 struct Log: TextOutputStream {
-
+    
     func write(_ string: String) {
         let fm = FileManager.default
         let log = fm.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("log.txt")

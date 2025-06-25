@@ -32,16 +32,16 @@ struct SpeechRecognizerView: View {
                 .font(.headline)
                 .onAppear {
                     SpeechHelper.shared.speak(text: "NORECORDEDOBJECT".localized)
-            }
+                }
         }
         .onAppear {
-                recognizedText = ""
-                viewModel.onResult = { textResult in
-                    if !textResult.isEmpty {
-                        recognizedText = textResult
-                     }
+            recognizedText = ""
+            viewModel.onResult = { textResult in
+                if !textResult.isEmpty {
+                    recognizedText = textResult
                 }
-                viewModel.startRecognition()
+            }
+            viewModel.startRecognition()
         }
         .onChange(of: recognizedText) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {

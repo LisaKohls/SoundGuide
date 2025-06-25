@@ -6,9 +6,9 @@
 //  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
-Abstract:
-An enumeration representing each part of the finger that forms the hand's skeleton.
-*/
+ Abstract:
+ An enumeration representing each part of the finger that forms the hand's skeleton.
+ */
 
 enum Finger: Int, CaseIterable {
     case forearm

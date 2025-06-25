@@ -12,9 +12,9 @@ struct StartImmersiveSpaceBtn: View {
     @Binding var showHomeButtons: Bool
     @Bindable var appState: AppState
     let btnName: String
-
+    
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
-
+    
     var body: some View {
         Button(btnName) {
             print("Button Interaction: User tapped \(btnName) to open immersive space", to: &logger)

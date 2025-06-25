@@ -7,9 +7,9 @@
 //  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
-Abstract:
-A component that tracks an entity to a hand.
-*/
+ Abstract:
+ A component that tracks an entity to a hand.
+ */
 
 import RealityKit
 import ARKit.hand_skeleton
@@ -18,7 +18,7 @@ import ARKit.hand_skeleton
 struct HandTrackingComponent: Component {
     /// The chirality for the hand this component tracks.
     let chirality: AnchoringComponent.Target.Chirality
-
+    
     /// A lookup that maps each joint name to the entity that represents it.
     var fingers: [HandSkeleton.JointName: Entity] = [:]
     

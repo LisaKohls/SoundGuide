@@ -4,6 +4,8 @@
 //
 //  Created by Lisa Salzer on 20.06.25.
 //
+//  Reference: https://developer.apple.com/documentation/xctest/xctestcase
+//
 
 /*
  Abstract:
