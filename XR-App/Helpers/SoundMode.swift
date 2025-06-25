@@ -5,8 +5,8 @@
 //  Created by Lisa Salzer on 22.06.25.
 //
 //  Soundreferences:
-//  Reference: [1] https://figshare.com/articles/media/Earcons/23152871
-//  Reference: [2] https://freesound.org/people/AudioCoffee/sounds/726503/
+//  [1] https://figshare.com/articles/media/Earcons/23152871
+//  [2] https://freesound.org/people/AudioCoffee/sounds/726503/
 
 /*
  Abstract:

@@ -3,10 +3,12 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 07.05.25.
-//  Reference: [1] https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
-//  Reference: [2] https://developer.apple.com/documentation/realitykit/spatialaudiocomponent
-//  Reference: [3] https://developer.apple.com/documentation/realitykit/audiofileresource
-//  Reference: [4] https://developer.apple.com/documentation/realitykit/entity
+//
+//  References:
+//  [1] https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
+//  [2] https://developer.apple.com/documentation/realitykit/spatialaudiocomponent
+//  [3] https://developer.apple.com/documentation/realitykit/audiofileresource
+//  [4] https://developer.apple.com/documentation/realitykit/entity
 //
 
 /*

@@ -4,8 +4,9 @@
 //
 //  Created by Lisa Salzer on 22.06.25.
 //
-//  Reference: [1] https://developer.apple.com/documentation/avfaudio/avaudioplayer
-//  Reference: [2] https://developer.apple.com/documentation/foundation/timer
+//  References:
+//  [1] https://developer.apple.com/documentation/avfaudio/avaudioplayer
+//  [2] https://developer.apple.com/documentation/foundation/timer
 
 /*
  Abstract:

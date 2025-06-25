@@ -4,8 +4,9 @@
 //
 //  Created by Lisa Salzer on 23.06.25.
 //
-//  Reference: [1] https://developer.apple.com/documentation/foundation/nslocalizedstring
-//  Reference: [2] https://github.com/swiftlang/swift-evolution/blob/main/proposals/0177-add-clamped-to-method.md
+//  References:
+//  [1] https://developer.apple.com/documentation/foundation/nslocalizedstring
+//  [2] https://github.com/swiftlang/swift-evolution/blob/main/proposals/0177-add-clamped-to-method.md
 //
 
 /*
