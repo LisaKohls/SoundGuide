@@ -70,11 +70,12 @@ struct ObjectsDetectionRealityView: View {
                                 root.addChild(visualization.entity)
                                 
                                 //Add Spatial sound to the Object (implemented by Lisa Salzer)
-                                viewModel.playSound(entity: visualization.entity)
+                                SpatialAudioManager.shared.playSound(for: visualization.entity)
                                 
                                 //if object has been found by user, stop sound, play feedback
                                 viewModel.observeTouchedObject(for: visualization.entity) { name in
-                                    viewModel.stopSpatialSound()
+                                    SpatialAudioManager.shared.stopSound()
+                                    
                                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                                     Task {
                                         HandTrackingSystem.detectedObjects.removeAll()
