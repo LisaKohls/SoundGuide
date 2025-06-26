@@ -46,12 +46,14 @@ struct SearchForObjectsView: View {
                         if !showSpeechRecognizer && !showHomeButtons {
                             HStack {
                                 Button("REPEAT_BTN".localized) {
+                                    SpeechHelper.shared.stopSpeaking()
                                     showSpeechRecognizer = true
                                 }
                                 .padding()
                                 .accessibilityLabel("REPEAT_BTN".localized)
 
                                 Button("START_BTN".localized) {
+                                    SpeechHelper.shared.stopSpeaking()
                                     Task {
                                         appState.realityView = "SearchForObjectsView" 
                                         let result = await openImmersiveSpace(id: immersiveSpaceIdentifier)

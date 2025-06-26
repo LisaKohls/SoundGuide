@@ -55,7 +55,6 @@ struct ObjectIdentificationView: View {
     }
 
     private func startImmersiveSpaceIfNeeded() {
-        print("🟩 current view:", appState.realityView)
 
         Task {
             appState.realityView = "ObjectIdentificationView"

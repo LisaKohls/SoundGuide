@@ -137,6 +137,9 @@ struct SettingsView: View {
             .accessibilityLabel("SETTINGS_SAVE_BTN_A11Y".localized)
         }
         .padding()
+        .onDisappear {
+                    SpeechHelper.shared.stopSpeaking()
+                }
     }
 }
 

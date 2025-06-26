@@ -28,6 +28,7 @@ struct WelcomeScreenView: View {
                 
                 if !showSpeechRecognizer {
                     Button("REPEATCONTENT_BTN".localized) {
+                        SpeechHelper.shared.stopSpeaking()
                         let text = "REPEATCONTENT_HOME".localized
                         SpeechHelper.shared.speak(text: text)
                     }
@@ -41,6 +42,7 @@ struct WelcomeScreenView: View {
                             title: "STARTRECORDING_BTN".localized,
                             accessibilityLabel: "START_BTN".localized,
                             action: {
+                                SpeechHelper.shared.stopSpeaking()
                                 onStartObjectSearch()
                             },
                             isSpeaking: $isSpeaking
@@ -50,6 +52,7 @@ struct WelcomeScreenView: View {
                             title: "UNKNOWNOBJECTS_BTN".localized,
                             accessibilityLabel: "UNKNOWNOBJECTS_BTN".localized,
                             action: {
+                                SpeechHelper.shared.stopSpeaking()
                                 onStartUnknownSearch()
                             },
                             isSpeaking: $isSpeaking
