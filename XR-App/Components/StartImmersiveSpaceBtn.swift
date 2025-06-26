@@ -9,7 +9,6 @@ import SwiftUI
 
 struct StartImmersiveSpaceBtn: View {
     let immersiveSpaceIdentifier: String
-    @Binding var showHomeButtons: Bool
     @Bindable var appState: AppState
     let btnName: String
     
@@ -22,7 +21,7 @@ struct StartImmersiveSpaceBtn: View {
                 appState.realityView = btnName
                 switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                 case .opened:
-                    showHomeButtons = false
+                    appState.showWelcomeView = false
                 case .error:
                     print("An error occurred when trying to open the immersive space \(immersiveSpaceIdentifier)")
                 case .userCancelled:

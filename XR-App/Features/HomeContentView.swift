@@ -20,7 +20,6 @@ struct HomeContentView: View {
 
     @State private var currentScreen: AppScreen = .welcome
     @State private var showSpeechRecognizer: Bool = false
-    @State private var showHomeButtons: Bool = true
     @State private var isSpeaking: Bool = true
     @State private var showSettings: Bool = false
 
@@ -39,8 +38,7 @@ struct HomeContentView: View {
                     },
                     isSpeaking: $isSpeaking,
                     showSettings: $showSettings,
-                    showSpeechRecognizer: $showSpeechRecognizer,
-                    showHomeButtons: $showHomeButtons
+                    showSpeechRecognizer: $showSpeechRecognizer
                 )
             case .objectIdentification:
                 ObjectIdentificationView(

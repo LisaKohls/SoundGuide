@@ -17,7 +17,9 @@ struct WelcomeScreenView: View {
     @Binding var isSpeaking: Bool
     @Binding var showSettings: Bool
     @Binding var showSpeechRecognizer: Bool
-    @Binding var showHomeButtons: Bool
+    
+    @State private var hasSeenWelcomeText = UserDefaults.standard.bool(forKey: "hasSeenWelcome")
+
     
     var body: some View {
         NavigationStack {
@@ -36,7 +38,7 @@ struct WelcomeScreenView: View {
                     .accessibilityLabel("REPEATCONTENT_BTN".localized)
                 }
                 
-                if showHomeButtons {
+                if appState.showWelcomeView {
                     HStack {
                         OpenViewButton(
                             title: "STARTRECORDING_BTN".localized,
@@ -72,10 +74,11 @@ struct WelcomeScreenView: View {
             .font(.footnote)
             .padding(.horizontal)
             .toolbar {
-                if showHomeButtons && !showSpeechRecognizer {
+                if appState.showWelcomeView && !showSpeechRecognizer {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             showSettings = true
+                            SpeechHelper.shared.stopSpeaking()
                         } label: {
                             Image(systemName: "gear")
                         }
@@ -85,12 +88,16 @@ struct WelcomeScreenView: View {
             }
             .onAppear {
                 SpeechHelper.shared.preWarmSpeechEngine()
-                SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
-                    isSpeaking = true
-                }
-                SpeechHelper.shared.speak(text: "WELCOMETEXT2".localized) {
-                    isSpeaking = true
-                }
+                if !hasSeenWelcomeText {
+                        SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
+                            isSpeaking = true
+                        }
+                        SpeechHelper.shared.speak(text: "WELCOMETEXT2".localized) {
+                            isSpeaking = true
+                        }
+                        UserDefaults.standard.set(true, forKey: "hasSeenWelcome")
+                        hasSeenWelcomeText = true
+                    }
             }
             .onDisappear {
                 SpeechHelper.shared.stopSpeaking()

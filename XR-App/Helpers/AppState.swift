@@ -52,6 +52,8 @@ class AppState {
     
     var didFinishObjectDetection = false
     
+    var showWelcomeView: Bool = true
+    
     func startTracking() async -> ObjectTrackingProvider? {
         let referenceObjects = referenceObjectLoader.enabledReferenceObjects
         

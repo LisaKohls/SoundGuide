@@ -73,18 +73,15 @@ struct ObjectsDetectionRealityView: View {
             
             switch anchorUpdate.event {
             case .added:
-                let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
-                let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
+                let visualization = ObjectAnchorVisualization(for: anchor)
                 let entity = visualization.entity
                 entity.name = detectedName
                 
                 viewModel.observeTouchedObject(for: entity) { name in
                     SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
+                
                 }
                 
-                objectVisualizations[id] = visualization
-                
-                content.add(visualization.entity)
             case .updated:
                 objectVisualizations[id]?.update(with: anchor)
             case .removed:
@@ -119,7 +116,6 @@ struct ObjectsDetectionRealityView: View {
                     SpatialAudioManager.shared.playSound(for: entity)
                     
                     viewModel.observeTouchedObject(for: entity) { name in
-                        SpatialAudioManager.shared.stopSound()
                         SpeechHelper.shared.speak(text: "FOUNDUNKNOWNOBJECT".localizedWithArgs(name))
                         
                         Task {

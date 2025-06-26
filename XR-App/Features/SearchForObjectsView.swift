@@ -18,7 +18,6 @@ struct SearchForObjectsView: View {
 
     @StateObject private var viewModel = SpeechRecognizerViewModel()
     @State private var showSpeechRecognizer = true
-    @State private var showHomeButtons = false
 
     var body: some View {
         NavigationStack {
@@ -43,7 +42,7 @@ struct SearchForObjectsView: View {
                     }
 
                     if !appState.isImmersiveSpaceOpened {
-                        if !showSpeechRecognizer && !showHomeButtons {
+                        if !showSpeechRecognizer && !appState.showWelcomeView {
                             HStack {
                                 Button("REPEAT_BTN".localized) {
                                     SpeechHelper.shared.stopSpeaking()
@@ -78,13 +77,7 @@ struct SearchForObjectsView: View {
                         }
                     } else {
                         Button("STOP_BTN".localized) {
-                            Task {
-                                await dismissImmersiveSpace()
-                                appState.didLeaveImmersiveSpace()
-                                appState.recognizedText = ""
-                                showHomeButtons = true
-                                onExit()
-                            }
+                            appState.didFinishObjectDetection = true
                         }
                         .accessibilityLabel("STOP_BTN".localized)
                         .onAppear {
@@ -99,13 +92,25 @@ struct SearchForObjectsView: View {
                         }
                     }
                 }
+                .onAppear {
+                    appState.showWelcomeView = false
+                }
                 .foregroundStyle(.secondary)
                 .font(.footnote)
                 .padding(.horizontal)
             }
         }
-        .onDisappear {
-            SpeechHelper.shared.stopSpeaking()
+        .onChange(of: appState.didFinishObjectDetection) { _, didFinish in
+            if didFinish {
+                Task {
+                    await dismissImmersiveSpace()
+                    appState.didLeaveImmersiveSpace()
+                    appState.recognizedText = ""
+                    appState.showWelcomeView = true
+                    onExit()
+                    appState.didFinishObjectDetection = false
+                }
+            }
         }
     }
 }
