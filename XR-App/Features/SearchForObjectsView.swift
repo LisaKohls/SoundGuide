@@ -75,13 +75,9 @@ struct SearchForObjectsView: View {
                                 appState.recognizedText = newText
                                 showSpeechRecognizer = false
                             }
-                            .onAppear {
-                                SpeechHelper.shared.speak(text: "NORECORDEDOBJECT".localized) 
-                            }
                         }
                     } else {
                         Button("STOP_BTN".localized) {
-                            SpeechHelper.shared.stopSpeaking()
                             Task {
                                 await dismissImmersiveSpace()
                                 appState.didLeaveImmersiveSpace()
@@ -92,7 +88,6 @@ struct SearchForObjectsView: View {
                         }
                         .accessibilityLabel("STOP_BTN".localized)
                         .onAppear {
-                            SpeechHelper.shared.stopSpeaking()
                             SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
                         }
 

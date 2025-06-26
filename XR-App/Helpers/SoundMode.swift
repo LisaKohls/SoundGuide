@@ -41,7 +41,7 @@ enum SoundMode: String, CaseIterable, Identifiable {
         case .staticFile2: return 0
         case .staticFile3: return 0
         case .staticFile4: return 15
-        case .staticFile5: return -5
+        case .staticFile5: return 0
         }
     }
     

@@ -40,9 +40,8 @@ struct WelcomeScreenView: View {
                     HStack {
                         OpenViewButton(
                             title: "STARTRECORDING_BTN".localized,
-                            accessibilityLabel: "START_BTN".localized,
+                            accessibilityLabel: "STARTRECORDING_BTN".localized,
                             action: {
-                                SpeechHelper.shared.stopSpeaking()
                                 onStartObjectSearch()
                             },
                             isSpeaking: $isSpeaking
@@ -52,7 +51,6 @@ struct WelcomeScreenView: View {
                             title: "UNKNOWNOBJECTS_BTN".localized,
                             accessibilityLabel: "UNKNOWNOBJECTS_BTN".localized,
                             action: {
-                                SpeechHelper.shared.stopSpeaking()
                                 onStartUnknownSearch()
                             },
                             isSpeaking: $isSpeaking
@@ -63,7 +61,7 @@ struct WelcomeScreenView: View {
                             SpeechHelper.shared.speak(text: "LOOKFORUNKNOWNOBJECTS".localized) {
                                 isSpeaking = true
                             }
-                            SpeechHelper.shared.speak(text: "STARTRECORDINGINSTRUCTION".localized) {
+                            SpeechHelper.shared.speak(text: "STARTRECORDINGINSTRUCTION".localizedWithArgs("STARTRECORDING_BTN".localized)) {
                                 isSpeaking = true
                             }
                         }

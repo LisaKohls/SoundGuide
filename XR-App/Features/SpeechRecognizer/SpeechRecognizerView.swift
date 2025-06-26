@@ -30,11 +30,12 @@ struct SpeechRecognizerView: View {
             let recordedText = recognizedText.isEmpty ? "NORECORDEDOBJECT".localized : recognizedText
             Text(recordedText)
                 .font(.headline)
-                .onAppear {
-                    SpeechHelper.shared.speak(text: "NORECORDEDOBJECT".localized)
-                }
         }
         .onAppear {
+            SpeechHelper.shared.stopSpeaking()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                SpeechHelper.shared.speak(text: "NORECORDEDOBJECT".localized)
+            }
             recognizedText = ""
             viewModel.onResult = { textResult in
                 if !textResult.isEmpty {
