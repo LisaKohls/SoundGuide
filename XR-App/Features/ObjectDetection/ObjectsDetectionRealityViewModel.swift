@@ -58,9 +58,13 @@ class ObjectsDetectionRealityViewModel: ObservableObject {
         HandTrackingSystem.detectedObjects.append(entity)
         
         HandTrackingSystem.onObjectTouched = { [weak self] name in
-            guard let self, !self.spokenObjectNames.contains(name) else { return }
-            self.spokenObjectNames.insert(name)
-            onTouch(name)
+            guard let self else { return }
+            
+            if !self.spokenObjectNames.contains(name) {
+                self.spokenObjectNames = [name]
+                onTouch(name)
+                
+            }
         }
     }
 }
