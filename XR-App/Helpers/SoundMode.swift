@@ -37,11 +37,11 @@ enum SoundMode: String, CaseIterable, Identifiable {
     
     var gain: Double {
         switch self {
-        case .staticFile1: return +30.0
-        case .staticFile2: return +25.0
-        case .staticFile3: return +25.0
-        case .staticFile4: return +50.0
-        case .staticFile5: return +15.0
+        case .staticFile1: return 7
+        case .staticFile2: return 0
+        case .staticFile3: return 0
+        case .staticFile4: return 15
+        case .staticFile5: return 0
         }
     }
     

@@ -19,8 +19,8 @@ enum AppDefaults {
         UserDefaults.standard.register(defaults: [
             "speechRate": 0.55,
             "soundMode": SoundMode.staticFile1.rawValue,
-            "reverbLevel": 1.0,
-            "rolloffFactor": 2.0
+            "reverbLevel": 2.0,
+            "rolloffFactor": 3.0
         ])
     }
 }

@@ -29,7 +29,7 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     
     func setupAudio() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .spokenAudio, options: [.duckOthers, .defaultToSpeaker])
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
             try AVAudioSession.sharedInstance().setActive(true)
             try AVAudioSession.sharedInstance().overrideOutputAudioPort(.speaker)
         } catch {
@@ -45,9 +45,6 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
     }
     
     func speak(text: String, language: String = "LANG".localized, rate: Float = UserDefaults.standard.float(forKey: "speechRate"), onFinish: (() -> Void)? = nil) {
-        
-        setupAudio()
-        
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language)
         utterance.rate = rate
@@ -61,11 +58,9 @@ class SpeechHelper: NSObject, AVSpeechSynthesizerDelegate {
         synthesizer.stopSpeaking(at: .immediate)
     }
     
-    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-            Task { @MainActor in
-                self.onFinishSpeaking?()
-                self.onFinishSpeaking = nil
-            }
-        }
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        onFinishSpeaking?()
+        onFinishSpeaking = nil
+    }
     
 }
