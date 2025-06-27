@@ -3,7 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 22.03.25.
-//
+//  Reference: [3] https://developer.apple.com/documentation/visionos/creating-your-first-visionos-app
 
 import SwiftUI
 

@@ -3,7 +3,9 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 22.03.25.
-//  Reference: https://github.com/dilmerv/VisionOSObjectTrackingDemo
+//  Reference:
+//  [2] https://github.com/dilmerv/VisionOSObjectTrackingDemo
+//  [15] https://developer.apple.com/documentation/visionos/adding-3d-content-to-your-app/
 
 /*
  Abstract:

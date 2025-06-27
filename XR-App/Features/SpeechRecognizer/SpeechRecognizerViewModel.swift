@@ -3,7 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 13.04.25.
-//
+//  Reference: [20] https://developer.apple.com/documentation/speech/sfspeechrecognizer/recognitiontask(with:delegate:)
 
 /*
  Abstract:
@@ -29,6 +29,15 @@ class SpeechRecognizerViewModel: ObservableObject {
             guard status == .authorized else { return }
             
             DispatchQueue.main.async {
+                let audioSession = AVAudioSession.sharedInstance()
+                do {
+                    try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+                } catch {
+                    print("AVAudioSession konnte nicht gestartet werden: \(error)")
+                    return
+                }
+                
                 self.request = SFSpeechAudioBufferRecognitionRequest()
                 let inputNode = self.audioEngine.inputNode
                 let format = inputNode.outputFormat(forBus: 0)
@@ -40,6 +49,7 @@ class SpeechRecognizerViewModel: ObservableObject {
                 
                 self.recognitionTask = self.recognizer?.recognitionTask(with: self.request!) { result, error in
                     if let error = error {
+                        self.stopRecognition()
                         return
                     }
                     

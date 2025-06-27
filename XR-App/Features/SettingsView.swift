@@ -5,9 +5,9 @@
 //  Created by Lisa Salzer on 20.06.25.
 //
 //  References:
-//  [1] https://developer.apple.com/documentation/swiftui/slider
-//  [2] https://developer.apple.com/documentation/foundation/userdefaults
-//  [3] https://developer.apple.com/documentation/swiftui/view-accessibility
+//  [7] https://developer.apple.com/documentation/swiftui/slider
+//  [8] https://developer.apple.com/documentation/foundation/userdefaults
+//  [9] https://developer.apple.com/documentation/swiftui/view-accessibility
 //
 
 /*
@@ -97,7 +97,7 @@ struct SettingsView: View {
                 .bold()
                 .accessibilityAddTraits(.isHeader)
             
-            // [1] Reverb level slider
+            // [7] Reverb level slider
             VStack(alignment: .leading) {
                 Text(String(format: "SETTINGS_REVERB_LABEL".localized, reverbLevel))
                 Slider(value: $reverbLevel, in: 0...5, step: 1.0, onEditingChanged: { editing in
@@ -109,7 +109,7 @@ struct SettingsView: View {
                 .accessibilityValue("\(Int(reverbLevel))")
             }
             
-            // [1] Rolloff factor slider
+            // [7] Rolloff factor slider
             VStack(alignment: .leading) {
                 Text(String(format: "SETTINGS_ROLLOFF_LABEL".localized, rolloffFactor))
                 Slider(value: $rolloffFactor, in: 1.0...6.0, step: 1.0, onEditingChanged: { editing in
@@ -125,7 +125,7 @@ struct SettingsView: View {
             
             Spacer()
             
-            // Save to user defaults [2]
+            // Save to user defaults [8]
             Button("SETTINGS_SAVE_BTN".localized) {
                 UserDefaults.standard.set(speechRate, forKey: "speechRate")
                 UserDefaults.standard.set(selectedSound.rawValue, forKey: "soundMode")
@@ -137,6 +137,9 @@ struct SettingsView: View {
             .accessibilityLabel("SETTINGS_SAVE_BTN_A11Y".localized)
         }
         .padding()
+        .onDisappear {
+                    SpeechHelper.shared.stopSpeaking()
+                }
     }
 }
 
