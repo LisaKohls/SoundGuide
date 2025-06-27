@@ -5,9 +5,8 @@
 //  Created by Lisa Salzer on 25.06.25.
 //
 //  References:
-//  [2] https://developer.apple.com/documentation/realitykit/spatialaudiocomponent
-//  [3] https://developer.apple.com/documentation/realitykit/audiofileresource
-//  [4] https://developer.apple.com/documentation/realitykit/entity
+//  [4] https://developer.apple.com/documentation/realitykit/spatialaudiocomponent
+//  [6] https://developer.apple.com/documentation/realitykit/entity
 //
 
 /*
@@ -25,7 +24,7 @@ final class SpatialAudioManager {
     
     private init() {}
     
-    // Configure the spatial audio properties [2]
+    // Configure the spatial audio properties [6]
     func configureSpatialAudio(
         on entity: Entity,
         gain: Double = -2.0,
@@ -48,7 +47,7 @@ final class SpatialAudioManager {
         playSpatialSound(for: entity, resourceName: soundMode.fileName, gain: soundMode.gain)
     }
     
-    // Load and play spatial audio file with given parameters [3], [4]
+    // Load and play spatial audio file with given parameters [6]
     func playSpatialSound(for entity: Entity, resourceName: String, gain: Double) {
         do {
             // Retrieve and clamp audio settings from user defaults
@@ -70,7 +69,7 @@ final class SpatialAudioManager {
         }
     }
     
-    // Stop any currently playing spatial audio [3]
+    // Stop any currently playing spatial audio
     func stopSound() {
         currentAudioController?.stop()
         currentAudioController = nil

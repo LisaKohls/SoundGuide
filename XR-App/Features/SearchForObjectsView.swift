@@ -3,6 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Salzer on 25.06.25.
+//  Reference: [2] https://github.com/dilmerv/VisionOSObjectTrackingDemo
 //
 
 import SwiftUI
@@ -26,7 +27,7 @@ struct SearchForObjectsView: View {
                     Text("WELCOMETOSOUNDGUIDE".localized)
                         .font(.system(size: 25, weight: .bold))
                         .padding(30)
-
+                    
                     if !showSpeechRecognizer {
                         Button("REPEATCONTENT_BTN".localized) {
                             let text: String

@@ -2,7 +2,8 @@
 //  ObjectIdentificationView.swift
 //  XR-App
 //
-//  Created by Lisa Salzer on 25.06.25.
+//  Created by Lisa Kohls on 25.06.25.
+//  Reference: [2] https://github.com/dilmerv/VisionOSObjectTrackingDemo
 //
 
 import SwiftUI
@@ -23,7 +24,7 @@ struct ObjectIdentificationView: View {
             Text("WELCOMETOSOUNDGUIDE".localized)
                 .font(.system(size: 25, weight: .bold))
                 .padding(30)
-            
+            // [2]
             if appState.isImmersiveSpaceOpened {
                 Button("STOP_BTN".localized) {
                     SpeechHelper.shared.stopSpeaking()
@@ -58,7 +59,7 @@ struct ObjectIdentificationView: View {
     }
 
     private func startImmersiveSpaceIfNeeded() {
-
+        // [2]
         Task {
             appState.realityView = "ObjectIdentificationView"
             let result = await openImmersiveSpace(id: immersiveSpaceIdentifier)

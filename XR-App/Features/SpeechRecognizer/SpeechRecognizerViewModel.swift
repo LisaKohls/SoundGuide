@@ -3,7 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 13.04.25.
-//
+//  Reference: [20] https://developer.apple.com/documentation/speech/sfspeechrecognizer/recognitiontask(with:delegate:)
 
 /*
  Abstract:

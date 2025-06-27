@@ -5,7 +5,7 @@
 //  Created by Lisa Salzer on 22.06.25.
 //
 //  Soundreferences:
-//  [1] https://figshare.com/articles/media/Earcons/23152871
+//  [13] https://figshare.com/articles/media/Earcons/23152871
 //  [2] https://freesound.org/people/AudioCoffee/sounds/726503/
 
 /*
@@ -24,7 +24,7 @@ enum SoundMode: String, CaseIterable, Identifiable {
     
     var id: String { self.rawValue }
     
-    // music file references: [1], [2]
+    // music file references: [13], [14]
     var fileName: String {
         switch self {
         case .staticFile1: return "E10.wav"

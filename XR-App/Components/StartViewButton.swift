@@ -18,7 +18,6 @@ struct OpenViewButton: View {
         Button(title) {
             action()
         }
-//        .disabled(isSpeaking)
         .accessibilityLabel(accessibilityLabel)
         .padding()
     }

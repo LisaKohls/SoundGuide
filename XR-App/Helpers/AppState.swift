@@ -3,7 +3,9 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 22.03.25.
-//  Reference: https://github.com/dilmerv/VisionOSObjectTrackingDemo
+//  //  Reference:
+//  [2] https://github.com/dilmerv/VisionOSObjectTrackingDemo
+//  [19] https://developer.apple.com/documentation/arkit/arkitsession
 
 /*
  Abstract:
@@ -54,6 +56,7 @@ class AppState {
     
     var showWelcomeView: Bool = true
     
+    //  [19]
     func startTracking() async -> ObjectTrackingProvider? {
         let referenceObjects = referenceObjectLoader.enabledReferenceObjects
         
@@ -72,6 +75,7 @@ class AppState {
         return objectTracking
     }
     
+    //  [19]
     func startHandTracking() async -> HandTrackingProvider? {
         let handTracking = HandTrackingProvider()
         do {

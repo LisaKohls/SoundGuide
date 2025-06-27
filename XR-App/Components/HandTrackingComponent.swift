@@ -4,7 +4,7 @@
 //
 //  Created by Lisa Kohls on 07.05.25.
 //
-//  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
+//  Reference: [1] https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
  Abstract:
@@ -15,6 +15,7 @@ import RealityKit
 import ARKit.hand_skeleton
 
 /// A component that tracks the hand skeleton.
+/// [1]
 struct HandTrackingComponent: Component {
     /// The chirality for the hand this component tracks.
     let chirality: AnchoringComponent.Target.Chirality

@@ -4,9 +4,6 @@
 //
 //  Created by Lisa Salzer on 22.06.25.
 //
-//  References:
-//  [1] https://developer.apple.com/documentation/avfaudio/avaudioplayer
-//  [2] https://developer.apple.com/documentation/foundation/timer
 
 /*
  Abstract:
@@ -36,7 +33,7 @@ class SoundPreviewHelper {
             player?.prepareToPlay()
             player?.play()
             
-            // stop preview afer 3 seconds [2]
+            // stop preview afer 3 seconds 
             stopTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
                 self?.player?.stop()
                 self?.player = nil
