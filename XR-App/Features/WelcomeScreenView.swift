@@ -19,7 +19,7 @@ struct WelcomeScreenView: View {
     @Binding var showSpeechRecognizer: Bool
     
     @State private var hasSeenWelcomeText = UserDefaults.standard.bool(forKey: "hasSeenWelcome")
-
+    
     
     var body: some View {
         NavigationStack {
@@ -48,7 +48,7 @@ struct WelcomeScreenView: View {
                             },
                             isSpeaking: $isSpeaking
                         )
-
+                        
                         OpenViewButton(
                             title: "UNKNOWNOBJECTS_BTN".localized,
                             accessibilityLabel: "UNKNOWNOBJECTS_BTN".localized,
@@ -89,18 +89,28 @@ struct WelcomeScreenView: View {
             .onAppear {
                 SpeechHelper.shared.preWarmSpeechEngine()
                 if !hasSeenWelcomeText {
-                        SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
-                            isSpeaking = true
-                        }
-                        SpeechHelper.shared.speak(text: "WELCOMETEXT2".localized) {
-                            isSpeaking = true
-                        }
-                        UserDefaults.standard.set(true, forKey: "hasSeenWelcome")
-                        hasSeenWelcomeText = true
+                    SpeechHelper.shared.speak(text: "WELCOMETEXT".localized) {
+                        isSpeaking = true
                     }
+                    SpeechHelper.shared.speak(text: "WELCOMETEXT2".localized) {
+                        isSpeaking = true
+                    }
+                    UserDefaults.standard.set(true, forKey: "hasSeenWelcome")
+                    hasSeenWelcomeText = true
+                }
             }
             .onDisappear {
                 SpeechHelper.shared.stopSpeaking()
+            }
+            // repeats the options after returning from the settings view
+            .onChange(of: showSettings) { oldValue, newValue in
+                if oldValue == true && newValue == false {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        SpeechHelper.shared.speak(text: "LOOKFORUNKNOWNOBJECTS".localized)
+                        SpeechHelper.shared.speak(text: "STARTRECORDINGINSTRUCTION".localizedWithArgs("STARTRECORDING_BTN".localized))
+                        isSpeaking = true
+                    }
+                }
             }
         }
     }

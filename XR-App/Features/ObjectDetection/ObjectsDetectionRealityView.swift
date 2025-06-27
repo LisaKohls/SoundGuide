@@ -59,7 +59,7 @@ struct ObjectsDetectionRealityView: View {
         }
     }
     
-    // MARK: - Detection View Handling
+    // MARK: - Objdect Identification View Handling
     
     private func handleObjectIdentificationView(content: RealityViewContent) async {
         SpeechHelper.shared.speak(text: "VIEWLOADED_UNKNOWNOBJECTS".localized)
@@ -91,7 +91,7 @@ struct ObjectsDetectionRealityView: View {
         }
     }
     
-    // MARK: - Tracking View Handling
+    // MARK: - Object Search View Handling
     
     private func handleSearchForObjectsView(content: RealityViewContent) async {
         SpeechHelper.shared.speak(text: "VIEWLOADED_SEARCHOBJECTS".localized)

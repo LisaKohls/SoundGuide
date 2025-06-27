@@ -35,10 +35,13 @@ struct ObjectIdentificationView: View {
                     }
                 }
                 .accessibilityLabel("STOP_BTN".localized)
+                .onAppear {
+                    SpeechHelper.shared.speak(text: "START_STOP_TRACKING_BTN".localizedWithArgs("STOP_BTN".localized,"STOP".localized))
+                }
                 .padding()
                 
             } else {
-                // Ladeanzeige
+                // Charging indicator
                 ProgressView("STARTING_IMMERSIVE...".localized)
                     .padding()
             }
