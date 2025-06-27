@@ -62,9 +62,4 @@ Hochschule der Medien Stuttgart, 2025
 ### Tests
 - to run the LoadReferenceObjectsTest you need to add the reference Objects manually in: Target → XR-AppTests → Build Phases → Copy Bundle Resources
 - run the tests with command + U 
----
 
-## License
-
-This project was developed for academic purposes.  
-© 2025 Lisa Kohls & Lisa Salzer
