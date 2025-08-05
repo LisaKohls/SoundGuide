@@ -3,7 +3,7 @@
 //  XR-App
 //
 //  Created by Lisa Kohls on 01.05.25.
-//  Reference: https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
+//  Reference: [1] https://developer.apple.com/documentation/visionos/tracking-and-visualizing-hand-movement
 
 /*
  Abstract:
@@ -13,6 +13,7 @@
 import ARKit.hand_skeleton
 
 /// A structure that contains data for finger joints.
+///  [1]
 struct Hand {
     /// The collection of joints in a hand.
     static let joints: [(HandSkeleton.JointName, Finger, Bone)] = [
